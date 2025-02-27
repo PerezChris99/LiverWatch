@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - LiverWatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>LiverWatch</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('subscribe') }}">Subscribe</a>
+            <a href="{{ url_for('admin', token=token) }}">Admin</a>
+            <button id="theme-toggle">Toggle Dark Mode</button>
+        </nav>
+    </header>
+    <main>
+        <article class="post-detail">
+            <h2>{{ post.title }}</h2>
+            <img src="{{ post.image_url }}" alt="{{ post.title }}">
+            <p>{{ post.content }}</p>
+            <p>Source: <a href="{{ post.source_url }}">{{ post.source_url }}</a></p>
+            <p>Date Posted: {{ post.date_posted }}</p>
+        </article>
+    </main>
+    <footer>
+        <p>&copy; 2024 LiverWatch</p>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        const token = "{{ token }}";
+    </script>
+</body>
+</html>

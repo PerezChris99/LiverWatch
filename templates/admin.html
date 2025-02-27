@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - LiverWatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>LiverWatch Admin</h1>
+        <nav>
+            <a href="{{ url_for('admin', token=request.args.get('token')) }}">Admin</a>
+            <a href="{{ url_for('new_post', token=request.args.get('token')) }}">New Post</a>
+            <button id="theme-toggle">Toggle Dark Mode</button>
+        </nav>
+    </header>
+    <main>
+        <section class="admin-posts">
+            <h2>Manage Posts</h2>
+            <ul>
+                {% for post in posts %}
+                <li>
+                    <a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a>
+                    <a href="{{ url_for('edit_post', post_id=post.id, token=request.args.get('token')) }}">Edit</a>
+                    <a href="{{ url_for('delete_post', post_id=post.id, token=request.args.get('token')) }}">Delete</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 LiverWatch</p>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        const token = "{{ request.args.get('token') }}";
+    </script>
+</body>
+</html>
