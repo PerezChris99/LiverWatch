@@ -82,6 +82,6 @@ LiverWatch is a Flask-based automated medical web app that collects real-time in
 
 Contributions are welcome! Please fork the repository and submit a pull request.
 
-## License
+## Copyright ©️ 
 
-This project is licensed under the MIT License.
+This project is copyrighted .
