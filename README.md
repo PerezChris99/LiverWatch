@@ -46,32 +46,6 @@ LiverWatch is a Flask-based automated medical web app that collects real-time in
 - **Caching**: Redis (optional for performance)
 - **Email Alerts**: Flask-Mail / SendGrid API
 
-## Installation
-
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/LiverWatch.git
-   cd LiverWatch
-   ```
-
-2. Create a virtual environment and activate it:
-   ```sh
-   python -m venv env
-   source env/bin/activate  # On Windows, use `env\Scripts\activate`
-   ```
-
-3. Install the dependencies:
-   ```sh
-   pip install -r requirements.txt
-   ```
-
-4. Set environment variables for `SECRET_KEY`, `MAIL` settings, and `DATABASE_URL`.
-
-5. Run the Flask app:
-   ```sh
-   python app.py
-   ```
-
 ## Usage
 
 - Visit the home page to see the latest posts.
