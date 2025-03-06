@@ -16,7 +16,8 @@ app.config.from_object(Config)
 
 db.init_app(app)
 mail = Mail(app)
-limiter = Limiter(get_remote_address, app=app, default_limits=["200 per day", "50 per hour"])
+limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
+limiter.init_app(app)
 
 # Create database tables
 with app.app_context():
@@ -75,7 +76,7 @@ def new_post():
         content = request.form['content']
         # Scrape data and create post
         scraped_data = scrape_data(content)  # Assuming content is the URL to scrape
-        if scraped_data:
+        if (scraped_data):
             new_post = Post(title=title, content=scraped_data['content'], image_url=scraped_data['image_url'], source_url=content)
             db.session.add(new_post)
             db.session.commit()
