@@ -1,39 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical News - LiverWatch</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>LiverWatch - Medical News</h1>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('forum') }}">Forum</a>
-            <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
-            <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
-            <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
-            <a href="{{ url_for('medical_news') }}">Medical News</a>
-            <button id="theme-toggle">Toggle Dark Mode</button>
-        </nav>
-    </header>
-    <main>
-        <section class="news-feed">
-            <h2>Latest Liver Health News</h2>
-            {% for item in news %}
-            <div class="news-card">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.description }}</p>
-                <a href="{{ item.link }}" target="_blank">Read more</a>
-            </div>
-            {% endfor %}
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 LiverWatch</p>
-    </footer>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Medical News - LiverWatch{% endblock %}
+
+{% block content %}
+<section class="news-feed">
+    <h2>Latest Liver Health News</h2>
+    {% for item in news %}
+    <div class="news-card">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+        <a href="{{ item.link }}" target="_blank">Read more</a>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

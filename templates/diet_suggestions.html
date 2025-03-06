@@ -1,41 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liver-Friendly Diet Suggestions - LiverWatch</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>LiverWatch - Diet Suggestions</h1>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('forum') }}">Forum</a>
-            <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
-            <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
-            <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
-            <a href="{{ url_for('medical_news') }}">Medical News</a>
-            <button id="theme-toggle">Toggle Dark Mode</button>
-        </nav>
-    </header>
-    <main>
-        <section class="recipes">
-            <h2>Liver-Friendly Recipes</h2>
-            {% for recipe in recipes %}
-            <div class="recipe-card">
-                <h3>{{ recipe.title }}</h3>
-                <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
-                <p>Ingredients: {{ recipe.ingredients }}</p>
-                <p>Instructions: {{ recipe.instructions }}</p>
-                <p>Nutritional Benefits: {{ recipe.nutritional_benefits }}</p>
-            </div>
-            {% endfor %}
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 LiverWatch</p>
-    </footer>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Diet Suggestions - LiverWatch{% endblock %}
+
+{% block content %}
+<section class="diet-suggestions">
+    <h2>Liver-Friendly Diet & Recipe Suggestions</h2>
+    {% for recipe in recipes %}
+    <div class="recipe-card">
+        <h3>{{ recipe.title }}</h3>
+        <p>{{ recipe.ingredients }}</p>
+        <p>{{ recipe.instructions }}</p>
+        <p>{{ recipe.nutritional_benefits }}</p>
+        {% if recipe.image_url %}
+        <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}">
+        {% endif %}
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

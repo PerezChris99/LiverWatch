@@ -1,52 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ question.title }} - LiverWatch</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>LiverWatch - Question Detail</h1>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('forum') }}">Forum</a>
-            <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
-            <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
-            <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
-            <a href="{{ url_for('medical_news') }}">Medical News</a>
-            <button id="theme-toggle">Toggle Dark Mode</button>
-        </nav>
-    </header>
-    <main>
-        <article class="question-detail">
-            <h2>{{ question.title }}</h2>
-            <p>{{ question.content }}</p>
-            <p>Date Posted: {{ question.date_posted }}</p>
-        </article>
-        <section class="new-answer-form">
-            <h2>Post an Answer</h2>
-            <form method="post">
-                {{ form.csrf_token }}
-                <label for="content">Content:</label><br>
-                {{ form.content(rows="5", cols="50", required=true) }}<br><br>
-                {{ form.submit() }}
-            </form>
-        </section>
-        <section class="answers">
-            <h2>Answers</h2>
-            {% for answer in question.answers %}
-            <div class="answer-card">
-                <p>{{ answer.content }}</p>
-                <p>Date Posted: {{ answer.date_posted }}</p>
-            </div>
-            {% endfor %}
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 LiverWatch</p>
-    </footer>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}{{ question.title }} - LiverWatch{% endblock %}
+
+{% block content %}
+<article class="question-detail">
+    <h2>{{ question.title }}</h2>
+    <p>{{ question.content }}</p>
+    <p>Date Posted: {{ question.date_posted }}</p>
+</article>
+<section class="new-answer-form">
+    <h2>Post an Answer</h2>
+    <form method="post">
+        {{ form.csrf_token }}
+        <label for="content">Content:</label><br>
+        {{ form.content(rows="5", cols="50", required=true) }}<br><br>
+        {{ form.submit() }}
+    </form>
+</section>
+<section class="answers">
+    <h2>Answers</h2>
+    {% for answer in question.answers %}
+    <div class="answer-card">
+        <p>{{ answer.content }}</p>
+        <p>Date Posted: {{ answer.date_posted }}</p>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

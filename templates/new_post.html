@@ -1,38 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Post - LiverWatch</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>LiverWatch - New Post</h1>
-        <nav>
-            <a href="{{ url_for('admin', token=request.args.get('token')) }}">Admin</a>
-            <a href="{{ url_for('new_post', token=request.args.get('token')) }}">New Post</a>
-            <button id="theme-toggle">Toggle Dark Mode</button>
-        </nav>
-    </header>
-    <main>
-        <section class="new-post-form">
-            <h2>Create a New Post</h2>
-            <form method="post">
-                <label for="title">Title:</label><br>
-                <input type="text" id="title" name="title" required><br><br>
-                <label for="content">URL to Scrape:</label><br>
-                <input type="text" id="content" name="content" required><br><br>
-                <button type="submit">Create Post</button>
-            </form>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 LiverWatch</p>
-    </footer>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script>
-        const token = "{{ request.args.get('token') }}";
-    </script>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}New Post - LiverWatch{% endblock %}
+
+{% block content %}
+<section class="new-post-form">
+    <h2>Create a New Post</h2>
+    <form method="post">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+        <label for="content">URL to Scrape:</label><br>
+        <input type="text" id="content" name="content" required><br><br>
+        <button type="submit">Create Post</button>
+    </form>
+</section>
+{% endblock %}

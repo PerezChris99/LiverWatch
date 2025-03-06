@@ -1,50 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Forum - LiverWatch</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>LiverWatch - Community Forum</h1>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('forum') }}">Forum</a>
-            <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
-            <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
-            <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
-            <a href="{{ url_for('medical_news') }}">Medical News</a>
-            <button id="theme-toggle">Toggle Dark Mode</button>
-        </nav>
-    </header>
-    <main>
-        <section class="new-question-form">
-            <h2>Ask a Question</h2>
-            <form method="post">
-                {{ form.csrf_token }}
-                <label for="title">Title:</label><br>
-                {{ form.title(size=50, required=true) }}<br><br>
-                <label for="content">Content:</label><br>
-                {{ form.content(rows="5", cols="50", required=true) }}<br><br>
-                {{ form.submit() }}
-            </form>
-        </section>
-        <section class="questions">
-            <h2>Questions</h2>
-            {% for question in questions %}
-            <div class="question-card">
-                <h3><a href="{{ url_for('question_detail', question_id=question.id) }}">{{ question.title }}</a></h3>
-                <p>{{ question.content[:100] }}...</p>
-                <p>Date Posted: {{ question.date_posted }}</p>
-            </div>
-            {% endfor %}
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 LiverWatch</p>
-    </footer>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Forum - LiverWatch{% endblock %}
+
+{% block content %}
+<section class="new-question-form">
+    <h2>Ask a Question</h2>
+    <form method="post">
+        {{ form.csrf_token }}
+        <label for="title">Title:</label><br>
+        {{ form.title(size=50, required=true) }}<br><br>
+        <label for="content">Content:</label><br>
+        {{ form.content(rows="5", cols="50", required=true) }}<br><br>
+        {{ form.submit() }}
+    </form>
+</section>
+<section class="questions">
+    <h2>Questions</h2>
+    {% for question in questions %}
+    <div class="question-card">
+        <h3><a href="{{ url_for('question_detail', question_id=question.id) }}">{{ question.title }}</a></h3>
+        <p>{{ question.content[:100] }}...</p>
+        <p>Date Posted: {{ question.date_posted }}</p>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

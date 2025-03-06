@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function setTheme(theme) {
         if (theme === 'dark') {
             body.classList.add('dark-mode');
-            themeToggle.textContent = 'Toggle Light Mode';
+            themeToggle.classList.remove('fa-moon');
+            themeToggle.classList.add('fa-sun');
         } else {
             body.classList.remove('dark-mode');
-            themeToggle.textContent = 'Toggle Dark Mode';
+            themeToggle.classList.remove('fa-sun');
+            themeToggle.classList.add('fa-moon');
         }
         localStorage.setItem('theme', theme);
     }

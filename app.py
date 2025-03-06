@@ -76,7 +76,7 @@ def new_post():
         content = request.form['content']
         # Scrape data and create post
         scraped_data = scrape_data(content)  # Assuming content is the URL to scrape
-        if (scraped_data):
+        if scraped_data:
             new_post = Post(title=title, content=scraped_data['content'], image_url=scraped_data['image_url'], source_url=content)
             db.session.add(new_post)
             db.session.commit()

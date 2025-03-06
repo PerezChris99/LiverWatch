@@ -55,6 +55,7 @@ nav a {
 
 main {
     padding: 20px;
+    padding-bottom: 100px; /* Add padding at the bottom to prevent footer overlap */
 }
 
 .posts {
@@ -249,14 +250,60 @@ body.dark-mode .new-post-form textarea {
 
 /* Dark Mode Toggle */
 #theme-toggle {
-    background-color: #444;
-    color: white;
+    background: none;
     border: none;
-    padding: 0.5em 1em;
-    border-radius: 5px;
+    font-size: 1.5em;
     cursor: pointer;
+    color: white;
 }
 
 #theme-toggle:hover {
-    background-color: #555;
+    color: #ffcc00;
+}
+
+/* Child Health Cards */
+.child-health-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: white;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+body.dark-mode .card {
+    background-color: #444;
+    border-color: #555;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    color: #007bff;
+}
+
+.card h3 {
+    margin-top: 10px;
+    color: #333;
+}
+
+body.dark-mode .card h3 {
+    color: #f4f4f4;
+}
+
+.card ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.card ul li {
+    margin-bottom: 5px;
 }
