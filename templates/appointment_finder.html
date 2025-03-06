@@ -11,13 +11,17 @@
         <button type="submit">Search</button>
     </form>
     <div class="specialists">
-        {% for specialist in specialists %}
-        <div class="specialist-card">
-            <h3>{{ specialist.name }}</h3>
-            <p>{{ specialist.vicinity }}</p>
-            <p>Rating: {{ specialist.rating }}</p>
-        </div>
-        {% endfor %}
+        {% if specialists %}
+            {% for specialist in specialists %}
+            <div class="specialist-card">
+                <h3>{{ specialist.name }}</h3>
+                <p>{{ specialist.vicinity }}</p>
+                <p>Rating: {{ specialist.rating }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No specialists found for the given location.</p>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

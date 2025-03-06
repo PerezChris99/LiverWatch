@@ -3,25 +3,42 @@
 {% block title %}Forum - LiverWatch{% endblock %}
 
 {% block content %}
-<section class="new-question-form">
-    <h2>Ask a Question</h2>
-    <form method="post">
-        {{ form.csrf_token }}
-        <label for="title">Title:</label><br>
-        {{ form.title(size=50, required=true) }}<br><br>
-        <label for="content">Content:</label><br>
-        {{ form.content(rows="5", cols="50", required=true) }}<br><br>
-        {{ form.submit() }}
-    </form>
-</section>
-<section class="questions">
-    <h2>Questions</h2>
-    {% for question in questions %}
-    <div class="question-card">
-        <h3><a href="{{ url_for('question_detail', question_id=question.id) }}">{{ question.title }}</a></h3>
-        <p>{{ question.content[:100] }}...</p>
-        <p>Date Posted: {{ question.date_posted }}</p>
-    </div>
-    {% endfor %}
-</section>
+<div class="forum-container">
+    <section class="new-question-form">
+        <h2>Ask a Question</h2>
+        <form method="post">
+            {{ form.csrf_token }}
+            <label for="title">Title:</label><br>
+            {{ form.title(size=50, required=true) }}<br><br>
+            <label for="content">Content:</label><br>
+            {{ form.content(rows="5", cols="50", required=true) }}<br><br>
+            {{ form.submit() }}
+        </form>
+    </section>
+    <section class="questions">
+        <h2>Questions</h2>
+        <div class="questions-scroll">
+            {% for question in questions %}
+            <div class="question-card">
+                <article class="question-detail">
+                    <h3 id="question-{{ question.id }}"><a href="{{ url_for('question_detail', question_id=question.id) }}">{{ question.title }}</a></h3>
+                    <p>{{ question.content[:100] }}...</p>
+                    <p class="meta">Posted by {{ question.user.username }} on {{ question.date_posted.strftime('%Y-%m-%d') }}</p>
+                    <a href="#answers-{{ question.id }}">View Answers</a>
+                </article>
+                <section class="answers" id="answers-{{ question.id }}">
+                    <h4>Answers</h4>
+                    {% for answer in question.answers %}
+                    <div class="answer-card">
+                        <p>{{ answer.content }}</p>
+                        <p class="meta">Posted by {{ answer.user.username }} on {{ answer.date_posted.strftime('%Y-%m-%d') }}</p>
+                        <a href="#question-{{ question.id }}">Back to Question</a>
+                    </div>
+                    {% endfor %}
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
 {% endblock %}

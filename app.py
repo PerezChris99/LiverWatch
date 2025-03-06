@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_limiter import Limiter
@@ -18,6 +18,9 @@ db.init_app(app)
 mail = Mail(app)
 limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
 limiter.init_app(app)
+
+# Exclude static files from rate limiting
+limiter.limit("200 per day", exempt_when=lambda: request.path.startswith('/static'))
 
 # Create database tables
 with app.app_context():
@@ -73,11 +76,16 @@ def admin():
 def new_post():
     if request.method == 'POST':
         title = request.form['title']
-        content = request.form['content']
+        content_url = request.form['content']
         # Scrape data and create post
-        scraped_data = scrape_data(content)  # Assuming content is the URL to scrape
+        scraped_data = scrape_data(content_url)
         if scraped_data:
-            new_post = Post(title=title, content=scraped_data['content'], image_url=scraped_data['image_url'], source_url=content)
+            new_post = Post(
+                title=scraped_data['title'],
+                content=scraped_data['content'],
+                image_url=scraped_data['image_url'],
+                source_url=content_url
+            )
             db.session.add(new_post)
             db.session.commit()
             # Send email to subscribers
@@ -199,6 +207,22 @@ def medical_news():
 @app.route('/child_health')
 def child_health():
     return render_template('child_health.html')
+
+def fetch_nearby_liver_specialists(location):
+    api_key = get_google_maps_api_key()
+    if not api_key:
+        print("Google Maps API key not set.")
+        return []
+
+    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location}&radius=10000&type=hospital&keyword=liver%20specialist&key={api_key}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        return data.get('results', [])
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching nearby specialists: {e}")
+        return []
 
 if __name__ == '__main__':
     app.run(debug=True)

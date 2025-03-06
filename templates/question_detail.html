@@ -3,27 +3,35 @@
 {% block title %}{{ question.title }} - LiverWatch{% endblock %}
 
 {% block content %}
-<article class="question-detail">
-    <h2>{{ question.title }}</h2>
-    <p>{{ question.content }}</p>
-    <p>Date Posted: {{ question.date_posted }}</p>
-</article>
-<section class="new-answer-form">
-    <h2>Post an Answer</h2>
-    <form method="post">
-        {{ form.csrf_token }}
-        <label for="content">Content:</label><br>
-        {{ form.content(rows="5", cols="50", required=true) }}<br><br>
-        {{ form.submit() }}
-    </form>
-</section>
-<section class="answers">
-    <h2>Answers</h2>
-    {% for answer in question.answers %}
-    <div class="answer-card">
-        <p>{{ answer.content }}</p>
-        <p>Date Posted: {{ answer.date_posted }}</p>
-    </div>
-    {% endfor %}
-</section>
+<div class="forum-container">
+    <section class="new-answer-form">
+        <h2>Post an Answer</h2>
+        <form method="post">
+            {{ form.csrf_token }}
+            <label for="content">Content:</label><br>
+            {{ form.content(rows="5", cols="50", required=true) }}<br><br>
+            {{ form.submit() }}
+        </form>
+    </section>
+    <section class="question-answers">
+        <div class="question-card">
+            <article class="question-detail">
+                <h2 id="question">{{ question.title }}</h2>
+                <p>{{ question.content }}</p>
+                <p class="meta">Posted by {{ question.user.username }} on {{ question.date_posted.strftime('%Y-%m-%d') }}</p>
+                <a href="#answers">View Answers</a>
+            </article>
+            <section class="answers" id="answers">
+                <h3>Answers</h3>
+                {% for answer in question.answers %}
+                <div class="answer-card">
+                    <p>{{ answer.content }}</p>
+                    <p class="meta">Posted by {{ answer.user.username }} on {{ answer.date_posted.strftime('%Y-%m-%d') }}</p>
+                    <a href="#question">Back to Question</a>
+                </div>
+                {% endfor %}
+            </section>
+        </div>
+    </section>
+</div>
 {% endblock %}
