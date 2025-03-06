@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} - LiverWatch{% endblock %}
+
+{% block content %}
+<div class="news-detail-container">
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.description }}</p>
+    <a href="{{ article.link }}" target="_blank">Read the original article</a>
+</div>
+{% endblock %}

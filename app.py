@@ -224,6 +224,17 @@ def medical_news():
     news = fetch_medical_news()
     return render_template('medical_news.html', news=news)
 
+@app.route('/medical_news/<int:news_id>')
+def medical_news_detail(news_id):
+    news = fetch_medical_news()
+    article = news[news_id]
+    return render_template('medical_news_detail.html', article=article)
+
+@app.route('/api/medical_news')
+def api_medical_news():
+    news = fetch_medical_news()
+    return {'news': news}
+
 @app.route('/child_health')
 def child_health():
     return render_template('child_health.html')

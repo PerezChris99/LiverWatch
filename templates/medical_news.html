@@ -5,14 +5,38 @@
 {% block content %}
 <div class="news-container">
     <h2>Latest Medical News</h2>
-    <div class="news-cards">
-        {% for news in news %}
-        <div class="news-card">
-            <h3>{{ news.title }}</h3>
-            <p>{{ news.description }}</p>
-            <a href="{{ news.link }}" target="_blank">Read more</a>
-        </div>
-        {% endfor %}
+    <div class="news-cards" id="news-cards">
+        <!-- News cards will be dynamically inserted here -->
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function fetchNews() {
+        fetch('/api/medical_news')
+            .then(response => response.json())
+            .then(data => {
+                const newsCards = document.getElementById('news-cards');
+                newsCards.innerHTML = ''; // Clear existing news cards
+                data.news.forEach((news, index) => {
+                    const newsCard = document.createElement('div');
+                    newsCard.className = 'news-card';
+                    newsCard.innerHTML = `
+                        <h3>${news.title}</h3>
+                        <p>${news.description}</p>
+                        <a href="/medical_news/${index}" target="_blank">Read more</a>
+                    `;
+                    newsCards.appendChild(newsCard);
+                });
+            })
+            .catch(error => console.error('Error fetching news:', error));
+    }
+
+    // Fetch news initially and then every 5 minutes
+    fetchNews();
+    setInterval(fetchNews, 300000); // 300000 ms = 5 minutes
+});
+</script>
 {% endblock %}

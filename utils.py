@@ -44,26 +44,28 @@ def fetch_nearby_liver_specialists(location):
         print(f"Error fetching nearby specialists: {e}")
         return None
 
-def fetch_medical_news(source='WHO'):
-    if source == 'WHO':
-        url = "https://www.who.int/rss-feeds/news-english.xml"
-    elif source == 'CDC':
-        url = "https://tools.cdc.gov/podcasts/rss.xml?s=10537"
-    else:
-        print("Invalid news source.")
-        return None
+def fetch_medical_news():
+    sources = [
+        "https://www.who.int/rss-feeds/news-english.xml",
+        "https://tools.cdc.gov/podcasts/rss.xml?s=10537",
+        # Add more reputable sources here
+    ]
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'lxml')  # Use 'lxml' parser
-        news_items = []
-        for item in soup.find_all('item'):
-            title = item.find('title').text
-            description = item.find('description').text
-            link = item.find('link').text
-            news_items.append({'title': title, 'description': description, 'link': link})
-        return news_items
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching medical news: {e}")
-        return None
+    liver_keywords = ['liver', 'hepatitis', 'cirrhosis', 'biliary', 'hepatocellular', 'liver disease', 'liver cancer']
+
+    news_items = []
+    for url in sources:
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'lxml')  # Use 'lxml' parser
+            for item in soup.find_all('item'):
+                title = item.find('title').text
+                description = item.find('description').text
+                link = item.find('link').text
+                if any(keyword in title.lower() or keyword in description.lower() for keyword in liver_keywords):
+                    news_items.append({'title': title, 'description': description, 'link': link})
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching medical news from {url}: {e}")
+    
+    return news_items
