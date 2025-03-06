@@ -37,6 +37,30 @@ LiverWatch is a Flask-based automated medical web app that collects real-time in
 7. **Optional Admin Dashboard**:
    - A backend panel where an admin can review, edit, or remove posts before publishing.
 
+8. **Community Forum & Q&A**:
+   - Users can ask and answer liver health-related questions.
+   - Store discussions in PostgreSQL/MySQL.
+   - Use Vanilla JS for interactive UI.
+
+9. **Liver Health Tracker**:
+   - Allow users to log habits (alcohol, diet, exercise) and visualize trends using Chart.js.
+   - Store logs in PostgreSQL/MySQL.
+
+10. **Diet & Recipe Suggestions**:
+    - Provide liver-friendly foods and meal ideas, searchable by ingredient or meal type.
+    - Update weekly.
+
+11. **Medical Appointment Finder**:
+    - Use Google Maps API to find liver specialists nearby.
+    - Filter by distance, rating, and availability.
+
+12. **Liver Disease News Feed**:
+    - Fetch and display real-time liver health updates from WHO/CDC APIs in a scrollable, card-based UI.
+
+13. **Child Health Section**:
+    - Detailed signs and symptoms for newborns, infants, and toddlers.
+    - Includes treatments and procedures for each.
+
 ## Tech Stack
 
 - **Backend**: Flask + Flask-SQLAlchemy (or Flask-PyMongo)
@@ -46,11 +70,43 @@ LiverWatch is a Flask-based automated medical web app that collects real-time in
 - **Caching**: Redis (optional for performance)
 - **Email Alerts**: Flask-Mail / SendGrid API
 
+## Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/LiverWatch.git
+   cd LiverWatch
+   ```
+
+2. Create a virtual environment and activate it:
+   ```sh
+   python -m venv env
+   source env/bin/activate  # On Windows, use `env\Scripts\activate`
+   ```
+
+3. Install the dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+4. Set environment variables for `SECRET_KEY`, `MAIL` settings, and `DATABASE_URL`.
+
+5. Run the Flask app:
+   ```sh
+   python app.py
+   ```
+
 ## Usage
 
 - Visit the home page to see the latest posts.
 - Subscribe to the newsletter to receive email alerts for new posts.
 - Admins can log in to manage posts.
+- Use the forum to ask and answer liver health-related questions.
+- Log daily habits in the health tracker and visualize trends.
+- Find liver-friendly diet and recipe suggestions.
+- Search for nearby liver specialists using the appointment finder.
+- Stay updated with the latest liver health news.
+- Learn about signs, symptoms, treatments, and procedures for newborns, infants, and toddlers in the child health section.
 
 ## Contributing
 
