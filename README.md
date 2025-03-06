@@ -2,6 +2,10 @@
 
 LiverWatch is a Flask-based automated medical web app that collects real-time information about biliary cirrhosis and biliary atresia from across the web. The system uses web scraping to gather data on disease causes, symptoms, recovery rates, death statistics, and surgical procedures at different stages. The extracted posts are stored in a database and displayed in a responsive, scrollable blog format.
 
+## Focus on Uganda
+
+This system is specifically focused on Uganda, where biliary cirrhosis and biliary atresia are not well-known diseases. LiverWatch aims to raise awareness and provide valuable information to the Ugandan population about these liver diseases. By collecting and displaying real-time information, the system helps educate the public and healthcare professionals about the causes, symptoms, and treatments of these conditions.
+
 ## Features
 
 1. **Automated Blog Post Generation**:

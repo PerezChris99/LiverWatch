@@ -51,8 +51,6 @@ def fetch_medical_news():
         # Add more reputable sources here
     ]
 
-    liver_keywords = ['liver', 'hepatitis', 'cirrhosis', 'biliary', 'hepatocellular', 'liver disease', 'liver cancer']
-
     news_items = []
     for url in sources:
         try:
@@ -63,8 +61,7 @@ def fetch_medical_news():
                 title = item.find('title').text
                 description = item.find('description').text
                 link = item.find('link').text
-                if any(keyword in title.lower() or keyword in description.lower() for keyword in liver_keywords):
-                    news_items.append({'title': title, 'description': description, 'link': link})
+                news_items.append({'title': title, 'description': description, 'link': link})
         except requests.exceptions.RequestException as e:
             print(f"Error fetching medical news from {url}: {e}")
     
