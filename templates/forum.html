@@ -23,7 +23,7 @@
                 <article class="question-detail">
                     <h3 id="question-{{ question.id }}"><a href="{{ url_for('question_detail', question_id=question.id) }}">{{ question.title }}</a></h3>
                     <p>{{ question.content[:100] }}...</p>
-                    <p class="meta">Posted by {{ question.user.username }} on {{ question.date_posted.strftime('%Y-%m-%d') }}</p>
+                    <p class="meta">Posted by {{ question.user.username }} on {{ question.date_posted.astimezone(get_timezone()).strftime('%Y-%m-%d %H:%M:%S') }}</p>
                     <a href="#answers-{{ question.id }}">View Answers</a>
                 </article>
                 <section class="answers" id="answers-{{ question.id }}">
@@ -31,7 +31,7 @@
                     {% for answer in question.answers %}
                     <div class="answer-card">
                         <p>{{ answer.content }}</p>
-                        <p class="meta">Posted by {{ answer.user.username }} on {{ answer.date_posted.strftime('%Y-%m-%d') }}</p>
+                        <p class="meta">Posted by {{ answer.user.username }} on {{ answer.date_posted.astimezone(get_timezone()).strftime('%Y-%m-%d %H:%M:%S') }}</p>
                         <a href="#question-{{ question.id }}">Back to Question</a>
                     </div>
                     {% endfor %}

@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import pytz
 
 db = SQLAlchemy()
 
@@ -9,7 +10,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.String(500))
     source_url = db.Column(db.String(500))
-    date_posted = db.Column(db.DateTime, default=db.func.now())
+    date_posted = db.Column(db.DateTime, default=lambda: datetime.now(pytz.utc))
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
@@ -25,7 +26,7 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    date_posted = db.Column(db.DateTime, default=db.func.now())
+    date_posted = db.Column(db.DateTime, default=lambda: datetime.now(pytz.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('questions', lazy=True))
 
@@ -35,7 +36,7 @@ class Question(db.Model):
 class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    date_posted = db.Column(db.DateTime, default=db.func.now())
+    date_posted = db.Column(db.DateTime, default=lambda: datetime.now(pytz.utc))
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     question = db.relationship('Question', backref=db.backref('answers', lazy=True))
@@ -54,7 +55,7 @@ class User(db.Model):
 
 class HealthLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(pytz.utc))
     alcohol_intake = db.Column(db.Integer, nullable=True)
     fatty_foods = db.Column(db.Integer, nullable=True)
     sugar_intake = db.Column(db.Integer, nullable=True)

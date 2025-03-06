@@ -10,6 +10,9 @@ from config import Config
 from models import db, Post, Subscriber, Question, Answer, User, HealthLog, Recipe
 from forms import SubscriptionForm, QuestionForm, AnswerForm, HealthLogForm
 from utils import scrape_data, fetch_nearby_liver_specialists, fetch_medical_news
+import pytz
+import ipinfo
+from timezonefinder import TimezoneFinder
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -39,6 +42,23 @@ def token_required(f):
             return {'message': 'Token is invalid!'}, 403
         return f(*args, **kwargs)
     return decorated
+
+@app.context_processor
+def inject_timezone():
+    def get_timezone():
+        access_token = 'your_ipinfo_access_token'  # Replace with your ipinfo access token
+        handler = ipinfo.getHandler(access_token)
+        ip_address = request.remote_addr
+        details = handler.getDetails(ip_address)
+        if details and 'latitude' in details.all and 'longitude' in details.all:
+            latitude = details.latitude
+            longitude = details.longitude
+            tf = TimezoneFinder()
+            timezone_str = tf.timezone_at(lng=longitude, lat=latitude)
+            if timezone_str:
+                return pytz.timezone(timezone_str)
+        return pytz.utc
+    return dict(get_timezone=get_timezone)
 
 @app.route('/')
 def index():
