@@ -110,7 +110,15 @@ LiverWatch is a Flask-based automated medical web app that collects real-time in
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+Contributions are currently not welcome.
+
+## Badges
+
+![WHO](https://img.shields.io/badge/WHO-World%20Health%20Organization-blue)
+![CDC](https://img.shields.io/badge/CDC-Centers%20for%20Disease%20Control%20and%20Prevention-blue)
+![NIH](https://img.shields.io/badge/NIH-National%20Institutes%20of%20Health-blue)
+![Liver Foundation](https://img.shields.io/badge/Liver%20Foundation-American%20Liver%20Foundation-blue)
+![Hepatitis B Foundation](https://img.shields.io/badge/Hepatitis%20B%20Foundation-Hepatitis%20B%20Foundation-blue)
 
 ## Legal Notice
 
