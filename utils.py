@@ -48,6 +48,9 @@ def fetch_medical_news():
     sources = [
         "https://www.who.int/rss-feeds/news-english.xml",
         "https://tools.cdc.gov/podcasts/rss.xml?s=10537",
+        "https://liverfoundation.org/feed/",
+        "https://www.niddk.nih.gov/rss.xml",
+        "https://www.aasld.org/rss.xml"
         # Add more reputable sources here
     ]
 

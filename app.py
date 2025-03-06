@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_caching import Cache
 from functools import wraps
 import jwt
 import datetime
@@ -19,6 +20,7 @@ app.config.from_object(Config)
 
 db.init_app(app)
 mail = Mail(app)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
 limiter.init_app(app)
 
@@ -231,6 +233,7 @@ def medical_news_detail(news_id):
     return render_template('medical_news_detail.html', article=article)
 
 @app.route('/api/medical_news')
+@cache.cached(timeout=300)
 def api_medical_news():
     news = fetch_medical_news()
     return {'news': news}
