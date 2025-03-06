@@ -56,7 +56,7 @@ def fetch_medical_news(source='WHO'):
     try:
         response = requests.get(url)
         response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'xml')
+        soup = BeautifulSoup(response.content, 'lxml')  # Use 'lxml' parser
         news_items = []
         for item in soup.find_all('item'):
             title = item.find('title').text

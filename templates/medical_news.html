@@ -3,14 +3,16 @@
 {% block title %}Medical News - LiverWatch{% endblock %}
 
 {% block content %}
-<section class="news-feed">
-    <h2>Latest Liver Health News</h2>
-    {% for item in news %}
-    <div class="news-card">
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.description }}</p>
-        <a href="{{ item.link }}" target="_blank">Read more</a>
+<div class="news-container">
+    <h2>Latest Medical News</h2>
+    <div class="news-cards">
+        {% for news in news %}
+        <div class="news-card">
+            <h3>{{ news.title }}</h3>
+            <p>{{ news.description }}</p>
+            <a href="{{ news.link }}" target="_blank">Read more</a>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</section>
+</div>
 {% endblock %}

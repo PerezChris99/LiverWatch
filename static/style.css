@@ -451,3 +451,66 @@ body.dark-mode .question-detail p, body.dark-mode .answer-card p {
 body.dark-mode .meta {
     color: #bbb;
 }
+
+/* Medical News Styles */
+.news-container {
+    padding: 20px;
+}
+
+.news-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Four columns */
+    gap: 20px;
+}
+
+.news-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px; /* Same padding as the "Ask a Question" card */
+    background-color: white;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    max-width: 300px; /* Same max-width as the "Ask a Question" card */
+    height: 250px; /* Set a fixed height for the news cards */
+    overflow: hidden; /* Hide overflow content */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+body.dark-mode .news-card {
+    background-color: #444;
+    border-color: #555;
+}
+
+.news-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.news-card h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.news-card p {
+    color: #333;
+    flex-grow: 1; /* Allow the description to take up available space */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+}
+
+body.dark-mode .news-card p {
+    color: #f4f4f4;
+}
+
+.news-card a {
+    color: #007bff;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.news-card a:hover {
+    text-decoration: underline;
+}
