@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Health - LiverWatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>LiverWatch - Child Health</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('forum') }}">Forum</a>
+            <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
+            <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
+            <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
+            <a href="{{ url_for('medical_news') }}">Medical News</a>
+            <a href="{{ url_for('child_health') }}">Child Health</a>
+            <button id="theme-toggle">Toggle Dark Mode</button>
+        </nav>
+    </header>
+    <main>
+        <section class="child-health">
+            <h2>Newborn Babies</h2>
+            <h3>Signs and Symptoms</h3>
+            <ul>
+                <li>Jaundice (yellowing of the skin and eyes)</li>
+                <li>Sugarcane-like breath (sweet-smelling breath)</li>
+                <li>Swollen abdomen</li>
+                <li>Poor feeding</li>
+                <li>Vomiting</li>
+                <li>Dark urine</li>
+                <li>Pale stools</li>
+                <li>Excessive sleepiness</li>
+                <li>Irritability</li>
+            </ul>
+            <h3>Treatments and Procedures</h3>
+            <ul>
+                <li>Phototherapy for jaundice</li>
+                <li>Medications to improve liver function</li>
+                <li>Surgical procedures if necessary (e.g., Kasai procedure for biliary atresia)</li>
+                <li>Intravenous fluids and nutrition</li>
+                <li>Monitoring and supportive care</li>
+            </ul>
+        </section>
+        <section class="child-health">
+            <h2>Infants</h2>
+            <h3>Signs and Symptoms</h3>
+            <ul>
+                <li>Jaundice (yellowing of the skin and eyes)</li>
+                <li>Sugarcane-like breath (sweet-smelling breath)</li>
+                <li>Swollen abdomen</li>
+                <li>Poor weight gain</li>
+                <li>Vomiting</li>
+                <li>Dark urine</li>
+                <li>Pale stools</li>
+                <li>Excessive sleepiness</li>
+                <li>Irritability</li>
+                <li>Failure to thrive</li>
+            </ul>
+            <h3>Treatments and Procedures</h3>
+            <ul>
+                <li>Phototherapy for jaundice</li>
+                <li>Medications to improve liver function</li>
+                <li>Surgical procedures if necessary (e.g., Kasai procedure for biliary atresia)</li>
+                <li>Intravenous fluids and nutrition</li>
+                <li>Monitoring and supportive care</li>
+                <li>Dietary modifications</li>
+            </ul>
+        </section>
+        <section class="child-health">
+            <h2>Toddlers</h2>
+            <h3>Signs and Symptoms</h3>
+            <ul>
+                <li>Jaundice (yellowing of the skin and eyes)</li>
+                <li>Sugarcane-like breath (sweet-smelling breath)</li>
+                <li>Swollen abdomen</li>
+                <li>Poor appetite</li>
+                <li>Vomiting</li>
+                <li>Dark urine</li>
+                <li>Pale stools</li>
+                <li>Fatigue</li>
+                <li>Irritability</li>
+                <li>Delayed growth and development</li>
+            </ul>
+            <h3>Treatments and Procedures</h3>
+            <ul>
+                <li>Phototherapy for jaundice</li>
+                <li>Medications to improve liver function</li>
+                <li>Surgical procedures if necessary (e.g., liver transplant for severe cases)</li>
+                <li>Intravenous fluids and nutrition</li>
+                <li>Monitoring and supportive care</li>
+                <li>Dietary modifications</li>
+                <li>Physical therapy and developmental support</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 LiverWatch</p>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

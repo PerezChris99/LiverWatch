@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiverWatch - Home</title>
+    <title>Medical News - LiverWatch</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
-        <h1>LiverWatch</h1>
+        <h1>LiverWatch - Medical News</h1>
         <nav>
             <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('subscribe') }}">Subscribe</a>
-            <a href="{{ url_for('admin', token=token) }}">Admin</a>
             <a href="{{ url_for('forum') }}">Forum</a>
             <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
             <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
             <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
             <a href="{{ url_for('medical_news') }}">Medical News</a>
-            <a href="{{ url_for('child_health') }}">Child Health</a>
             <button id="theme-toggle">Toggle Dark Mode</button>
         </nav>
     </header>
     <main>
-        <section class="posts">
-            {% for post in posts %}
-            <div class="post-card">
-                <img src="{{ post.image_url }}" alt="{{ post.title }}">
-                <h2><a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a></h2>
-                <p>{{ post.content[:100] }}...</p>
+        <section class="news-feed">
+            <h2>Latest Liver Health News</h2>
+            {% for item in news %}
+            <div class="news-card">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.description }}</p>
+                <a href="{{ item.link }}" target="_blank">Read more</a>
             </div>
             {% endfor %}
         </section>
@@ -37,8 +35,5 @@
         <p>&copy; 2024 LiverWatch</p>
     </footer>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script>
-        const token = "{{ token }}";
-    </script>
 </body>
 </html>

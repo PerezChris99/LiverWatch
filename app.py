@@ -7,9 +7,9 @@ from functools import wraps
 import jwt
 import datetime
 from config import Config
-from models import db, Post, Subscriber
-from forms import SubscriptionForm
-from utils import scrape_data
+from models import db, Post, Subscriber, Question, Answer, User, HealthLog, Recipe
+from forms import SubscriptionForm, QuestionForm, AnswerForm, HealthLogForm
+from utils import scrape_data, fetch_nearby_liver_specialists, fetch_medical_news
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -118,6 +118,86 @@ def login():
         'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
     }, app.config['SECRET_KEY'], algorithm="HS256")
     return token
+
+@app.route('/forum', methods=['GET', 'POST'])
+def forum():
+    form = QuestionForm()
+    if form.validate_on_submit():
+        # For simplicity, assume a default user
+        user = User.query.first()
+        if not user:
+            user = User(username='default_user', email='default@example.com')
+            db.session.add(user)
+            db.session.commit()
+        question = Question(title=form.title.data, content=form.content.data, user=user)
+        db.session.add(question)
+        db.session.commit()
+        return redirect(url_for('forum'))
+    questions = Question.query.all()
+    return render_template('forum.html', form=form, questions=questions)
+
+@app.route('/question/<int:question_id>', methods=['GET', 'POST'])
+def question_detail(question_id):
+    question = Question.query.get_or_404(question_id)
+    form = AnswerForm()
+    if form.validate_on_submit():
+        # For simplicity, assume a default user
+        user = User.query.first()
+        if not user:
+            user = User(username='default_user', email='default@example.com')
+            db.session.add(user)
+            db.session.commit()
+        answer = Answer(content=form.content.data, question=question, user=user)
+        db.session.add(answer)
+        db.session.commit()
+        return redirect(url_for('question_detail', question_id=question_id))
+    return render_template('question_detail.html', question=question, form=form)
+
+@app.route('/health_tracker', methods=['GET', 'POST'])
+def health_tracker():
+    form = HealthLogForm()
+    if form.validate_on_submit():
+        # For simplicity, assume a default user
+        user = User.query.first()
+        if not user:
+            user = User(username='default_user', email='default@example.com')
+            db.session.add(user)
+            db.session.commit()
+        health_log = HealthLog(
+            date=form.date.data,
+            alcohol_intake=form.alcohol_intake.data,
+            fatty_foods=form.fatty_foods.data,
+            sugar_intake=form.sugar_intake.data,
+            water_intake=form.water_intake.data,
+            exercise_level=form.exercise_level.data,
+            medication_usage=form.medication_usage.data,
+            user=user
+        )
+        db.session.add(health_log)
+        db.session.commit()
+        return redirect(url_for('health_tracker'))
+    health_logs = HealthLog.query.all()
+    return render_template('health_tracker.html', form=form, health_logs=health_logs)
+
+@app.route('/diet_suggestions')
+def diet_suggestions():
+    recipes = Recipe.query.all()
+    return render_template('diet_suggestions.html', recipes=recipes)
+
+@app.route('/appointment_finder')
+def appointment_finder():
+    location = request.args.get('location', 'New York')  # Default location
+    specialists = fetch_nearby_liver_specialists(location)
+    return render_template('appointment_finder.html', specialists=specialists)
+
+@app.route('/medical_news')
+def medical_news():
+    news = fetch_medical_news()
+    return render_template('medical_news.html', news=news)
+
+@app.route('/child_health')
+def child_health():
+    return render_template('child_health.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

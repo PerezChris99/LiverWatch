@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liver Specialist Finder - LiverWatch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>LiverWatch - Appointment Finder</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('forum') }}">Forum</a>
+            <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
+            <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
+            <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
+            <a href="{{ url_for('medical_news') }}">Medical News</a>
+            <button id="theme-toggle">Toggle Dark Mode</button>
+        </nav>
+    </header>
+    <main>
+        <section class="search-form">
+            <h2>Find Liver Specialists Near You</h2>
+            <form method="get">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" value="{{ request.args.get('location', 'New York') }}">
+                <button type="submit">Search</button>
+            </form>
+        </section>
+        <section class="specialists">
+            <h2>Nearby Liver Specialists</h2>
+            {% if specialists %}
+            <ul>
+                {% for specialist in specialists %}
+                <li>
+                    <h3>{{ specialist.name }}</h3>
+                    <p>Address: {{ specialist.vicinity }}</p>
+                    {% if specialist.rating %}
+                    <p>Rating: {{ specialist.rating }}</p>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No specialists found near your location.</p>
+            {% endif %}
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 LiverWatch</p>
+    </footer>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
