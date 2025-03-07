@@ -1,9 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, Blueprint, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-# Remove the limiter import
-# from flask_limiter import Limiter
-# from flask_limiter.util import get_remote_address
 from flask_caching import Cache
 from functools import wraps
 import jwt
@@ -15,25 +12,16 @@ from utils import scrape_data, fetch_nearby_liver_specialists, fetch_medical_new
 import pytz
 import ipinfo
 from timezonefinder import TimezoneFinder
-from flask_migrate import Migrate  # Add this import
+from flask_migrate import Migrate  # Ensure this import is present
 import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
-migrate = Migrate(app, db)  # Initialize Flask-Migrate
+migrate = Migrate(app, db)  # Ensure Flask-Migrate is initialized
 mail = Mail(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-# Remove the limiter initialization
-# limiter = Limiter(key_func=get_remote_address, default_limits=["2000 per day", "50 per hour"])
-# limiter.init_app(app)
-
-# Exclude static files from rate limiting
-# Remove the static blueprint and limiter exemption
-# static_bp = Blueprint('static', __name__, static_folder='static')
-# app.register_blueprint(static_bp, url_prefix='/static')
-# limiter.exempt(static_bp)
 
 # Create database tables
 with app.app_context():

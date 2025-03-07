@@ -29,7 +29,7 @@ class Question(db.Model):
     date_posted = db.Column(db.DateTime, default=lambda: datetime.now(pytz.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('questions', lazy=True))
-    tags = db.Column(db.String(100))
+    tags = db.Column(db.String(100))  # Ensure this column is defined
     upvotes = db.Column(db.Integer, default=0)
     downvotes = db.Column(db.Integer, default=0)
 
