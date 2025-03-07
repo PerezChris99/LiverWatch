@@ -309,7 +309,7 @@ body.dark-mode .card h3 {
 }
 
 /* Forum Styles */
-.forum-container {
+.forum-container, .question-detail-container {
     display: flex;
     justify-content: space-between;
     gap: 20px;
@@ -395,7 +395,7 @@ body.dark-mode .new-answer-form textarea {
     overflow-y: auto;
 }
 
-.question-card {
+.question-card, .answer-card {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
@@ -404,12 +404,12 @@ body.dark-mode .new-answer-form textarea {
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-body.dark-mode .question-card {
+body.dark-mode .question-card, body.dark-mode .answer-card {
     background-color: #444;
     border-color: #555;
 }
 
-.question-card:hover {
+.question-card:hover, .answer-card:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -450,6 +450,32 @@ body.dark-mode .question-detail p, body.dark-mode .answer-card p {
 
 body.dark-mode .meta {
     color: #bbb;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.tags {
+    font-size: 0.9em;
+    color: #007bff;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-form .form-control {
+    flex: 1;
+}
+
+.search-form .btn-primary {
+    flex-shrink: 0;
 }
 
 /* Medical News Styles */

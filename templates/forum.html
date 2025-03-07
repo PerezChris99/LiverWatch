@@ -4,41 +4,71 @@
 
 {% block content %}
 <div class="forum-container">
-    <section class="new-question-form">
+    <div class="new-question-form">
         <h2>Ask a Question</h2>
         <form method="post">
             {{ form.csrf_token }}
-            <label for="title">Title:</label><br>
-            {{ form.title(size=50, required=true) }}<br><br>
-            <label for="content">Content:</label><br>
-            {{ form.content(rows="5", cols="50", required=true) }}<br><br>
-            {{ form.submit() }}
-        </form>
-    </section>
-    <section class="questions">
-        <h2>Questions</h2>
-        <div class="questions-scroll">
-            {% for question in questions %}
-            <div class="question-card">
-                <article class="question-detail">
-                    <h3 id="question-{{ question.id }}"><a href="{{ url_for('question_detail', question_id=question.id) }}">{{ question.title }}</a></h3>
-                    <p>{{ question.content[:100] }}...</p>
-                    <p class="meta">Posted by {{ question.user.username }} on {{ question.date_posted.astimezone(get_timezone()).strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                    <a href="#answers-{{ question.id }}">View Answers</a>
-                </article>
-                <section class="answers" id="answers-{{ question.id }}">
-                    <h4>Answers</h4>
-                    {% for answer in question.answers %}
-                    <div class="answer-card">
-                        <p>{{ answer.content }}</p>
-                        <p class="meta">Posted by {{ answer.user.username }} on {{ answer.date_posted.astimezone(get_timezone()).strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                        <a href="#question-{{ question.id }}">Back to Question</a>
-                    </div>
-                    {% endfor %}
-                </section>
+            <div class="form-group">
+                {{ form.title.label }}<br>
+                {{ form.title(class="form-control") }}
             </div>
-            {% endfor %}
+            <div class="form-group">
+                {{ form.content.label }}<br>
+                <div id="editor" style="height: 200px;"></div>
+                <input type="hidden" name="content" id="content">
+            </div>
+            <div class="form-group">
+                {{ form.tags.label }}<br>
+                {{ form.tags(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+    <div class="questions">
+        <h2>Questions</h2>
+        <form method="get" action="{{ url_for('forum') }}" class="search-form">
+            <input type="text" name="search" placeholder="Search questions..." class="form-control">
+            <select name="filter" class="form-control">
+                <option value="date">Date</option>
+                <option value="popularity">Popularity</option>
+                <option value="tags">Tags</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        {% for question in questions.items %}
+        <div class="question-card">
+            <h3><a href="{{ url_for('question_detail', question_id=question.id) }}">{{ question.title }}</a></h3>
+            <p>{{ question.content }}</p>
+            <p class="meta">Posted by {{ question.user.username }} on {{ question.date_posted.strftime('%Y-%m-%d') }}</p>
+            <p class="tags">Tags: {{ question.tags }}</p>
+            <div class="vote-buttons">
+                <button class="btn btn-success" onclick="vote('question', {{ question.id }}, 'upvote')">Upvote</button>
+                <span>{{ question.upvotes }}</span>
+                <button class="btn btn-danger" onclick="vote('question', {{ question.id }}, 'downvote')">Downvote</button>
+                <span>{{ question.downvotes }}</span>
+            </div>
         </div>
-    </section>
+        {% endfor %}
+        <div class="pagination">
+            {% if questions.has_prev %}
+            <a href="{{ url_for('forum', page=questions.prev_num) }}" class="btn btn-primary">Previous</a>
+            {% endif %}
+            {% if questions.has_next %}
+            <a href="{{ url_for('forum', page=questions.next_num) }}" class="btn btn-primary">Next</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
+<script>
+    var quill = new Quill('#editor', {
+        theme: 'snow'
+    });
+    var form = document.querySelector('form');
+    form.onsubmit = function() {
+        var content = document.querySelector('input[name=content]');
+        content.value = quill.root.innerHTML;
+    };
+</script>
 {% endblock %}

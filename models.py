@@ -29,6 +29,9 @@ class Question(db.Model):
     date_posted = db.Column(db.DateTime, default=lambda: datetime.now(pytz.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('questions', lazy=True))
+    tags = db.Column(db.String(100))
+    upvotes = db.Column(db.Integer, default=0)
+    downvotes = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return f"Question('{self.title}', '{self.date_posted}')"
@@ -41,6 +44,8 @@ class Answer(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     question = db.relationship('Question', backref=db.backref('answers', lazy=True))
     user = db.relationship('User', backref=db.backref('answers', lazy=True))
+    upvotes = db.Column(db.Integer, default=0)
+    downvotes = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return f"Answer('{self.content}', '{self.date_posted}')"

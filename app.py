@@ -14,11 +14,14 @@ from utils import scrape_data, fetch_nearby_liver_specialists, fetch_medical_new
 import pytz
 import ipinfo
 from timezonefinder import TimezoneFinder
+from flask_migrate import Migrate
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+migrate = Migrate(app, db)  # Initialize Flask-Migrate
 mail = Mail(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 limiter = Limiter(key_func=get_remote_address, default_limits=["2000 per day", "50 per hour"])
@@ -61,13 +64,6 @@ def inject_timezone():
                 return pytz.timezone(timezone_str)
         return pytz.utc
     return dict(get_timezone=get_timezone)
-
-# Custom filter for strftime
-@app.template_filter('strftime')
-def _jinja2_filter_datetime(date, fmt=None):
-    if fmt is None:
-        fmt = '%Y-%m-%d'
-    return date.strftime(fmt)
 
 @app.route('/')
 def index():
@@ -167,11 +163,25 @@ def forum():
             user = User(username='default_user', email='default@example.com')
             db.session.add(user)
             db.session.commit()
-        question = Question(title=form.title.data, content=form.content.data, user=user)
+        question = Question(title=form.title.data, content=form.content.data, tags=form.tags.data, user=user)
         db.session.add(question)
         db.session.commit()
         return redirect(url_for('forum'))
-    questions = Question.query.all()
+    
+    search = request.args.get('search')
+    filter_by = request.args.get('filter')
+    page = request.args.get('page', 1, type=int)
+    query = Question.query
+    if search:
+        query = query.filter(Question.title.contains(search) | Question.content.contains(search))
+    if filter_by == 'popularity':
+        query = query.order_by(Question.upvotes.desc())
+    elif filter_by == 'tags':
+        query = query.order_by(Question.tags)
+    else:
+        query = query.order_by(Question.date_posted.desc())
+    questions = query.paginate(page=page, per_page=5)
+    
     return render_template('forum.html', form=form, questions=questions)
 
 @app.route('/question/<int:question_id>', methods=['GET', 'POST'])
@@ -189,7 +199,20 @@ def question_detail(question_id):
         db.session.add(answer)
         db.session.commit()
         return redirect(url_for('question_detail', question_id=question_id))
-    return render_template('question_detail.html', question=question, form=form)
+    
+    search = request.args.get('search')
+    sort_by = request.args.get('sort')
+    page = request.args.get('page', 1, type=int)
+    query = Answer.query.filter_by(question_id=question_id)
+    if search:
+        query = query.filter(Answer.content.contains(search))
+    if sort_by == 'popularity':
+        query = query.order_by(Answer.upvotes.desc())
+    else:
+        query = query.order_by(Answer.date_posted.desc())
+    answers = query.paginate(page=page, per_page=5)
+    
+    return render_template('question_detail.html', question=question, form=form, answers=answers)
 
 @app.route('/health_tracker', methods=['GET', 'POST'])
 def health_tracker():
@@ -248,6 +271,25 @@ def api_medical_news():
 @app.route('/child_health')
 def child_health():
     return render_template('child_health.html')
+
+@app.route('/vote/<string:type>/<int:id>/<string:action>', methods=['POST'])
+def vote(type, id, action):
+    if type == 'question':
+        item = Question.query.get_or_404(id)
+    elif type == 'answer':
+        item = Answer.query.get_or_404(id)
+    else:
+        return {'success': False}, 400
+
+    if action == 'upvote':
+        item.upvotes += 1
+    elif action == 'downvote':
+        item.downvotes += 1
+    else:
+        return {'success': False}, 400
+
+    db.session.commit()
+    return {'success': True}, 200
 
 def fetch_nearby_liver_specialists(location):
     api_key = get_google_maps_api_key()

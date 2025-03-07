@@ -14,22 +14,51 @@
         </form>
     </section>
     <section class="question-answers">
+        <form method="get" action="{{ url_for('question_detail', question_id=question.id) }}" class="search-form">
+            <input type="text" name="search" placeholder="Search answers..." class="form-control">
+            <select name="sort" class="form-control">
+                <option value="date">Date</option>
+                <option value="popularity">Popularity</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
         <div class="question-card">
             <article class="question-detail">
                 <h2 id="question">{{ question.title }}</h2>
                 <p>{{ question.content }}</p>
                 <p class="meta">Posted by {{ question.user.username }} on {{ question.date_posted.astimezone(get_timezone()).strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                <a href="#answers">View Answers</a>
+                <p class="tags">Tags: {{ question.tags }}</p>
+                <a href="{{ url_for('forum') }}">Back to Questions</a>
+                <div class="vote-buttons">
+                    <button class="btn btn-success" onclick="vote('question', {{ question.id }}, 'upvote')">Upvote</button>
+                    <span>{{ question.upvotes }}</span>
+                    <button class="btn btn-danger" onclick="vote('question', {{ question.id }}, 'downvote')">Downvote</button>
+                    <span>{{ question.downvotes }}</span>
+                </div>
             </article>
             <section class="answers" id="answers">
                 <h3>Answers</h3>
-                {% for answer in question.answers %}
+                {% for answer in answers.items %}
                 <div class="answer-card">
                     <p>{{ answer.content }}</p>
                     <p class="meta">Posted by {{ answer.user.username }} on {{ answer.date_posted.astimezone(get_timezone()).strftime('%Y-%m-%d %H:%M:%S') }}</p>
-                    <a href="#question">Back to Question</a>
+                    <a href="{{ url_for('forum') }}">Back to Questions</a>
+                    <div class="vote-buttons">
+                        <button class="btn btn-success" onclick="vote('answer', {{ answer.id }}, 'upvote')">Upvote</button>
+                        <span>{{ answer.upvotes }}</span>
+                        <button class="btn btn-danger" onclick="vote('answer', {{ answer.id }}, 'downvote')">Downvote</button>
+                        <span>{{ answer.downvotes }}</span>
+                    </div>
                 </div>
                 {% endfor %}
+                <div class="pagination">
+                    {% if answers.has_prev %}
+                    <a href="{{ url_for('question_detail', question_id=question.id, page=answers.prev_num) }}" class="btn btn-primary">Previous</a>
+                    {% endif %}
+                    {% if answers.has_next %}
+                    <a href="{{ url_for('question_detail', question_id=question.id, page=answers.next_num) }}" class="btn btn-primary">Next</a>
+                    {% endif %}
+                </div>
             </section>
         </div>
     </section>

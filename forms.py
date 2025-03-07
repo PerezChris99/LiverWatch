@@ -9,6 +9,7 @@ class SubscriptionForm(FlaskForm):
 class QuestionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+    tags = StringField('Tags')
     submit = SubmitField('Post Question')
 
 class AnswerForm(FlaskForm):
