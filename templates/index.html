@@ -3,13 +3,85 @@
 {% block title %}Home - LiverWatch{% endblock %}
 
 {% block content %}
-<section class="posts">
-    {% for post in posts %}
-    <div class="post-card">
-        <img src="{{ post.image_url }}" alt="{{ post.title }}">
-        <h2><a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a></h2>
-        <p>{{ post.content[:100] }}...</p>
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Welcome to LiverWatch</h1>
+        <p>Your go-to source for real-time information on liver health, specifically focused on Uganda.</p>
+        <a href="#latest-posts" class="btn btn-primary">Explore More</a>
     </div>
-    {% endfor %}
-</section>
+</div>
+
+<div class="latest-posts" id="latest-posts">
+    <h2>Latest Blog Posts</h2>
+    <div class="posts">
+        {% for post in posts %}
+        <div class="post-card">
+            <img src="{{ post.image_url }}" alt="{{ post.title }}">
+            <h2><a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a></h2>
+            <p>{{ post.content[:150] }}...</p>
+            <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-secondary">Read More</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="newsletter-subscription">
+    <h2>Subscribe to Our Newsletter</h2>
+    <form method="post" action="{{ url_for('subscribe') }}" class="subscription-form">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            {{ form.email.label }}<br>
+            {{ form.email(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+
+<div class="key-features">
+    <h2>Key Features</h2>
+    <div class="features">
+        <div class="feature-card">
+            <h3>Health Tracker</h3>
+            <p>Log your daily habits and visualize trends to keep your liver healthy.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Diet Suggestions</h3>
+            <p>Find liver-friendly foods and meal ideas to support your liver health.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Appointment Finder</h3>
+            <p>Locate liver specialists nearby and book appointments easily.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Community Forum</h3>
+            <p>Ask and answer liver health-related questions in our community forum.</p>
+        </div>
+    </div>
+</div>
+
+<div class="testimonials">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial-cards">
+        <div class="testimonial-card">
+            <p>"LiverWatch has been a game-changer for me. The health tracker helps me stay on top of my habits."</p>
+            <p>- John Doe</p>
+        </div>
+        <div class="testimonial-card">
+            <p>"The diet suggestions are fantastic! I've discovered so many liver-friendly recipes."</p>
+            <p>- Jane Smith</p>
+        </div>
+        <div class="testimonial-card">
+            <p>"The community forum is a great place to get answers to my liver health questions."</p>
+            <p>- Dr. Emily Brown</p>
+        </div>
+    </div>
+</div>
+
+<div class="call-to-action">
+    <h2>Join LiverWatch Today</h2>
+    <p>Explore our features, ask questions, and take control of your liver health.</p>
+    <a href="{{ url_for('forum') }}" class="btn btn-primary">Join the Forum</a>
+</div>
 {% endblock %}

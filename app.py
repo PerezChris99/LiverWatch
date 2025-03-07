@@ -68,7 +68,8 @@ def inject_timezone():
 @app.route('/')
 def index():
     posts = Post.query.all()
-    return render_template('index.html', posts=posts)
+    form = SubscriptionForm()  # Create an instance of the SubscriptionForm
+    return render_template('index.html', posts=posts, form=form)  # Pass the form to the template
 
 @app.route('/post/<int:post_id>')
 def post_detail(post_id):

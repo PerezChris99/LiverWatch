@@ -1,19 +1,54 @@
+:root {
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --primary-color: #007bff;
+    --secondary-color: #0056b3;
+    --card-background-color: #fff;
+    --card-border-color: #ddd;
+    --card-hover-shadow: rgba(0, 0, 0, 0.1);
+    --meta-color: #777;
+    --hero-background: url('/static/images/hero-bg.jpg') no-repeat center center/cover;
+    --hero-text-color: #333; /* Adjusted for light mode */
+    --newsletter-background-color: #007bff;
+    --newsletter-text-color: white;
+    --testimonial-background-color: #007bff;
+    --testimonial-text-color: white;
+    --call-to-action-background-color: #007bff;
+    --call-to-action-text-color: white;
+}
+
+body.dark-mode {
+    --background-color: #1a1a1a;
+    --text-color: #f4f4f4;
+    --card-background-color: #333; /* Dark mode card background */
+    --card-border-color: #555;
+    --card-hover-shadow: rgba(255, 255, 255, 0.1);
+    --meta-color: #bbb;
+    --hero-text-color: #f4f4f4; /* Adjusted for dark mode */
+    /* Blue areas remain unchanged */
+    --newsletter-background-color: #007bff;
+    --newsletter-text-color: white;
+    --testimonial-background-color: #007bff;
+    --testimonial-text-color: white;
+    --call-to-action-background-color: #007bff;
+    --call-to-action-text-color: white;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
 }
 
-body.dark-mode {
-    background-color: #1a1a1a;
-    color: #f4f4f4;
-}
-
 header {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     padding: 1em 0;
     text-align: center;
@@ -65,20 +100,15 @@ main {
 }
 
 .post-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 8px;
     padding: 15px;
-    background-color: white;
+    background-color: var(--card-background-color);
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-body.dark-mode .post-card {
-    background-color: #444;
-    border-color: #555;
-}
-
 .post-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-hover-shadow);
 }
 
 .post-card img {
@@ -90,7 +120,7 @@ body.dark-mode .post-card {
 }
 
 .post-card h2 a {
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -108,7 +138,7 @@ body.dark-mode .post-card {
 footer {
     text-align: center;
     padding: 1em 0;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     position: fixed;
     bottom: 0;
@@ -120,43 +150,27 @@ footer {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: var(--card-background-color);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-body.dark-mode .subscription-form {
-    background-color: #444;
-    color: #f4f4f4;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px var(--card-hover-shadow);
 }
 
 .subscription-form h2 {
     text-align: center;
-    color: #333;
-}
-
-body.dark-mode .subscription-form h2 {
-    color: #f4f4f4;
+    color: var(--text-color);
 }
 
 .subscription-form input[type="email"] {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 4px;
     box-sizing: border-box;
 }
 
-body.dark-mode .subscription-form input[type="email"] {
-    background-color: #555;
-    color: #f4f4f4;
-    border-color: #777;
-}
-
 .subscription-form button {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -166,7 +180,7 @@ body.dark-mode .subscription-form input[type="email"] {
 }
 
 .subscription-form button:hover {
-    background-color: #0056b3;
+    background-color: var(--secondary-color);
 }
 
 /* Admin Styles */
@@ -177,16 +191,12 @@ body.dark-mode .subscription-form input[type="email"] {
 
 .admin-posts li {
     padding: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-body.dark-mode .admin-posts li {
-    border-color: #555;
+    border-bottom: 1px solid var(--card-border-color);
 }
 
 .admin-posts li a {
     margin-right: 10px;
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -195,25 +205,15 @@ body.dark-mode .admin-posts li {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: var(--card-background-color);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-body.dark-mode .new-post-form {
-    background-color: #444;
-    color: #f4f4f4;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px var(--card-hover-shadow);
 }
 
 .new-post-form label {
     display: block;
     margin-bottom: 5px;
-    color: #333;
-}
-
-body.dark-mode .new-post-form label {
-    color: #f4f4f4;
+    color: var(--text-color);
 }
 
 .new-post-form input[type="text"],
@@ -221,21 +221,14 @@ body.dark-mode .new-post-form label {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: #f9f9f9;
-}
-
-body.dark-mode .new-post-form input[type="text"],
-body.dark-mode .new-post-form textarea {
-    background-color: #555;
-    color: #f4f4f4;
-    border-color: #777;
+    background-color: var(--background-color);
 }
 
 .new-post-form button {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -245,7 +238,7 @@ body.dark-mode .new-post-form textarea {
 }
 
 .new-post-form button:hover {
-    background-color: #0056b3;
+    background-color: var(--secondary-color);
 }
 
 /* Dark Mode Toggle */
@@ -270,33 +263,24 @@ body.dark-mode .new-post-form textarea {
 }
 
 .card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 8px;
     padding: 15px;
-    background-color: white;
+    background-color: var(--card-background-color);
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-body.dark-mode .card {
-    background-color: #444;
-    border-color: #555;
-}
-
 .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-hover-shadow);
 }
 
 .card h2 {
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .card h3 {
     margin-top: 10px;
-    color: #333;
-}
-
-body.dark-mode .card h3 {
-    color: #f4f4f4;
+    color: var(--text-color);
 }
 
 .card ul {
@@ -320,34 +304,20 @@ body.dark-mode .card h3 {
     max-width: 300px; /* Make the form smaller */
     margin: 20px 0;
     padding: 20px;
-    background-color: #fff;
+    background-color: var(--card-background-color);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-body.dark-mode .new-question-form, body.dark-mode .new-answer-form {
-    background-color: #444;
-    color: #f4f4f4;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px var(--card-hover-shadow);
 }
 
 .new-question-form h2, .new-answer-form h2 {
     text-align: center;
-    color: #333;
-}
-
-body.dark-mode .new-question-form h2, body.dark-mode .new-answer-form h2 {
-    color: #f4f4f4;
+    color: var(--text-color);
 }
 
 .new-question-form label, .new-answer-form label {
     display: block;
     margin-bottom: 5px;
-    color: #333;
-}
-
-body.dark-mode .new-question-form label, body.dark-mode .new-answer-form label {
-    color: #f4f4f4;
+    color: var(--text-color);
 }
 
 .new-question-form input[type="text"], .new-question-form textarea,
@@ -355,21 +325,14 @@ body.dark-mode .new-question-form label, body.dark-mode .new-answer-form label {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: #f9f9f9;
-}
-
-body.dark-mode .new-question-form input[type="text"], body.dark-mode .new-question-form textarea,
-body.dark-mode .new-answer-form textarea {
-    background-color: #555;
-    color: #f4f4f4;
-    border-color: #777;
+    background-color: var(--background-color);
 }
 
 .new-question-form button, .new-answer-form button {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     padding: 12px 20px;
     border: none;
@@ -379,7 +342,7 @@ body.dark-mode .new-answer-form textarea {
 }
 
 .new-question-form button:hover, .new-answer-form button:hover {
-    background-color: #0056b3;
+    background-color: var(--secondary-color);
 }
 
 .questions, .question-answers {
@@ -396,60 +359,42 @@ body.dark-mode .new-answer-form textarea {
 }
 
 .question-card, .answer-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 8px;
     padding: 15px;
-    background-color: white;
+    background-color: var(--card-background-color);
     margin-bottom: 20px;
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-body.dark-mode .question-card, body.dark-mode .answer-card {
-    background-color: #444;
-    border-color: #555;
-}
-
 .question-card:hover, .answer-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-hover-shadow);
 }
 
 .question-detail, .answer-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 8px;
     padding: 10px;
-    background-color: white;
+    background-color: var(--card-background-color);
     margin-bottom: 10px;
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-body.dark-mode .question-detail, body.dark-mode .answer-card {
-    background-color: #444;
-    border-color: #555;
-}
-
 .question-detail:hover, .answer-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-hover-shadow);
 }
 
 .question-detail h3, .answer-card h3 {
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .question-detail p, .answer-card p {
-    color: #333;
-}
-
-body.dark-mode .question-detail p, body.dark-mode .answer-card p {
-    color: #f4f4f4;
+    color: var(--text-color);
 }
 
 .meta {
     font-size: 0.9em;
-    color: #777;
-}
-
-body.dark-mode .meta {
-    color: #bbb;
+    color: var(--meta-color);
 }
 
 .pagination {
@@ -461,7 +406,7 @@ body.dark-mode .meta {
 
 .tags {
     font-size: 0.9em;
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .search-form {
@@ -490,10 +435,10 @@ body.dark-mode .meta {
 }
 
 .news-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 8px;
     padding: 20px; /* Same padding as the "Ask a Question" card */
-    background-color: white;
+    background-color: var(--card-background-color);
     transition: background-color 0.3s, box-shadow 0.3s;
     max-width: 300px; /* Same max-width as the "Ask a Question" card */
     height: 250px; /* Set a fixed height for the news cards */
@@ -503,22 +448,17 @@ body.dark-mode .meta {
     justify-content: space-between;
 }
 
-body.dark-mode .news-card {
-    background-color: #444;
-    border-color: #555;
-}
-
 .news-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-hover-shadow);
 }
 
 .news-card h3 {
-    color: #007bff;
+    color: var(--primary-color);
     margin-bottom: 10px;
 }
 
 .news-card p {
-    color: #333;
+    color: var(--text-color);
     flex-grow: 1; /* Allow the description to take up available space */
     overflow: hidden;
     text-overflow: ellipsis; /* Add ellipsis for overflow text */
@@ -527,12 +467,8 @@ body.dark-mode .news-card {
     -webkit-box-orient: vertical;
 }
 
-body.dark-mode .news-card p {
-    color: #f4f4f4;
-}
-
 .news-card a {
-    color: #007bff;
+    color: var(--primary-color);
     text-decoration: none;
     margin-top: 10px;
 }
@@ -550,27 +486,18 @@ body.dark-mode .news-card p {
 }
 
 .health-tracker-card {
-    background-color: white;
+    background-color: var(--card-background-color);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-hover-shadow);
     padding: 20px;
     max-width: 400px; /* Make the card smaller */
     height: auto; /* Adjust height to content */
     width: 100%;
 }
 
-body.dark-mode .health-tracker-card {
-    background-color: #444;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-}
-
 .health-tracker-card h2 {
     text-align: center;
-    color: #007bff;
-}
-
-body.dark-mode .health-tracker-card h2 {
-    color: #f4f4f4;
+    color: var(--primary-color);
 }
 
 .form-group {
@@ -580,19 +507,13 @@ body.dark-mode .health-tracker-card h2 {
 .form-control {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--card-border-color);
     border-radius: 4px;
     box-sizing: border-box;
 }
 
-body.dark-mode .form-control {
-    background-color: #555;
-    color: #f4f4f4;
-    border-color: #777;
-}
-
 .btn-primary {
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: white;
     padding: 10px 20px;
     border: none;
@@ -602,7 +523,7 @@ body.dark-mode .form-control {
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: var(--secondary-color);
 }
 
 /* Health Logs Styles */
@@ -613,32 +534,19 @@ body.dark-mode .form-control {
 }
 
 .health-log-card {
-    background-color: white;
+    background-color: var(--card-background-color);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px var(--card-hover-shadow);
     padding: 15px;
     margin-bottom: 20px;
 }
 
-body.dark-mode .health-log-card {
-    background-color: #444;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-}
-
 .health-log-card h3 {
-    color: #007bff;
-}
-
-body.dark-mode .health-log-card h3 {
-    color: #f4f4f4;
+    color: var(--primary-color);
 }
 
 .health-log-card p {
-    color: #333;
-}
-
-body.dark-mode .health-log-card p {
-    color: #f4f4f4;
+    color: var(--text-color);
 }
 
 /* Health Chart Styles */
@@ -648,7 +556,93 @@ body.dark-mode .health-log-card p {
     margin-left: 20px; /* Add space between the card and chart */
 }
 
-body.dark-mode .health-chart {
-    background-color: #444;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+/* Home Page Styles */
+.hero-section {
+    background: var(--hero-background);
+    color: var(--hero-text-color);
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.latest-posts {
+    padding: 50px 20px;
+    background-color: var(--card-background-color);
+}
+
+.latest-posts h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.newsletter-subscription {
+    padding: 50px 20px;
+    background-color: var(--newsletter-background-color);
+    color: var(--newsletter-text-color);
+    text-align: center;
+}
+
+.key-features {
+    padding: 50px 20px;
+    background-color: var(--card-background-color);
+}
+
+.key-features h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    background-color: var(--card-background-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.testimonials {
+    padding: 50px 20px;
+    background-color: var(--testimonial-background-color);
+    color: var(--testimonial-text-color);
+    text-align: center;
+}
+
+.testimonial-cards {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.testimonial-card {
+    background-color: var(--card-background-color);
+    color: var(--text-color);
+    border: 1px solid var(--card-border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.call-to-action {
+    padding: 50px 20px;
+    background-color: var(--call-to-action-background-color);
+    color: var(--call-to-action-text-color);
+    text-align: center;
+}
+
+.call-to-action .btn {
+    margin-top: 20px;
 }
