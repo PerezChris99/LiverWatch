@@ -46,18 +46,24 @@ def fetch_nearby_liver_specialists(location):
 
 def fetch_medical_news():
     sources = [
-        "https://www.who.int/rss-feeds/news-english.xml",
-        "https://tools.cdc.gov/podcasts/rss.xml?s=10537",
-        "https://liverfoundation.org/feed/",
-        "https://www.niddk.nih.gov/rss.xml",
-        "https://www.aasld.org/rss.xml"
+         "https://liverdiseasenews.com/",
+        "https://www.sciencedaily.com/news/health_medicine/liver_disease/",
+        "https://www.medscape.com/viewarticle/glp-1-ras-cut-cardiovascular-risk-metabolic-liver-disease-2025a10005jk?form=fpf",
+        "https://www.news-medical.net/news/20250306/Asah1-gene-plays-key-role-in-preventing-progression-of-nonalcoholic-fatty-liver-disease.aspx",
+        "https://bmcgastroenterol.biomedcentral.com/articles/10.1186/s12876-025-03719-z",
+        "https://www.news-medical.net/news/20250305/New-drug-candidate-may-help-combat-metabolic-dysfunction-associated-steatotic-liver-disease.aspx",
+        "https://my.clevelandclinic.org/health/diseases/17179-liver-disease"
         # Add more reputable sources here
     ]
+
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+    }
 
     news_items = []
     for url in sources:
         try:
-            response = requests.get(url)
+            response = requests.get(url, headers=headers)
             response.raise_for_status()
             soup = BeautifulSoup(response.content, 'lxml')  # Use 'lxml' parser
             for item in soup.find_all('item'):

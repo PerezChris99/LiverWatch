@@ -3,38 +3,60 @@
 {% block title %}Liver Health Tracker - LiverWatch{% endblock %}
 
 {% block content %}
-<section class="health-log-form">
-    <h2>Log Your Daily Health Data</h2>
-    <form method="post">
-        {{ form.csrf_token }}
-        <label for="date">Date:</label><br>
-        {{ form.date(required=true) }}<br><br>
-        <label for="alcohol_intake">Alcohol Intake:</label><br>
-        {{ form.alcohol_intake() }}<br><br>
-        <label for="fatty_foods">Fatty Foods:</label><br>
-        {{ form.fatty_foods() }}<br><br>
-        <label for="sugar_intake">Sugar Intake:</label><br>
-        {{ form.sugar_intake() }}<br><br>
-        <label for="water_intake">Water Intake:</label><br>
-        {{ form.water_intake() }}<br><br>
-        <label for="exercise_level">Exercise Level:</label><br>
-        {{ form.exercise_level() }}<br><br>
-        <label for="medication_usage">Medication Usage:</label><br>
-        {{ form.medication_usage(size=50) }}<br><br>
-        {{ form.submit() }}
-    </form>
-</section>
-<section class="health-logs">
-    <h2>Your Health Logs</h2>
-    <canvas id="healthChart" width="400" height="200"
-        data-labels='[{% for log in health_logs %} "{{ log.date.strftime('%Y-%m-%d') }}", {% endfor %}]'
-        data-alcohol-intake='[{% for log in health_logs %} {{ log.alcohol_intake or 0 }}, {% endfor %}]'
-        data-fatty-foods='[{% for log in health_logs %} {{ log.fatty_foods or 0 }}, {% endfor %}]'
-        data-sugar-intake='[{% for log in health_logs %} {{ log.sugar_intake or 0 }}, {% endfor %}]'
-        data-water-intake='[{% for log in health_logs %} {{ log.water_intake or 0 }}, {% endfor %}]'
-        data-exercise-level='[{% for log in health_logs %} {{ log.exercise_level or 0 }}, {% endfor %}]'>
-    </canvas>
-</section>
+<div class="health-tracker-container">
+    <div class="health-tracker-card">
+        <h2>Log Your Daily Health Data</h2>
+        <form method="post">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                <label for="date">Date:</label><br>
+                {{ form.date(required=true, class="form-control", type="date") }}
+            </div>
+            <div class="form-group">
+                <label for="alcohol_intake">Alcohol Intake (units):</label><br>
+                {{ form.alcohol_intake(class="form-control", placeholder="e.g., 2 units") }}
+            </div>
+            <div class="form-group">
+                <label for="fatty_foods">Fatty Foods (servings):</label><br>
+                {{ form.fatty_foods(class="form-control", placeholder="e.g., 3 servings") }}
+            </div>
+            <div class="form-group">
+                <label for="sugar_intake">Sugar Intake (grams):</label><br>
+                {{ form.sugar_intake(class="form-control", placeholder="e.g., 50 grams") }}
+            </div>
+            <div class="form-group">
+                <label for="water_intake">Water Intake (liters):</label><br>
+                {{ form.water_intake(class="form-control", placeholder="e.g., 2 liters") }}
+            </div>
+            <div class="form-group">
+                <label for="exercise_level">Exercise Level (minutes):</label><br>
+                {{ form.exercise_level(class="form-control", placeholder="e.g., 30 minutes") }}
+            </div>
+            <div class="form-group">
+                <label for="medication_usage">Medication Usage:</label><br>
+                {{ form.medication_usage(size=50, class="form-control", placeholder="e.g., 1 tablet of aspirin") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+    <div class="health-logs">
+        {% for log in health_logs %}
+        <div class="health-log-card">
+            <h3>{{ log.date.strftime('%Y-%m-%d') }}</h3>
+            <canvas id="healthChart-{{ log.id }}" width="400" height="400"
+                data-alcohol-intake="{{ log.alcohol_intake }}"
+                data-fatty-foods="{{ log.fatty_foods }}"
+                data-sugar-intake="{{ log.sugar_intake }}"
+                data-water-intake="{{ log.water_intake }}"
+                data-exercise-level="{{ log.exercise_level }}"
+                data-medication-usage="{{ log.medication_usage }}">
+            </canvas>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{{ url_for('static', filename='health_tracker.js') }}"></script>

@@ -21,7 +21,7 @@ app.config.from_object(Config)
 db.init_app(app)
 mail = Mail(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
+limiter = Limiter(key_func=get_remote_address, default_limits=["2000 per day", "50 per hour"])
 limiter.init_app(app)
 
 # Exclude static files from rate limiting
@@ -61,6 +61,13 @@ def inject_timezone():
                 return pytz.timezone(timezone_str)
         return pytz.utc
     return dict(get_timezone=get_timezone)
+
+# Custom filter for strftime
+@app.template_filter('strftime')
+def _jinja2_filter_datetime(date, fmt=None):
+    if fmt is None:
+        fmt = '%Y-%m-%d'
+    return date.strftime(fmt)
 
 @app.route('/')
 def index():
