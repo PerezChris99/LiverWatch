@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Confirmation</title>
+</head>
+<body class="subscription-email-body">
+    <div class="subscription-email-container">
+        <h1>Welcome to LiverWatch!</h1>
+        <p>Thank you for subscribing to our newsletter. You'll now receive constant updates about liver health, including information on biliary cirrhosis and biliary atresia, best practices for keeping your liver healthy, and much more.</p>
+        <p>We hope you find our updates beneficial and informative.</p>
+        <p>If you wish to unsubscribe at any time, please click the link below:</p>
+        <a href="{{ url_for('unsubscribe', email=email, _external=True) }}" class="unsubscribe">Unsubscribe</a>
+    </div>
+</body>
+</html>

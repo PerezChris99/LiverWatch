@@ -147,9 +147,9 @@ footer {
 
 /* Subscription Form */
 .subscription-form {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
+    max-width: 200px; /* Further reduce the max-width */
+    margin: 10px auto; /* Reduce the margin */
+    padding: 5px; /* Further reduce the padding */
     background-color: var(--card-background-color);
     border-radius: 8px;
     box-shadow: 0 0 10px var(--card-hover-shadow);
@@ -158,12 +158,13 @@ footer {
 .subscription-form h2 {
     text-align: center;
     color: var(--text-color);
+    font-size: 0.8em; /* Further reduce the font size */
 }
 
 .subscription-form input[type="email"] {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0;
+    padding: 4px; /* Further reduce the padding */
+    margin: 4px 0; /* Reduce the margin */
     border: 1px solid var(--card-border-color);
     border-radius: 4px;
     box-sizing: border-box;
@@ -172,15 +173,53 @@ footer {
 .subscription-form button {
     background-color: var(--primary-color);
     color: white;
-    padding: 12px 20px;
+    padding: 5px 10px; /* Further reduce the padding */
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px; /* Further reduce the font size */
 }
 
 .subscription-form button:hover {
     background-color: var(--secondary-color);
+}
+
+/* Subscription Email Styles */
+.subscription-email-body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.subscription-email-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.subscription-email-container h1 {
+    color: #007bff;
+}
+
+.subscription-email-container p {
+    line-height: 1.6;
+}
+
+.subscription-email-container .unsubscribe {
+    display: block;
+    margin-top: 20px;
+    text-align: center;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.subscription-email-container .unsubscribe:hover {
+    text-decoration: underline;
 }
 
 /* Admin Styles */
@@ -679,4 +718,29 @@ footer {
 canvas {
     max-width: 100%;
     height: 450px; /* Set a fixed height for the canvas */
+}
+
+/* Flash Messages */
+.flash-messages {
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.flash-message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-message.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
 }

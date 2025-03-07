@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, Blueprint, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+# Remove the limiter import
+# from flask_limiter import Limiter
+# from flask_limiter.util import get_remote_address
 from flask_caching import Cache
 from functools import wraps
 import jwt
@@ -14,7 +15,7 @@ from utils import scrape_data, fetch_nearby_liver_specialists, fetch_medical_new
 import pytz
 import ipinfo
 from timezonefinder import TimezoneFinder
-from flask_migrate import Migrate
+from flask_migrate import Migrate  # Add this import
 import os
 
 app = Flask(__name__)
@@ -24,11 +25,15 @@ db.init_app(app)
 migrate = Migrate(app, db)  # Initialize Flask-Migrate
 mail = Mail(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
-limiter = Limiter(key_func=get_remote_address, default_limits=["2000 per day", "50 per hour"])
-limiter.init_app(app)
+# Remove the limiter initialization
+# limiter = Limiter(key_func=get_remote_address, default_limits=["2000 per day", "50 per hour"])
+# limiter.init_app(app)
 
 # Exclude static files from rate limiting
-limiter.limit("200 per day", exempt_when=lambda: request.path.startswith('/static'))
+# Remove the static blueprint and limiter exemption
+# static_bp = Blueprint('static', __name__, static_folder='static')
+# app.register_blueprint(static_bp, url_prefix='/static')
+# limiter.exempt(static_bp)
 
 # Create database tables
 with app.app_context():
@@ -81,15 +86,30 @@ def subscribe():
     form = SubscriptionForm()
     if form.validate_on_submit():
         email = form.email.data
-        new_subscriber = Subscriber(email=email)
-        db.session.add(new_subscriber)
-        db.session.commit()
-        # Send confirmation email
-        msg = Message("Subscription Confirmation", sender=app.config['MAIL_DEFAULT_SENDER'], recipients=[email])
-        msg.body = "Thank you for subscribing to our newsletter!"
-        mail.send(msg)
-        return 'Subscribed!'
+        existing_subscriber = Subscriber.query.filter_by(email=email).first()
+        if existing_subscriber:
+            flash('This email is already subscribed.', 'warning')
+        else:
+            new_subscriber = Subscriber(email=email)
+            db.session.add(new_subscriber)
+            db.session.commit()
+            # Send confirmation email using the new template
+            msg = Message("Subscription Confirmation", sender=app.config['MAIL_DEFAULT_SENDER'], recipients=[email])
+            msg.html = render_template('emails/subscription_confirmation.html', email=email)
+            mail.send(msg)
+            flash('You have successfully subscribed!', 'success')
+        return redirect(url_for('index'))
     return render_template('subscribe.html', form=form)
+
+@app.route('/unsubscribe')
+def unsubscribe():
+    email = request.args.get('email')
+    subscriber = Subscriber.query.filter_by(email=email).first()
+    if subscriber:
+        db.session.delete(subscriber)
+        db.session.commit()
+        return 'You have been unsubscribed.'
+    return 'Email not found.'
 
 @app.route('/admin')
 @token_required
@@ -146,7 +166,8 @@ def delete_post(post_id):
     return redirect(url_for('admin'))
 
 @app.route('/login')
-@limiter.limit("5 per minute")
+# Remove the rate limiting decorator
+# @limiter.limit("5 per minute")
 def login():
     token = jwt.encode({
         'user': 'admin',
