@@ -308,5 +308,9 @@ def fetch_nearby_liver_specialists(location):
         print(f"Error fetching nearby specialists: {e}")
         return []
 
+@app.route('/survival_rates')
+def survival_rates():
+    return render_template('survival_rates.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

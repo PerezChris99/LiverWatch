@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Survival Rates - LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Overall Survival vs. Death Rates in Liver Disease</h1>
+    <div class="graph-container">
+        <div class="graph">
+            <canvas id="globalSurvivalChart"></canvas>
+        </div>
+        <div class="graph">
+            <canvas id="ugandanSurvivalChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Ensure Chart.js is loaded -->
+<script src="{{ url_for('static', filename='survival_rates.js') }}"></script>
+{% endblock %}

@@ -20,6 +20,7 @@
             <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
             <a href="{{ url_for('medical_news') }}">Medical News</a>
             <a href="{{ url_for('child_health') }}">Child Health</a>
+            <a href="{{ url_for('survival_rates') }}">Survival Rates</a> <!-- New link -->
             <button id="theme-toggle" class="fas fa-moon"></button>
         </nav>
     </header>
@@ -30,17 +31,7 @@
         <p>&copy; 2024 LiverWatch</p>
     </footer>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var quill = new Quill('#editor', {
-                theme: 'snow'
-            });
-            var form = document.querySelector('form');
-            form.onsubmit = function() {
-                var content = document.querySelector('input[name=content]');
-                content.value = quill.root.innerHTML;
-            };
-        });
-    </script>
+    <script src="{{ url_for('static', filename='base.js') }}"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>
