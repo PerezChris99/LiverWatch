@@ -5,23 +5,49 @@ from flask_caching import Cache
 from functools import wraps
 import jwt
 import datetime
+import requests
 from config import Config
 from models import db, Post, Subscriber, Question, Answer, User, HealthLog, Recipe
 from forms import SubscriptionForm, QuestionForm, AnswerForm, HealthLogForm
-from utils import scrape_data, fetch_nearby_liver_specialists, fetch_medical_news
+from utils import fetch_nearby_liver_specialists, fetch_medical_news
+from scraper import scrape_medical_news, scrape_single_article
+from analytics import analytics_bp
+from notifications import notifications_bp
 import pytz
 import ipinfo
 from timezonefinder import TimezoneFinder
-from flask_migrate import Migrate  # Ensure this import is present
+from flask_migrate import Migrate
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Register blueprints
+app.register_blueprint(analytics_bp)
+app.register_blueprint(notifications_bp)
+
 db.init_app(app)
-migrate = Migrate(app, db)  # Ensure Flask-Migrate is initialized
+migrate = Migrate(app, db)
 mail = Mail(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+def run_scraper():
+    with app.app_context():
+        scrape_and_show()
+
+scheduler = BackgroundScheduler(timezone=pytz.utc)
+scheduler.add_job(func=run_scraper, trigger="interval", hours=1)
+scheduler.start()
 
 # Create database tables
 with app.app_context():
@@ -111,27 +137,41 @@ def new_post():
     if request.method == 'POST':
         title = request.form['title']
         content_url = request.form['content']
-        # Scrape data and create post
-        scraped_data = scrape_data(content_url)
-        if scraped_data:
-            new_post = Post(
-                title=scraped_data['title'],
-                content=scraped_data['content'],
-                image_url=scraped_data['image_url'],
-                source_url=content_url
-            )
-            db.session.add(new_post)
-            db.session.commit()
-            # Send email to subscribers
-            with app.app_context():
-                subscribers = Subscriber.query.all()
-                for subscriber in subscribers:
-                    msg = Message("New Post Alert", sender=app.config['MAIL_DEFAULT_SENDER'], recipients=[subscriber.email])
-                    msg.body = f"A new post '{title}' has been added to our blog!"
-                    mail.send(msg)
-            return redirect(url_for('admin'))
-        else:
-            return "Scraping failed."
+        image_url = request.form.get('image_url') # Get image_url from form
+
+        # If a content_url is provided, try to scrape it
+        if content_url:
+            scraped_data = scrape_single_article(content_url)
+            if scraped_data:
+                title = scraped_data['title']
+                content = scraped_data['content']
+                image_url = scraped_data['image_url'] if scraped_data['image_url'] else image_url
+            else:
+                flash("Scraping failed for the provided URL.", 'danger')
+                return render_template('new_post.html')
+        
+        # If no content_url or scraping failed, use direct input
+        if not title or not content:
+            flash("Title and Content are required.", 'danger')
+            return render_template('new_post.html')
+
+        new_post = Post(
+            title=title,
+            content=content,
+            image_url=image_url,
+            source_url=content_url
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        # Send email to subscribers
+        with app.app_context():
+            subscribers = Subscriber.query.all()
+            for subscriber in subscribers:
+                msg = Message("New Post Alert", sender=app.config['MAIL_DEFAULT_SENDER'], recipients=[subscriber.email])
+                msg.body = f"A new post '{title}' has been added to our blog!"
+                mail.send(msg)
+        flash('Post created successfully!', 'success')
+        return redirect(url_for('admin'))
     return render_template('new_post.html')
 
 @app.route('/admin/post/edit/<int:post_id>', methods=['GET', 'POST'])
@@ -153,10 +193,10 @@ def delete_post(post_id):
     db.session.commit()
     return redirect(url_for('admin'))
 
-@app.route('/login')
+@app.route('/admin-token')
 # Remove the rate limiting decorator
 # @limiter.limit("5 per minute")
-def login():
+def admin_token():
     token = jwt.encode({
         'user': 'admin',
         'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
@@ -258,7 +298,12 @@ def diet_suggestions():
 @app.route('/appointment_finder')
 def appointment_finder():
     location = request.args.get('location', 'New York')  # Default location
-    specialists = fetch_nearby_liver_specialists(location)
+    api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
+    if not api_key:
+        flash('Google Maps API key is not configured. Please set the GOOGLE_MAPS_API_KEY environment variable.', 'warning')
+        specialists = []
+    else:
+        specialists = fetch_nearby_liver_specialists(location)
     return render_template('appointment_finder.html', specialists=specialists)
 
 @app.route('/medical_news')
@@ -302,6 +347,7 @@ def vote(type, id, action):
     return {'success': True}, 200
 
 def fetch_nearby_liver_specialists(location):
+    from utils import get_google_maps_api_key
     api_key = get_google_maps_api_key()
     if not api_key:
         print("Google Maps API key not set.")
@@ -320,6 +366,53 @@ def fetch_nearby_liver_specialists(location):
 @app.route('/survival_rates')
 def survival_rates():
     return render_template('survival_rates.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        user = User.query.filter_by(username=request.form['username']).first()
+        if user and check_password_hash(user.password, request.form['password']):
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid username or password')
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        hashed_password = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
+        new_user = User(username=request.form['username'], email=request.form['email'], password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('You have successfully registered!')
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/scrape')
+def scrape_and_show():
+    articles = scrape_medical_news()
+    for article_data in articles:
+        existing_post = Post.query.filter_by(source_url=article_data['link']).first()
+        if not existing_post:
+            post = Post(
+                title=article_data['title'],
+                content=article_data['summary'],
+                source_url=article_data['link']
+            )
+            db.session.add(post)
+    db.session.commit()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

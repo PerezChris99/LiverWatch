@@ -8,18 +8,23 @@
         <h1>Welcome to LiverWatch</h1>
         <p>Your go-to source for real-time information on liver health, specifically focused on Uganda.</p>
         <a href="#latest-posts" class="btn btn-primary">Explore More</a>
+        <a href="{{ url_for('scrape_and_show') }}" class="btn btn-secondary">Scrape New Articles</a>
     </div>
 </div>
 
 <div class="latest-posts" id="latest-posts">
     <h2>Latest Blog Posts</h2>
-    <div class="posts">
+    <div class="row">
         {% for post in posts %}
-        <div class="post-card">
-            <img src="{{ post.image_url }}" alt="{{ post.title }}">
-            <h2><a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a></h2>
-            <p>{{ post.content[:150] }}...</p>
-            <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-secondary">Read More</a>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ post.image_url }}" class="card-img-top" alt="{{ post.title }}">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a></h5>
+                    <p class="card-text">{{ post.content[:150] }}...</p>
+                    <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-secondary">Read More</a>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -63,7 +68,7 @@
 
 <div class="testimonials">
     <h2>What Our Users Say</h2>
-    <div class="testimonial-cards">
+    <div classs="testimonial-cards">
         <div class="testimonial-card">
             <p>"LiverWatch has been a game-changer for me. The health tracker helps me stay on top of my habits."</p>
             <p>- John Doe</p>

@@ -1,54 +1,19 @@
-:root {
-    --background-color: #f4f4f4;
-    --text-color: #333;
-    --primary-color: #007bff;
-    --secondary-color: #0056b3;
-    --card-background-color: #fff;
-    --card-border-color: #ddd;
-    --card-hover-shadow: rgba(0, 0, 0, 0.1);
-    --meta-color: #777;
-    --hero-background: url('/static/images/hero-bg.jpg') no-repeat center center/cover;
-    --hero-text-color: #333; /* Adjusted for light mode */
-    --newsletter-background-color: #007bff;
-    --newsletter-text-color: white;
-    --testimonial-background-color: #007bff;
-    --testimonial-text-color: white;
-    --call-to-action-background-color: #007bff;
-    --call-to-action-text-color: white;
-}
-
-body.dark-mode {
-    --background-color: #1a1a1a;
-    --text-color: #f4f4f4;
-    --card-background-color: #333; /* Dark mode card background */
-    --card-border-color: #555;
-    --card-hover-shadow: rgba(255, 255, 255, 0.1);
-    --meta-color: #bbb;
-    --hero-text-color: #f4f4f4; /* Adjusted for dark mode */
-    /* Blue areas remain unchanged */
-    --newsletter-background-color: #007bff;
-    --newsletter-text-color: white;
-    --testimonial-background-color: #007bff;
-    --testimonial-text-color: white;
-    --call-to-action-background-color: #007bff;
-    --call-to-action-text-color: white;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    background-color: #f4f4f4;
+    color: #333;
     transition: background-color 0.3s, color 0.3s;
 }
 
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #f4f4f4;
+}
+
 header {
-    background-color: var(--primary-color);
+    background-color: #007bff;
     color: white;
     padding: 1em 0;
     text-align: center;
@@ -90,7 +55,6 @@ nav a {
 
 main {
     padding: 20px;
-    padding-bottom: 100px; /* Add padding at the bottom to prevent footer overlap */
 }
 
 .posts {
@@ -100,15 +64,20 @@ main {
 }
 
 .post-card {
-    border: 1px solid var(--card-border-color);
+    border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
-    background-color: var(--card-background-color);
+    background-color: white;
     transition: background-color 0.3s, box-shadow 0.3s;
 }
 
+body.dark-mode .post-card {
+    background-color: #444;
+    border-color: #555;
+}
+
 .post-card:hover {
-    box-shadow: 0 4px 8px var(--card-hover-shadow);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .post-card img {
@@ -120,7 +89,7 @@ main {
 }
 
 .post-card h2 a {
-    color: var(--primary-color);
+    color: #007bff;
     text-decoration: none;
 }
 
@@ -138,7 +107,7 @@ main {
 footer {
     text-align: center;
     padding: 1em 0;
-    background-color: var(--primary-color);
+    background-color: #007bff;
     color: white;
     position: fixed;
     bottom: 0;
@@ -147,53 +116,6 @@ footer {
 
 /* Subscription Form */
 .subscription-form {
-    max-width: 200px; /* Further reduce the max-width */
-    margin: 10px auto; /* Reduce the margin */
-    padding: 5px; /* Further reduce the padding */
-    background-color: var(--card-background-color);
-    border-radius: 8px;
-    box-shadow: 0 0 10px var(--card-hover-shadow);
-}
-
-.subscription-form h2 {
-    text-align: center;
-    color: var(--text-color);
-    font-size: 0.8em; /* Further reduce the font size */
-}
-
-.subscription-form input[type="email"] {
-    width: 100%;
-    padding: 4px; /* Further reduce the padding */
-    margin: 4px 0; /* Reduce the margin */
-    border: 1px solid var(--card-border-color);
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.subscription-form button {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 5px 10px; /* Further reduce the padding */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px; /* Further reduce the font size */
-}
-
-.subscription-form button:hover {
-    background-color: var(--secondary-color);
-}
-
-/* Subscription Email Styles */
-.subscription-email-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-.subscription-email-container {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
@@ -202,24 +124,48 @@ footer {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.subscription-email-container h1 {
-    color: #007bff;
+body.dark-mode .subscription-form {
+    background-color: #444;
+    color: #f4f4f4;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-.subscription-email-container p {
-    line-height: 1.6;
-}
-
-.subscription-email-container .unsubscribe {
-    display: block;
-    margin-top: 20px;
+.subscription-form h2 {
     text-align: center;
-    color: #007bff;
-    text-decoration: none;
+    color: #333;
 }
 
-.subscription-email-container .unsubscribe:hover {
-    text-decoration: underline;
+body.dark-mode .subscription-form h2 {
+    color: #f4f4f4;
+}
+
+.subscription-form input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+body.dark-mode .subscription-form input[type="email"] {
+    background-color: #555;
+    color: #f4f4f4;
+    border-color: #777;
+}
+
+.subscription-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.subscription-form button:hover {
+    background-color: #0056b3;
 }
 
 /* Admin Styles */
@@ -230,12 +176,16 @@ footer {
 
 .admin-posts li {
     padding: 10px;
-    border-bottom: 1px solid var(--card-border-color);
+    border-bottom: 1px solid #eee;
+}
+
+body.dark-mode .admin-posts li {
+    border-color: #555;
 }
 
 .admin-posts li a {
     margin-right: 10px;
-    color: var(--primary-color);
+    color: #007bff;
     text-decoration: none;
 }
 
@@ -244,15 +194,25 @@ footer {
     max-width: 600px;
     margin: 20px auto;
     padding: 20px;
-    background-color: var(--card-background-color);
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px var(--card-hover-shadow);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .new-post-form {
+    background-color: #444;
+    color: #f4f4f4;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
 .new-post-form label {
     display: block;
     margin-bottom: 5px;
-    color: var(--text-color);
+    color: #333;
+}
+
+body.dark-mode .new-post-form label {
+    color: #f4f4f4;
 }
 
 .new-post-form input[type="text"],
@@ -260,14 +220,21 @@ footer {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
-    border: 1px solid var(--card-border-color);
+    border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: var(--background-color);
+    background-color: #f9f9f9;
+}
+
+body.dark-mode .new-post-form input[type="text"],
+body.dark-mode .new-post-form textarea {
+    background-color: #555;
+    color: #f4f4f4;
+    border-color: #777;
 }
 
 .new-post-form button {
-    background-color: var(--primary-color);
+    background-color: #007bff;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -277,470 +244,19 @@ footer {
 }
 
 .new-post-form button:hover {
-    background-color: var(--secondary-color);
+    background-color: #0056b3;
 }
 
 /* Dark Mode Toggle */
 #theme-toggle {
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    cursor: pointer;
+    background-color: #444;
     color: white;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #theme-toggle:hover {
-    color: #ffcc00;
-}
-
-/* Child Health Cards */
-.child-health-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.card {
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    padding: 15px;
-    background-color: var(--card-background-color);
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-    box-shadow: 0 4px 8px var(--card-hover-shadow);
-}
-
-.card h2 {
-    color: var(--primary-color);
-}
-
-.card h3 {
-    margin-top: 10px;
-    color: var(--text-color);
-}
-
-.card ul {
-    list-style-type: disc;
-    padding-left: 20px;
-}
-
-.card ul li {
-    margin-bottom: 5px;
-}
-
-/* Forum Styles */
-.forum-container, .question-detail-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.new-question-form, .new-answer-form {
-    flex: 1;
-    max-width: 300px; /* Make the form smaller */
-    margin: 20px 0;
-    padding: 20px;
-    background-color: var(--card-background-color);
-    border-radius: 8px;
-    box-shadow: 0 0 10px var(--card-hover-shadow);
-}
-
-.new-question-form h2, .new-answer-form h2 {
-    text-align: center;
-    color: var(--text-color);
-}
-
-.new-question-form label, .new-answer-form label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--text-color);
-}
-
-.new-question-form input[type="text"], .new-question-form textarea,
-.new-answer-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid var(--card-border-color);
-    border-radius: 4px;
-    box-sizing: border-box;
-    background-color: var(--background-color);
-}
-
-.new-question-form button, .new-answer-form button {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.new-question-form button:hover, .new-answer-form button:hover {
-    background-color: var(--secondary-color);
-}
-
-.questions, .question-answers {
-    flex: 2;
-    max-width: 800px;
-    margin: 20px 0;
-    height: 400px; /* Set a fixed height for the questions section */
-    overflow-y: auto; /* Make the questions section scrollable */
-}
-
-.questions-scroll {
-    max-height: 100%;
-    overflow-y: auto;
-}
-
-.question-card, .answer-card {
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    padding: 15px;
-    background-color: var(--card-background-color);
-    margin-bottom: 20px;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.question-card:hover, .answer-card:hover {
-    box-shadow: 0 4px 8px var(--card-hover-shadow);
-}
-
-.question-detail, .answer-card {
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    padding: 10px;
-    background-color: var(--card-background-color);
-    margin-bottom: 10px;
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.question-detail:hover, .answer-card:hover {
-    box-shadow: 0 4px 8px var(--card-hover-shadow);
-}
-
-.question-detail h3, .answer-card h3 {
-    color: var(--primary-color);
-}
-
-.question-detail p, .answer-card p {
-    color: var(--text-color);
-}
-
-.meta {
-    font-size: 0.9em;
-    color: var(--meta-color);
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.tags {
-    font-size: 0.9em;
-    color: var(--primary-color);
-}
-
-.search-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.search-form .form-control {
-    flex: 1;
-}
-
-.search-form .btn-primary {
-    flex-shrink: 0;
-}
-
-/* Medical News Styles */
-.news-container {
-    padding: 20px;
-}
-
-.news-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Four columns */
-    gap: 20px;
-}
-
-.news-card {
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    padding: 20px; /* Same padding as the "Ask a Question" card */
-    background-color: var(--card-background-color);
-    transition: background-color 0.3s, box-shadow 0.3s;
-    max-width: 300px; /* Same max-width as the "Ask a Question" card */
-    height: 250px; /* Set a fixed height for the news cards */
-    overflow: hidden; /* Hide overflow content */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.news-card:hover {
-    box-shadow: 0 4px 8px var (--card-hover-shadow);
-}
-
-.news-card h3 {
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.news-card p {
-    color: var(--text-color);
-    flex-grow: 1; /* Allow the description to take up available space */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis for overflow text */
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Limit to 3 lines */
-    -webkit-box-orient: vertical;
-}
-
-.news-card a {
-    color: var(--primary-color);
-    text-decoration: none;
-    margin-top: 10px;
-}
-
-.news-card a:hover {
-    text-decoration: underline;
-}
-
-/* Health Tracker Styles */
-.health-tracker-container {
-    display: flex;
-    justify-content: space-between; /* Align items to the left and right */
-    align-items: flex-start; /* Align to the top */
-    padding: 20px;
-}
-
-.health-tracker-card {
-    background-color: var(--card-background-color);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px var(--card-hover-shadow);
-    padding: 20px;
-    max-width: 400px; /* Make the card smaller */
-    height: auto; /* Adjust height to content */
-    width: 100%;
-}
-
-.health-tracker-card h2 {
-    text-align: center;
-    color: var(--primary-color);
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--card-border-color);
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.btn-primary:hover {
-    background-color: var(--secondary-color);
-}
-
-/* Health Logs Styles */
-.health-logs {
-    max-width: 600px;
-    width: 100%;
-    margin-left: 20px; /* Add space between the card and logs */
-}
-
-.health-log-card {
-    background-color: var(--card-background-color);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px var(--card-hover-shadow);
-    padding: 15px;
-    margin-bottom: 20px;
-}
-
-.health-log-card h3 {
-    color: var(--primary-color);
-}
-
-.health-log-card p {
-    color: var(--text-color);
-}
-
-/* Health Chart Styles */
-.health-chart {
-    max-width: 600px;
-    width: 100%;
-    margin-left: 20px; /* Add space between the card and chart */
-}
-
-/* Home Page Styles */
-.hero-section {
-    background: var(--hero-background);
-    color: var(--hero-text-color);
-    text-align: center;
-    padding: 100px 20px;
-}
-
-.hero-content {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.latest-posts {
-    padding: 50px 20px;
-    background-color: var(--card-background-color);
-}
-
-.latest-posts h2 {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.newsletter-subscription {
-    padding: 50px 20px;
-    background-color: var(--newsletter-background-color);
-    color: var(--newsletter-text-color);
-    text-align: center;
-}
-
-.key-features {
-    padding: 50px 20px;
-    background-color: var(--card-background-color);
-}
-
-.key-features h2 {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.features {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
-.feature-card {
-    background-color: var(--card-background-color);
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px;
-    width: 200px;
-    text-align: center;
-}
-
-.testimonials {
-    padding: 50px 20px;
-    background-color: var(--testimonial-background-color);
-    color: var(--testimonial-text-color);
-    text-align: center;
-}
-
-.testimonial-cards {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
-.testimonial-card {
-    background-color: var(--card-background-color);
-    color: var(--text-color);
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    padding: 20px;
-    margin: 10px;
-    width: 200px;
-    text-align: center;
-}
-
-.call-to-action {
-    padding: 50px 20px;
-    background-color: var(--call-to-action-background-color);
-    color: var(--call-to-action-text-color);
-    text-align: center;
-}
-
-.call-to-action .btn {
-    margin-top: 20px;
-}
-
-.container {
-    max-width: 1200px; /* Increase the width of the container */
-    margin: 0 auto;
-    padding: 20px;
-    background-color: var(--card-background-color);
-    border-radius: 8px;
-    box-shadow: 0 0 10px var(--card-hover-shadow);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.graph-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 100%;
-}
-
-.graph {
-    flex: 1;
-    max-width: 48%; /* Increase the width of each graph section */
-    background-color: var(--card-background-color);
-    border-radius: 8px;
-    box-shadow: 0 0 10px var(--card-hover-shadow);
-    padding: 20px;
-}
-
-canvas {
-    max-width: 100%;
-    height: 450px; /* Set a fixed height for the canvas */
-}
-
-/* Flash Messages */
-.flash-messages {
-    margin: 20px auto;
-    max-width: 600px;
-}
-
-.flash-message {
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.flash-message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.flash-message.warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
+    background-color: #555;
 }

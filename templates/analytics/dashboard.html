@@ -1,0 +1,462 @@
+{% extends "base.html" %}
+
+{% block title %}Health Analytics Dashboard - LiverWatch{% endblock %}
+
+{% block content %}
+<div class="analytics-dashboard">
+    <div class="dashboard-header">
+        <h1>Your Liver Health Analytics</h1>
+        <div class="risk-score-card">
+            <h3>Current Risk Score</h3>
+            <div class="risk-score-display" data-score="{{ risk_score }}">
+                <span class="score-value">{{ "%.1f"|format(risk_score * 100) }}%</span>
+                <div class="risk-level {% if risk_score > 0.7 %}high{% elif risk_score > 0.4 %}medium{% else %}low{% endif %}">
+                    {% if risk_score > 0.7 %}High Risk{% elif risk_score > 0.4 %}Medium Risk{% else %}Low Risk{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="analytics-card">
+            <h3>Health Trends</h3>
+            <canvas id="healthTrendsChart" width="400" height="200"></canvas>
+            <div class="trend-summary">
+                {% if trends.status == 'success' %}
+                    {% for factor, data in trends.trends.items() %}
+                    <div class="trend-item {{ data.trend }}">
+                        <span class="factor-name">{{ factor.replace('_', ' ').title() }}</span>
+                        <span class="trend-arrow">
+                            {% if data.trend == 'improving' %}↗{% else %}↘{% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Need more data to show trends</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>AI Recommendations</h3>
+            <div class="recommendations-list">
+                {% for rec in recommendations %}
+                <div class="recommendation {{ rec.priority }}">
+                    <div class="rec-header">
+                        <span class="rec-type">{{ rec.type.title() }}</span>
+                        <span class="priority-badge">{{ rec.priority.title() }}</span>
+                    </div>
+                    <h4>{{ rec.title }}</h4>
+                    <p>{{ rec.message }}</p>
+                    {% if rec.recipes %}
+                    <div class="recipe-suggestions">
+                        <h5>Suggested Recipes:</h5>
+                        {% for recipe in rec.recipes %}
+                        <a href="{{ url_for('diet_suggestions') }}#recipe-{{ recipe.id }}" class="recipe-link">{{ recipe.title }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Progress Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value">{{ total_logs }}</span>
+                    <span class="stat-label">Total Health Logs</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ recent_logs }}</span>
+                    <span class="stat-label">Recent Logs (30 days)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ "%.1f"|format((recent_logs/30)*100) if recent_logs else 0 }}%</span>
+                    <span class="stat-label">Daily Consistency</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Detailed Health Chart</h3>
+            <div class="chart-controls">
+                <button onclick="updateChart(30)" class="chart-btn active">30 Days</button>
+                <button onclick="updateChart(90)" class="chart-btn">90 Days</button>
+                <button onclick="updateChart(365)" class="chart-btn">1 Year</button>
+            </div>
+            <canvas id="detailedHealthChart" width="400" height="300"></canvas>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Risk Assessment</h3>
+            <div id="riskAssessment">
+                <div class="loading">Loading risk assessment...</div>
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Community Comparison</h3>
+            <div id="communityStats">
+                <div class="loading">Loading community statistics...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.analytics-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+}
+
+.risk-score-card {
+    text-align: center;
+}
+
+.risk-score-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-value {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.risk-level {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+.risk-level.low { background-color: #4CAF50; }
+.risk-level.medium { background-color: #FF9800; }
+.risk-level.high { background-color: #F44336; }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.analytics-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.analytics-card h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
+}
+
+.recommendation {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #ccc;
+}
+
+.recommendation.urgent { border-left-color: #F44336; background-color: #ffebee; }
+.recommendation.high { border-left-color: #FF9800; background-color: #fff3e0; }
+.recommendation.medium { border-left-color: #2196F3; background-color: #e3f2fd; }
+.recommendation.low { border-left-color: #4CAF50; background-color: #e8f5e8; }
+
+.rec-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.priority-badge {
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: #667eea;
+    color: white;
+}
+
+.trend-summary {
+    margin-top: 15px;
+}
+
+.trend-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.trend-item.improving { color: #4CAF50; }
+.trend-item.declining { color: #F44336; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.chart-controls {
+    margin-bottom: 15px;
+}
+
+.chart-btn {
+    padding: 8px 16px;
+    margin-right: 10px;
+    border: 1px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chart-btn.active {
+    background-color: #667eea;
+    color: white;
+}
+
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+.recipe-suggestions {
+    margin-top: 10px;
+}
+
+.recipe-link {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #667eea;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.recipe-link:hover {
+    background-color: #5a67d8;
+}
+
+/* Dark mode support */
+body.dark-mode .analytics-card {
+    background-color: #2d3748;
+    color: #e2e8f0;
+    border-color: #4a5568;
+}
+
+body.dark-mode .analytics-card h3 {
+    color: #e2e8f0;
+}
+
+body.dark-mode .stat-item {
+    background-color: #4a5568;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let detailedChart = null;
+let trendsChart = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTrendsChart();
+    updateChart(30);
+    loadRiskAssessment();
+    loadCommunityStats();
+});
+
+function initializeTrendsChart() {
+    const ctx = document.getElementById('healthTrendsChart').getContext('2d');
+    // Simplified trends chart based on server data
+    trendsChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Improving Factors', 'Declining Factors'],
+            datasets: [{
+                data: [60, 40], // Example data
+                backgroundColor: ['#4CAF50', '#F44336']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+function updateChart(days) {
+    // Update active button
+    document.querySelectorAll('.chart-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    fetch(`/analytics/api/health-data?days=${days}`)
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('detailedHealthChart').getContext('2d');
+            
+            if (detailedChart) {
+                detailedChart.destroy();
+            }
+            
+            detailedChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates,
+                    datasets: [
+                        {
+                            label: 'Alcohol Intake',
+                            data: data.alcohol_intake,
+                            borderColor: '#F44336',
+                            fill: false
+                        },
+                        {
+                            label: 'Water Intake',
+                            data: data.water_intake,
+                            borderColor: '#2196F3',
+                            fill: false
+                        },
+                        {
+                            label: 'Exercise Level',
+                            data: data.exercise_level,
+                            borderColor: '#4CAF50',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+}
+
+function loadRiskAssessment() {
+    fetch('/analytics/api/risk-assessment')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('riskAssessment');
+            container.innerHTML = `
+                <div class="risk-timeline">
+                    <div class="risk-period">
+                        <span class="period-label">30 Days</span>
+                        <div class="risk-bar">
+                            <div class="risk-fill" style="width: ${data.risk_scores['30_days'] * 100}%"></div>
+                        </div>
+                        <span class="risk-value">${(data.risk_scores['30_days'] * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="risk-period">
+                        <span class="period-label">90 Days</span>
+                        <div class="risk-bar">
+                            <div class="risk-fill" style="width: ${data.risk_scores['90_days'] * 100}%"></div>
+                        </div>
+                        <span class="risk-value">${(data.risk_scores['90_days'] * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="risk-period">
+                        <span class="period-label">1 Year</span>
+                        <div class="risk-bar">
+                            <div class="risk-fill" style="width: ${data.risk_scores['365_days'] * 100}%"></div>
+                        </div>
+                        <span class="risk-value">${(data.risk_scores['365_days'] * 100).toFixed(1)}%</span>
+                    </div>
+                </div>
+                <div class="risk-factors">
+                    <h4>Risk Factors</h4>
+                    ${Object.entries(data.risk_factors).map(([factor, isRisk]) => 
+                        `<div class="risk-factor ${isRisk ? 'active' : ''}">
+                            ${factor.replace('_', ' ').replace('risk', '').trim()}
+                            ${isRisk ? '⚠️' : '✅'}
+                        </div>`
+                    ).join('')}
+                </div>
+            `;
+        });
+}
+
+function loadCommunityStats() {
+    fetch('/analytics/api/community-stats')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('communityStats');
+            container.innerHTML = `
+                <div class="community-overview">
+                    <div class="community-stat">
+                        <span class="stat-value">${data.total_users}</span>
+                        <span class="stat-label">Total Users</span>
+                    </div>
+                    <div class="community-stat">
+                        <span class="stat-value">${data.active_users}</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                    <div class="community-stat">
+                        <span class="stat-value">${(data.avg_risk_score * 100).toFixed(1)}%</span>
+                        <span class="stat-label">Avg Risk Score</span>
+                    </div>
+                </div>
+                <div class="health-comparison">
+                    <h4>Your vs Community Average</h4>
+                    <div class="comparison-item">
+                        <span>Water Intake</span>
+                        <span>Community: ${data.health_averages.water_intake}L</span>
+                    </div>
+                    <div class="comparison-item">
+                        <span>Exercise</span>
+                        <span>Community: ${data.health_averages.exercise_level}min</span>
+                    </div>
+                </div>
+            `;
+        });
+}
+</script>
+{% endblock %}

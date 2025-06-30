@@ -1,46 +1,180 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}LiverWatch{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>LiverWatch</h1>
-        <nav>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('forum') }}">Forum</a>
-            <a href="{{ url_for('health_tracker') }}">Health Tracker</a>
-            <a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a>
-            <a href="{{ url_for('appointment_finder') }}">Appointment Finder</a>
-            <a href="{{ url_for('medical_news') }}">Medical News</a>
-            <a href="{{ url_for('child_health') }}">Child Health</a>
-            <a href="{{ url_for('survival_rates') }}">Survival Rates</a> <!-- New link -->
-            <button id="theme-toggle" class="fas fa-moon"></button>
-        </nav>
-    </header>
-    <main>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light modern-nav">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <i class="fas fa-heartbeat"></i> LiverWatch
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('forum') }}">
+                        <i class="fas fa-comments"></i> Forum
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('medical_news') }}">
+                        <i class="fas fa-newspaper"></i> News
+                    </a>
+                </li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="healthDropdown" role="button" data-toggle="dropdown">
+                            <i class="fas fa-chart-line"></i> Health
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ url_for('health_tracker') }}">
+                                <i class="fas fa-clipboard-list"></i> Health Tracker
+                            </a>
+                            <a class="dropdown-item" href="{{ url_for('analytics.dashboard') }}">
+                                <i class="fas fa-analytics"></i> Analytics Dashboard
+                            </a>
+                            <a class="dropdown-item" href="{{ url_for('diet_suggestions') }}">
+                                <i class="fas fa-utensils"></i> Diet Suggestions
+                            </a>
+                            <a class="dropdown-item" href="{{ url_for('survival_rates') }}">
+                                <i class="fas fa-chart-bar"></i> Survival Rates
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('appointment_finder') }}">
+                            <i class="fas fa-search-location"></i> Find Doctors
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link notification-link" href="{{ url_for('notifications.notification_center') }}">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="notificationBadge">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> {{ current_user.username }}
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ url_for('analytics.dashboard') }}">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <button class="btn btn-sm theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid main-content">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="flash-messages">
+                <div class="alerts-container">
                     {% for category, message in messages %}
-                        <div class="flash-message {{ category }}">{{ message }}</div>
+                        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     {% endfor %}
                 </div>
             {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
-    </main>
-    <footer>
-        <p>&copy; 2024 LiverWatch</p>
+    </div>
+
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-heartbeat"></i> LiverWatch</h5>
+                    <p>Your trusted companion for liver health awareness in Uganda.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('forum') }}">Community Forum</a></li>
+                        <li><a href="{{ url_for('medical_news') }}">Health News</a></li>
+                        <li><a href="{{ url_for('child_health') }}">Child Health</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Health Resources</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('diet_suggestions') }}">Diet Suggestions</a></li>
+                        <li><a href="{{ url_for('appointment_finder') }}">Find Specialists</a></li>
+                        <li><a href="{{ url_for('survival_rates') }}">Statistics</a></li>
+                        <li><a href="{{ url_for('subscribe') }}">Newsletter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2025 LiverWatch. All rights reserved. Dedicated to liver health awareness in Uganda.</p>
+            </div>
+        </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script src="{{ url_for('static', filename='base.js') }}"></script>
-    {% block scripts %}{% endblock %}
+    
+    {% if current_user.is_authenticated %}
+    <script>
+        // Load notification count
+        function updateNotificationBadge() {
+            fetch('/notifications/api/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    const unreadCount = data.filter(n => !n.read).length;
+                    const badge = document.getElementById('notificationBadge');
+                    badge.textContent = unreadCount;
+                    badge.style.display = unreadCount > 0 ? 'inline' : 'none';
+                })
+                .catch(error => console.error('Error loading notifications:', error));
+        }
+        
+        // Update notification badge on page load and periodically
+        document.addEventListener('DOMContentLoaded', updateNotificationBadge);
+        setInterval(updateNotificationBadge, 60000); // Every minute
+    </script>
+    {% endif %}
 </body>
 </html>

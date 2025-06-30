@@ -1,0 +1,476 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - LiverWatch{% endblock %}
+
+{% block content %}
+<div class="notification-center">
+    <div class="notification-header">
+        <h1>Notification Center</h1>
+        <div class="notification-controls">
+            <button onclick="markAllAsRead()" class="btn btn-secondary">Mark All as Read</button>
+            <button onclick="refreshNotifications()" class="btn btn-primary">Refresh</button>
+        </div>
+    </div>
+
+    <div class="notification-filters">
+        <button class="filter-btn active" onclick="filterNotifications('all')">All</button>
+        <button class="filter-btn" onclick="filterNotifications('info')">Info</button>
+        <button class="filter-btn" onclick="filterNotifications('warning')">Warnings</button>
+        <button class="filter-btn" onclick="filterNotifications('error')">Alerts</button>
+    </div>
+
+    <div class="notifications-list" id="notificationsList">
+        {% for notification in notifications %}
+        <div class="notification-item {{ notification.type }} {% if not notification.read %}unread{% endif %}" 
+             data-type="{{ notification.type }}" data-id="{{ notification.id }}">
+            <div class="notification-icon">
+                {% if notification.type == 'info' %}ℹ️
+                {% elif notification.type == 'warning' %}⚠️
+                {% elif notification.type == 'error' %}🔴
+                {% else %}✅{% endif %}
+            </div>
+            <div class="notification-content">
+                <h3>{{ notification.title }}</h3>
+                <p>{{ notification.message }}</p>
+                <div class="notification-meta">
+                    <span class="notification-time">{{ notification.created_at }}</span>
+                    {% if notification.action_url %}
+                    <a href="{{ notification.action_url }}" class="notification-action">Take Action</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="notification-actions">
+                <button onclick="markAsRead('{{ notification.id }}')" class="mark-read-btn">✓</button>
+                <button onclick="dismissNotification('{{ notification.id }}')" class="dismiss-btn">✕</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="notification-settings">
+        <h3>Notification Preferences</h3>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="healthReminders" checked>
+                    Health Logging Reminders
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="riskAlerts" checked>
+                    Risk Factor Alerts
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="newContent" checked>
+                    New Content Notifications
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="emailNotifications">
+                    Email Notifications
+                </label>
+            </div>
+        </div>
+        <button onclick="saveSettings()" class="btn btn-primary">Save Preferences</button>
+    </div>
+</div>
+
+<style>
+.notification-center {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+}
+
+.notification-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.notification-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: 1px solid #dee2e6;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn.active {
+    background-color: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.notifications-list {
+    margin-bottom: 30px;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 4px solid #ccc;
+    transition: all 0.3s;
+}
+
+.notification-item.unread {
+    background-color: #f8f9ff;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.notification-item.info { border-left-color: #2196F3; }
+.notification-item.warning { border-left-color: #FF9800; }
+.notification-item.error { border-left-color: #F44336; }
+.notification-item.success { border-left-color: #4CAF50; }
+
+.notification-icon {
+    font-size: 24px;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.notification-content p {
+    margin: 0 0 10px 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.notification-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.notification-time {
+    color: #999;
+}
+
+.notification-action {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid #667eea;
+    border-radius: 3px;
+    transition: all 0.3s;
+}
+
+.notification-action:hover {
+    background-color: #667eea;
+    color: white;
+}
+
+.notification-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-left: 15px;
+}
+
+.mark-read-btn, .dismiss-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.mark-read-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.dismiss-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.mark-read-btn:hover {
+    background-color: #45a049;
+}
+
+.dismiss-btn:hover {
+    background-color: #d32f2f;
+}
+
+.notification-settings {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.notification-settings h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 10px;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.setting-item label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.setting-item input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+/* Dark mode support */
+body.dark-mode .notification-item {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+
+body.dark-mode .notification-item.unread {
+    background-color: #2a2f3a;
+}
+
+body.dark-mode .notification-content h3 {
+    color: #e2e8f0;
+}
+
+body.dark-mode .notification-content p {
+    color: #a0aec0;
+}
+
+body.dark-mode .notification-filters {
+    background-color: #2d3748;
+}
+
+body.dark-mode .filter-btn {
+    background-color: #4a5568;
+    color: #e2e8f0;
+    border-color: #4a5568;
+}
+
+body.dark-mode .notification-settings {
+    background-color: #2d3748;
+    color: #e2e8f0;
+}
+</style>
+
+<script>
+let allNotifications = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadNotifications();
+    
+    // Auto-refresh notifications every 5 minutes
+    setInterval(refreshNotifications, 300000);
+});
+
+function loadNotifications() {
+    fetch('/notifications/api/notifications')
+        .then(response => response.json())
+        .then(data => {
+            allNotifications = data;
+            renderNotifications(data);
+        })
+        .catch(error => console.error('Error loading notifications:', error));
+}
+
+function renderNotifications(notifications) {
+    const container = document.getElementById('notificationsList');
+    
+    if (notifications.length === 0) {
+        container.innerHTML = '<div class="no-notifications">No notifications at this time.</div>';
+        return;
+    }
+    
+    container.innerHTML = notifications.map(notification => `
+        <div class="notification-item ${notification.type} ${notification.read ? '' : 'unread'}" 
+             data-type="${notification.type}" data-id="${notification.id}">
+            <div class="notification-icon">
+                ${getNotificationIcon(notification.type)}
+            </div>
+            <div class="notification-content">
+                <h3>${notification.title}</h3>
+                <p>${notification.message}</p>
+                <div class="notification-meta">
+                    <span class="notification-time">${formatTime(notification.created_at)}</span>
+                    ${notification.action_url ? `<a href="${notification.action_url}" class="notification-action">Take Action</a>` : ''}
+                </div>
+            </div>
+            <div class="notification-actions">
+                <button onclick="markAsRead('${notification.id}')" class="mark-read-btn">✓</button>
+                <button onclick="dismissNotification('${notification.id}')" class="dismiss-btn">✕</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        'info': 'ℹ️',
+        'warning': '⚠️',
+        'error': '🔴',
+        'success': '✅'
+    };
+    return icons[type] || 'ℹ️';
+}
+
+function formatTime(isoString) {
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffInHours = (now - date) / (1000 * 60 * 60);
+    
+    if (diffInHours < 1) {
+        return 'Just now';
+    } else if (diffInHours < 24) {
+        return `${Math.floor(diffInHours)} hours ago`;
+    } else {
+        return `${Math.floor(diffInHours / 24)} days ago`;
+    }
+}
+
+function filterNotifications(type) {
+    // Update active filter button
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Filter notifications
+    let filtered = allNotifications;
+    if (type !== 'all') {
+        filtered = allNotifications.filter(n => n.type === type);
+    }
+    
+    renderNotifications(filtered);
+}
+
+function markAsRead(notificationId) {
+    fetch('/notifications/api/notifications/mark-read', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ notification_id: notificationId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const element = document.querySelector(`[data-id="${notificationId}"]`);
+            element.classList.remove('unread');
+        }
+    });
+}
+
+function dismissNotification(notificationId) {
+    const element = document.querySelector(`[data-id="${notificationId}"]`);
+    element.style.animation = 'slideOut 0.3s ease-out';
+    setTimeout(() => {
+        element.remove();
+        allNotifications = allNotifications.filter(n => n.id !== notificationId);
+    }, 300);
+}
+
+function markAllAsRead() {
+    document.querySelectorAll('.notification-item').forEach(item => {
+        item.classList.remove('unread');
+    });
+}
+
+function refreshNotifications() {
+    loadNotifications();
+}
+
+function saveSettings() {
+    const settings = {
+        healthReminders: document.getElementById('healthReminders').checked,
+        riskAlerts: document.getElementById('riskAlerts').checked,
+        newContent: document.getElementById('newContent').checked,
+        emailNotifications: document.getElementById('emailNotifications').checked
+    };
+    
+    // Save to localStorage for now
+    localStorage.setItem('notificationSettings', JSON.stringify(settings));
+    alert('Settings saved successfully!');
+}
+
+// Load saved settings
+document.addEventListener('DOMContentLoaded', function() {
+    const savedSettings = localStorage.getItem('notificationSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        Object.keys(settings).forEach(key => {
+            const element = document.getElementById(key);
+            if (element) {
+                element.checked = settings[key];
+            }
+        });
+    }
+});
+</script>
+
+<style>
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+.no-notifications {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
+}
+</style>
+{% endblock %}

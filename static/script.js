@@ -6,12 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function setTheme(theme) {
         if (theme === 'dark') {
             body.classList.add('dark-mode');
-            themeToggle.classList.remove('fa-moon');
-            themeToggle.classList.add('fa-sun');
+            themeToggle.textContent = 'Toggle Light Mode';
         } else {
             body.classList.remove('dark-mode');
-            themeToggle.classList.remove('fa-sun');
-            themeToggle.classList.add('fa-moon');
+            themeToggle.textContent = 'Toggle Dark Mode';
         }
         localStorage.setItem('theme', theme);
     }
@@ -31,36 +29,3 @@ document.addEventListener('DOMContentLoaded', function() {
         setTheme(savedTheme);
     }
 });
-
-function vote(type, id, action) {
-    fetch(`/vote/${type}/${id}/${action}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert('Error voting');
-        }
-    });
-}
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}

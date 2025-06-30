@@ -8,8 +8,10 @@
     <form method="post">
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title" required><br><br>
-        <label for="content">URL to Scrape:</label><br>
-        <input type="text" id="content" name="content" required><br><br>
+        <label for="content">Content (URL to Scrape or Text):</label><br>
+        <textarea id="content" name="content" rows="10" cols="50"></textarea><br><br>
+        <label for="image_url">Image URL (Optional):</label><br>
+        <input type="text" id="image_url" name="image_url"><br><br>
         <button type="submit">Create Post</button>
     </form>
 </section>
