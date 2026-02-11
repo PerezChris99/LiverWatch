@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - LiverWatch{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/notification-center.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="notification-center">
+    <div class="notification-header">
+        <h1>Notification Center</h1>
+        <div class="notification-controls">
+            <button class="btn btn-secondary">Mark All as Read</button>
+            <button class="btn btn-primary">Refresh</button>
+        </div>
+    </div>
+
+    <div class="notification-filters">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Info</button>
+        <button class="filter-btn">Warnings</button>
+        <button class="filter-btn">Alerts</button>
+    </div>
+
+    <div class="notifications-list" id="notificationsList">
+        {% for notification in notifications %}
+        <div class="notification-item {{ notification.type }} {% if not notification.read %}unread{% endif %}" 
+             data-type="{{ notification.type }}" data-id="{{ notification.id }}">
+            <div class="notification-icon">
+                {% if notification.type == 'info' %}ℹ️
+                {% elif notification.type == 'warning' %}⚠️
+                {% elif notification.type == 'error' %}🔴
+                {% else %}✅{% endif %}
+            </div>
+            <div class="notification-content">
+                <h3>{{ notification.title }}</h3>
+                <p>{{ notification.message }}</p>
+                <div class="notification-meta">
+                    <span class="notification-time">{{ notification.created_at }}</span>
+                    {% if notification.action_url %}
+                    <a href="{{ notification.action_url }}" class="notification-action">Take Action</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="notification-actions">
+                <button class="mark-read-btn">✓</button>
+                <button class="dismiss-btn">✕</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="notification-settings">
+        <h3>Notification Preferences</h3>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="healthReminders" checked>
+                    Health Logging Reminders
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="riskAlerts" checked>
+                    Risk Factor Alerts
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="newContent" checked>
+                    New Content Notifications
+                </label>
+            </div>
+            <div class="setting-item">
+                <label>
+                    <input type="checkbox" id="emailNotifications">
+                    Email Notifications
+                </label>
+            </div>
+        </div>
+        <button class="btn btn-primary save-settings-btn">Save Preferences</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/notifications-center.js') }}"></script>
+{% endblock %}

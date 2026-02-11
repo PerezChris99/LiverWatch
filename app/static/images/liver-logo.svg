@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Liver organ shape -->
+  <defs>
+    <linearGradient id="liverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B2E2B;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A94442;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7A231F;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Right lobe (larger) -->
+  <path d="M 45 25 
+           Q 55 20, 65 22 
+           Q 75 24, 78 32
+           Q 80 40, 78 50
+           Q 76 60, 72 68
+           Q 68 75, 60 78
+           Q 52 80, 45 78
+           L 45 25 Z" 
+        fill="url(#liverGradient)" 
+        filter="url(#shadow)"
+        stroke="#6B1F1C" 
+        stroke-width="1.5"/>
+  
+  <!-- Left lobe (smaller, overlapping) -->
+  <path d="M 45 28
+           Q 38 26, 32 28
+           Q 26 30, 23 36
+           Q 20 42, 22 50
+           Q 24 58, 28 64
+           Q 32 70, 38 72
+           Q 44 74, 45 72
+           L 45 28 Z" 
+        fill="url(#liverGradient)" 
+        filter="url(#shadow)"
+        stroke="#6B1F1C" 
+        stroke-width="1.5"
+        opacity="0.95"/>
+  
+  <!-- Highlight for depth -->
+  <ellipse cx="58" cy="42" rx="8" ry="12" 
+           fill="#C9746B" 
+           opacity="0.4"/>
+  
+  <ellipse cx="35" cy="45" rx="6" ry="9" 
+           fill="#C9746B" 
+           opacity="0.3"/>
+  
+  <!-- Vessels/texture lines -->
+  <path d="M 48 35 Q 52 40, 50 48" 
+        stroke="#6B1F1C" 
+        stroke-width="1" 
+        fill="none" 
+        opacity="0.4"/>
+  <path d="M 55 38 Q 58 45, 56 52" 
+        stroke="#6B1F1C" 
+        stroke-width="0.8" 
+        fill="none" 
+        opacity="0.3"/>
+  <path d="M 38 40 Q 35 48, 37 55" 
+        stroke="#6B1F1C" 
+        stroke-width="0.8" 
+        fill="none" 
+        opacity="0.3"/>
+  
+  <!-- Heart pulse line (caring symbol) -->
+  <path d="M 15 85 L 25 85 L 30 78 L 35 92 L 40 75 L 45 85 L 85 85" 
+        stroke="#8B2E2B" 
+        stroke-width="2.5" 
+        fill="none" 
+        stroke-linecap="round"
+        opacity="0.8">
+    <animate attributeName="stroke-dasharray" 
+             from="0,200" 
+             to="200,0" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Small health icon (shield) -->
+  <circle cx="72" cy="32" r="8" fill="#5A1916" opacity="0.7"/>
+  <path d="M 72 26 L 68 28 L 68 34 Q 68 37, 72 38 Q 76 37, 76 34 L 76 28 Z" 
+        fill="#8B2E2B" 
+        stroke="#fff" 
+        stroke-width="0.5"/>
+  <path d="M 70 32 L 71.5 33.5 L 74 30" 
+        stroke="#fff" 
+        stroke-width="1.2" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+</svg>

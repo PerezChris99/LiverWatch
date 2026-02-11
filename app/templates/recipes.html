@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Liver-Friendly Recipes{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/recipes.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container recipes-container">
+    <!-- Header -->
+    <div class="recipes-header">
+        <span class="section-badge"><i class="fas fa-book-open"></i> Recipes</span>
+        <h1 class="recipes-title">Liver-Friendly Recipes</h1>
+        <p class="recipes-subtitle">Delicious Ugandan recipes that support liver health.</p>
+    </div>
+
+    <!-- Recipe Cards -->
+    <div class="recipes-grid">
+        <!-- Recipe 1: Steamed Fish -->
+        <div class="card recipe-card">
+            <div class="recipe-card-header">
+                <div class="recipe-icon fish">
+                    <i class="fas fa-fish"></i>
+                </div>
+                <div>
+                    <h3 class="recipe-card-title">Steamed Tilapia with Vegetables</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-clock"></i> 30 mins</span>
+                        <span><i class="fas fa-fire"></i> Low Fat</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recipe-content">
+                <div>
+                    <h4 class="recipe-section-title">Ingredients</h4>
+                    <ul class="recipe-ingredients">
+                        <li>• 1 whole tilapia (cleaned)</li>
+                        <li>• 2 tomatoes, sliced</li>
+                        <li>• 1 onion, sliced</li>
+                        <li>• Fresh dodo (amaranth)</li>
+                        <li>• Lemon juice, ginger, garlic</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="recipe-section-title">Instructions</h4>
+                    <ol class="recipe-instructions">
+                        <li>Season fish with lemon, ginger, garlic</li>
+                        <li>Layer vegetables in steaming pot</li>
+                        <li>Place fish on vegetables</li>
+                        <li>Steam for 20-25 minutes</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="recipe-benefits">
+                <p class="recipe-benefits-text"><i class="fas fa-heart"></i> <strong>Liver Benefits:</strong> High protein, low fat, rich in omega-3 fatty acids</p>
+            </div>
+        </div>
+
+        <!-- Recipe 2: Katogo -->
+        <div class="card recipe-card">
+            <div class="recipe-card-header">
+                <div class="recipe-icon plant">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <div>
+                    <h3 class="recipe-card-title">Healthy Bean Katogo</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-clock"></i> 45 mins</span>
+                        <span><i class="fas fa-leaf"></i> High Fiber</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recipe-content">
+                <div>
+                    <h4 class="recipe-section-title">Ingredients</h4>
+                    <ul class="recipe-ingredients">
+                        <li>• 2 cups dried beans (soaked)</li>
+                        <li>• 3 green bananas (matooke)</li>
+                        <li>• 2 tomatoes, diced</li>
+                        <li>• 1 onion, chopped</li>
+                        <li>• 1 tbsp olive oil, turmeric</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="recipe-section-title">Instructions</h4>
+                    <ol class="recipe-instructions">
+                        <li>Cook beans until almost tender</li>
+                        <li>Sauté onions and tomatoes in olive oil</li>
+                        <li>Add peeled matooke and beans</li>
+                        <li>Simmer with turmeric until done</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="recipe-benefits">
+                <p class="recipe-benefits-text"><i class="fas fa-heart"></i> <strong>Liver Benefits:</strong> Plant protein, fiber aids digestion, turmeric reduces inflammation</p>
+            </div>
+        </div>
+
+        <!-- Recipe 3: Millet Porridge -->
+        <div class="card recipe-card">
+            <div class="recipe-card-header">
+                <div class="recipe-icon beverage">
+                    <i class="fas fa-mug-hot"></i>
+                </div>
+                <div>
+                    <h3 class="recipe-card-title">Obushera (Millet Porridge)</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-clock"></i> 20 mins</span>
+                        <span><i class="fas fa-bolt"></i> Energy Boost</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recipe-content">
+                <div>
+                    <h4 class="recipe-section-title">Ingredients</h4>
+                    <ul class="recipe-ingredients">
+                        <li>• 1 cup millet flour</li>
+                        <li>• 4 cups water</li>
+                        <li>• Fresh lemon juice</li>
+                        <li>• Small amount of honey (optional)</li>
+                        <li>• Pinch of ginger</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="recipe-section-title">Instructions</h4>
+                    <ol class="recipe-instructions">
+                        <li>Mix millet flour with cold water</li>
+                        <li>Boil remaining water</li>
+                        <li>Slowly add mixture, stirring constantly</li>
+                        <li>Add lemon and ginger, simmer 10 mins</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="recipe-benefits">
+                <p class="recipe-benefits-text"><i class="fas fa-heart"></i> <strong>Liver Benefits:</strong> Whole grain, gluten-free, rich in B vitamins for liver function</p>
+            </div>
+        </div>
+
+        <!-- Recipe 4: Green Smoothie -->
+        <div class="card recipe-card">
+            <div class="recipe-card-header">
+                <div class="recipe-icon smoothie">
+                    <i class="fas fa-blender"></i>
+                </div>
+                <div>
+                    <h3 class="recipe-card-title">Liver Detox Green Smoothie</h3>
+                    <div class="recipe-meta">
+                        <span><i class="fas fa-clock"></i> 5 mins</span>
+                        <span><i class="fas fa-spa"></i> Detox</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recipe-content">
+                <div>
+                    <h4 class="recipe-section-title">Ingredients</h4>
+                    <ul class="recipe-ingredients">
+                        <li>• Handful of spinach/nakati</li>
+                        <li>• 1 ripe papaya, cubed</li>
+                        <li>• 1/2 lemon juice</li>
+                        <li>• 1 cup water or coconut water</li>
+                        <li>• Small piece of fresh ginger</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="recipe-section-title">Instructions</h4>
+                    <ol class="recipe-instructions">
+                        <li>Add all ingredients to blender</li>
+                        <li>Blend until smooth</li>
+                        <li>Add ice if desired</li>
+                        <li>Drink immediately for best benefits</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="recipe-benefits">
+                <p class="recipe-benefits-text"><i class="fas fa-heart"></i> <strong>Liver Benefits:</strong> Antioxidants, vitamin C, enzymes that support liver detoxification</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="recipes-cta">
+        <a href="{{ url_for('main.diet_suggestions') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Diet Guide
+        </a>
+    </div>
+</div>
+{% endblock %}

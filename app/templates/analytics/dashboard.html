@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Health Analytics Dashboard - LiverWatch{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics-dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="analytics-dashboard">
+    <div class="dashboard-header">
+        <h1>Your Liver Health Analytics</h1>
+        <div class="risk-score-card">
+            <h3>Current Risk Score</h3>
+            <div class="risk-score-display" data-score="{{ risk_score }}">
+                <span class="score-value">{{ "%.1f"|format(risk_score * 100) }}%</span>
+                <div class="risk-level {% if risk_score > 0.7 %}high{% elif risk_score > 0.4 %}medium{% else %}low{% endif %}">
+                    {% if risk_score > 0.7 %}High Risk{% elif risk_score > 0.4 %}Medium Risk{% else %}Low Risk{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="analytics-card">
+            <h3>Health Trends</h3>
+            <canvas id="healthTrendsChart" width="400" height="200"></canvas>
+            <div class="trend-summary">
+                {% if trends.status == 'success' %}
+                    {% for factor, data in trends.trends.items() %}
+                    <div class="trend-item {{ data.trend }}">
+                        <span class="factor-name">{{ factor.replace('_', ' ').title() }}</span>
+                        <span class="trend-arrow">
+                            {% if data.trend == 'improving' %}↗{% else %}↘{% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Need more data to show trends</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>AI Recommendations</h3>
+            <div class="recommendations-list">
+                {% for rec in recommendations %}
+                <div class="recommendation {{ rec.priority }}">
+                    <div class="rec-header">
+                        <span class="rec-type">{{ rec.type.title() }}</span>
+                        <span class="priority-badge">{{ rec.priority.title() }}</span>
+                    </div>
+                    <h4>{{ rec.title }}</h4>
+                    <p>{{ rec.message }}</p>
+                    {% if rec.recipes %}
+                    <div class="recipe-suggestions">
+                        <h5>Suggested Recipes:</h5>
+                        {% for recipe in rec.recipes %}
+                        <a href="{{ url_for('diet_suggestions') }}#recipe-{{ recipe.id }}" class="recipe-link">{{ recipe.title }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Progress Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value">{{ total_logs }}</span>
+                    <span class="stat-label">Total Health Logs</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ recent_logs }}</span>
+                    <span class="stat-label">Recent Logs (30 days)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">{{ "%.1f"|format((recent_logs/30)*100) if recent_logs else 0 }}%</span>
+                    <span class="stat-label">Daily Consistency</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Detailed Health Chart</h3>
+            <div class="chart-controls">
+                <button class="chart-btn active" data-days="30">30 Days</button>
+                <button class="chart-btn" data-days="90">90 Days</button>
+                <button class="chart-btn" data-days="365">1 Year</button>
+            </div>
+            <canvas id="detailedHealthChart" width="400" height="300"></canvas>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Risk Assessment</h3>
+            <div id="riskAssessment">
+                <div class="loading">Loading risk assessment...</div>
+            </div>
+        </div>
+
+        <div class="analytics-card">
+            <h3>Community Comparison</h3>
+            <div id="communityStats">
+                <div class="loading">Loading community statistics...</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/analytics-dashboard.js') }}"></script>
+{% endblock %}

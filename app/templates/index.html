@@ -1,0 +1,622 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/homepage-3d-cta.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/utilities.css') }}">
+{% endblock %}
+{% block meta_description %}LiverWatch - Uganda's leading liver health awareness platform. Track your health, get personalized recommendations, and join our community.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <span class="hero-badge">
+                <i class="fas fa-heart"></i>
+                Liver Health Platform
+            </span>
+            
+            <h1 class="hero-title">
+                Your Liver Health,<br>
+                <span>Our Priority</span>
+            </h1>
+            
+            <p class="hero-description">
+                Empowering Ugandans with knowledge and support to prevent 
+                and manage liver diseases.
+            </p>
+            
+            <div class="hero-actions">
+                <a href="{{ url_for('health.tracker') }}" class="btn btn-primary">
+                    <i class="fas fa-heartbeat"></i>
+                    Track My Health
+                </a>
+                <a href="{{ url_for('main.survival_rates') }}" class="btn btn-outline">
+                    <i class="fas fa-info-circle"></i>
+                    Learn More
+                </a>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value">15K+</span>
+                    <span class="hero-stat-label">Users</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">500+</span>
+                    <span class="hero-stat-label">Centers</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value">98%</span>
+                    <span class="hero-stat-label">Satisfied</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header" data-animate="fade-up">
+            <span class="section-badge">
+                <i class="fas fa-star"></i>
+                Features
+            </span>
+            <h2 class="section-title">Everything You Need for Liver Health</h2>
+            <p class="section-description">
+                Comprehensive tools and resources designed specifically for liver health 
+                awareness and management in Uganda.
+            </p>
+        </div>
+        
+        <div class="features-grid" data-animate-children>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3 class="feature-title">Health Tracking</h3>
+                <p class="feature-description">
+                    Monitor your liver enzymes, track symptoms, and visualize your 
+                    health trends with our intuitive dashboard.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3 class="feature-title">AI Recommendations</h3>
+                <p class="feature-description">
+                    Get personalized health recommendations powered by advanced AI 
+                    based on your health data and lifestyle.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Community Forum</h3>
+                <p class="feature-description">
+                    Connect with others, share experiences, and get support from 
+                    our caring community of liver health advocates.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <h3 class="feature-title">Medical News</h3>
+                <p class="feature-description">
+                    Stay updated with the latest liver health research, treatments, 
+                    and news from trusted medical sources.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <h3 class="feature-title">Find Care</h3>
+                <p class="feature-description">
+                    Locate nearby hospitals, clinics, and specialists that provide 
+                    liver health services in Uganda.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3 class="feature-title">Diet & Recipes</h3>
+                <p class="feature-description">
+                    Discover liver-friendly recipes and dietary guidelines tailored 
+                    for Ugandan cuisine and ingredients.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats Section -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="quick-stats" data-animate-children>
+            <div class="quick-stat">
+                <div class="quick-stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="quick-stat-value" data-counter="25000">0</div>
+                <div class="quick-stat-label">Community Members</div>
+            </div>
+            
+            <div class="quick-stat">
+                <div class="quick-stat-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="quick-stat-value" data-counter="50000">0</div>
+                <div class="quick-stat-label">Health Logs</div>
+            </div>
+            
+            <div class="quick-stat">
+                <div class="quick-stat-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <div class="quick-stat-value" data-counter="12000">0</div>
+                <div class="quick-stat-label">Forum Posts</div>
+            </div>
+            
+            <div class="quick-stat">
+                <div class="quick-stat-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="quick-stat-value" data-counter="116">0</div>
+                <div class="quick-stat-label">Districts Covered</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Priority Conditions Section - Featured -->
+<section class="section bg-gradient-gray">\n    <div class="container">
+        <div class="section-header" data-animate="fade-up">
+            <span class="section-badge">
+                <i class="fas fa-exclamation-triangle"></i>
+                Priority Conditions
+            </span>
+            <h2 class="section-title">Critical Liver Conditions We Focus On</h2>
+            <p class="section-description">
+                Specialized support for biliary atresia, cirrhosis, and liver failure - 
+                conditions that require urgent attention and expert care.
+            </p>
+        </div>
+        
+        <div class="priority-conditions-grid" data-animate-children>
+            <!-- Biliary Atresia Widget -->
+            <div class="priority-card urgent" data-condition="biliary-atresia">
+                <div class="priority-card-header">
+                    <div class="priority-icon">
+                        <i class="fas fa-baby"></i>
+                    </div>
+                    <div class="priority-badge urgent-badge">
+                        <i class="fas fa-clock"></i> Time Critical
+                    </div>
+                </div>
+                <h3 class="priority-title">Biliary Atresia</h3>
+                <p class="priority-subtitle">Infant Liver Emergency</p>
+                <p class="priority-description">
+                    Rare but serious condition in newborns where bile ducts don't form properly. 
+                    Surgery must happen before 60-90 days old.
+                </p>
+                
+                <div class="priority-warning">
+                    <div class="priority-warning-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="priority-warning-content">
+                        <strong>Warning Signs:</strong>
+                        <ul class="priority-symptoms">
+                            <li><i class="fas fa-check-circle"></i> Jaundice beyond 2 weeks</li>
+                            <li><i class="fas fa-check-circle"></i> Dark/brown urine in baby</li>
+                            <li><i class="fas fa-check-circle"></i> Pale/white stools</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="priority-actions">
+                    <a href="{{ url_for('main.ai_assistant') }}" class="btn btn-danger btn-block">
+                        <i class="fas fa-robot"></i> Get AI Assessment
+                    </a>
+                    <a href="{{ url_for('main.child_health') }}" class="btn btn-outline btn-block">
+                        <i class="fas fa-info-circle"></i> Learn More
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cirrhosis Widget -->
+            <div class="priority-card warning" data-condition="cirrhosis">
+                <div class="priority-card-header">
+                    <div class="priority-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="priority-badge warning-badge">
+                        <i class="fas fa-shield-alt"></i> Manage Closely
+                    </div>
+                </div>
+                <h3 class="priority-title">Cirrhosis</h3>
+                <p class="priority-subtitle">Advanced Liver Scarring</p>
+                <p class="priority-description">
+                    Permanent scarring from chronic liver damage. Can be managed with proper care, 
+                    diet, and medical treatment.
+                </p>
+                
+                <div class="priority-stats">
+                    <div class="priority-stat">
+                        <div class="priority-stat-value">4-10%</div>
+                        <div class="priority-stat-label">In Uganda (Hep B)</div>
+                    </div>
+                    <div class="priority-stat">
+                        <div class="priority-stat-value">60%</div>
+                        <div class="priority-stat-label">Can Improve</div>
+                    </div>
+                </div>
+                
+                <div class="priority-complications">
+                    <strong>Watch for Complications:</strong>
+                    <div class="complication-tags">
+                        <span class="complication-tag">Ascites</span>
+                        <span class="complication-tag">Bleeding</span>
+                        <span class="complication-tag">Confusion</span>
+                    </div>
+                </div>
+                
+                <div class="priority-actions">
+                    <a href="{{ url_for('health.tracker') }}" class="btn btn-warning btn-block">
+                        <i class="fas fa-chart-line"></i> Track My Health
+                    </a>
+                    <a href="{{ url_for('main.diet_suggestions') }}" class="btn btn-outline btn-block">
+                        <i class="fas fa-apple-alt"></i> Diet Guide
+                    </a>
+                </div>
+            </div>
+
+            <!-- Liver Failure Widget -->
+            <div class="priority-card critical" data-condition="liver-failure">
+                <div class="priority-card-header">
+                    <div class="priority-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="priority-badge critical-badge">
+                        <i class="fas fa-ambulance"></i> Emergency
+                    </div>
+                </div>
+                <h3 class="priority-title">Liver Failure</h3>
+                <p class="priority-subtitle">Life-Threatening Emergency</p>
+                <p class="priority-description">
+                    Severe loss of liver function requiring intensive medical care. 
+                    May need transplant evaluation.
+                </p>
+                
+                <div class="priority-emergency">
+                    <div class="priority-emergency-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="priority-emergency-content">
+                        <strong>GO TO HOSPITAL IF:</strong>
+                        <ul class="priority-symptoms">
+                            <li><i class="fas fa-arrow-right"></i> Vomiting blood</li>
+<li><i class="fas fa-arrow-right"></i> Severe confusion</li>
+                            <li><i class="fas fa-arrow-right"></i> Black stools</li>
+                            <li><i class="fas fa-arrow-right"></i> Can't urinate</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="priority-actions">
+                    <a href="tel:+256414231234" class="btn btn-danger btn-block">
+                        <i class="fas fa-phone"></i> Call Emergency
+                    </a>
+                    <a href="{{ url_for('main.appointment_finder') }}" class="btn btn-outline btn-block">
+                        <i class="fas fa-hospital"></i> Find Hospital
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Access Bar -->
+        <div class="priority-quick-access" data-animate="fade-up">
+            <div class="quick-access-item">
+                <i class="fas fa-stethoscope"></i>
+                <span>24/7 AI Assistant Available</span>
+            </div>
+            <div class="quick-access-item">
+                <i class="fas fa-users"></i>
+                <span>Support Groups & Forum</span>
+            </div>
+            <div class="quick-access-item">
+                <i class="fas fa-hospital-user"></i>
+                <span>Specialist Directory</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3D Liver Visualization CTA -->
+<!-- 3D Liver Model CTA Section -->
+<section class="section liver-3d-cta-section">
+    <div class="container">
+        <div class="liver-3d-cta-grid">
+            <div data-animate="fade-up">
+                <span class="liver-3d-cta-badge">
+                    <i class="fas fa-cube"></i> Interactive Learning Tool
+                </span>
+                <h2 class="liver-3d-cta-title">
+                    See How Liver Diseases<br>Progress in 3D
+                </h2>
+                <p class="liver-3d-cta-description">
+                    Explore a medically accurate 3D liver model that shows exactly how liver conditions 
+                    develop and change over time. Understanding disease progression empowers you to recognize 
+                    warning signs and seek help early—when treatment is most effective.
+                </p>
+                <ul class="liver-3d-features-list">
+                    <li class="liver-3d-feature-item">
+                        <i class="fas fa-check-circle liver-3d-feature-icon"></i>
+                        <span>Rotate and zoom to examine every angle</span>
+                    </li>
+                    <li class="liver-3d-feature-item">
+                        <i class="fas fa-check-circle liver-3d-feature-icon"></i>
+                        <span>Compare healthy vs. diseased liver states</span>
+                    </li>
+                    <li class="liver-3d-feature-item">
+                        <i class="fas fa-check-circle liver-3d-feature-icon"></i>
+                        <span>Learn medical facts for each condition</span>
+                    </li>
+                    <li class="liver-3d-feature-item">
+                        <i class="fas fa-check-circle liver-3d-feature-icon"></i>
+                        <span>Watch automatic progression demonstration</span>
+                    </li>
+                </ul>
+                <a href="{{ url_for('main.liver_3d') }}" class="liver-3d-cta-btn">
+                    <i class="fas fa-cube"></i>
+                    Explore 3D Liver Model
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div data-animate="fade-up" class="liver-3d-preview-container">
+                <div class="liver-3d-preview-card">
+                    <img src="{{ url_for('static', filename='images/liver-logo.svg') }}" alt="3D Liver Preview" class="liver-3d-preview-image">
+                    
+                    <div class="liver-3d-stats-grid">
+                        <div class="liver-3d-stat-card">
+                            <div class="liver-3d-stat-value">6</div>
+                            <div class="liver-3d-stat-label">Disease States</div>
+                        </div>
+                        <div class="liver-3d-stat-card">
+                            <div class="liver-3d-stat-value">360°</div>
+                            <div class="liver-3d-stat-label">Rotation</div>
+                        </div>
+                        <div class="liver-3d-stat-card">
+                            <div class="liver-3d-stat-value">100%</div>
+                            <div class="liver-3d-stat-label">Accurate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Latest News Section -->
+<section class="section">
+    <div class="container">
+        <div class="section-header" data-animate="fade-up">
+            <span class="section-badge">
+                <i class="fas fa-newspaper"></i>
+                Latest News
+            </span>
+            <h2 class="section-title">Stay Informed</h2>
+            <p class="section-description">
+                The latest medical news and research on liver health.
+            </p>
+        </div>
+        
+        <div class="news-grid" data-animate-children>
+            {% if latest_news %}
+                {% for article in latest_news[:3] %}
+                <div class="news-card">
+                    <div class="news-image">
+                        <img src="{{ article.image or url_for('static', filename='images/news-placeholder.jpg') }}" 
+                             alt="{{ article.title }}" loading="lazy">
+                        <span class="news-source">{{ article.source }}</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-category">{{ article.category or 'Health' }}</span>
+                        <h3 class="news-title">
+                            <a href="{{ url_for('main.medical_news_detail', id=article.id) }}">
+                                {{ article.title }}
+                            </a>
+                        </h3>
+                        <p class="news-excerpt">{{ article.summary | truncate(120) }}</p>
+                        <div class="news-meta">
+                            <span><i class="fas fa-calendar"></i> {{ article.published_at | formatdate }}</span>
+                            <span><i class="fas fa-clock"></i> {{ article.read_time or '5' }} min read</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card text-center p-8 grid-span-3">
+                    <i class="fas fa-newspaper text-4xl text-muted mb-4"></i>
+                    <h3>No news articles available</h3>
+                    <p class="text-muted">Check back later for the latest updates.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="text-center mt-8" data-animate="fade-up">
+            <a href="{{ url_for('main.medical_news') }}" class="btn btn-outline-primary btn-lg">
+                View All News
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section cta-section">
+    <div class="container text-center" data-animate="fade-up">
+        <h2 class="text-white mb-4 cta-title">
+            Ready to Take Control of Your Liver Health?
+        </h2>
+        <p class="text-white opacity-90 mb-8 cta-description">
+            Join thousands of Ugandans who are proactively managing their liver health 
+            with LiverWatch. It's free to get started!
+        </p>
+        
+        {% if not current_user.is_authenticated %}
+        <div class="d-flex justify-center gap-4 flex-wrap">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">
+                <i class="fas fa-rocket"></i>
+                Create Free Account
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </a>
+        </div>
+        {% else %}
+        <a href="{{ url_for('health.tracker') }}" class="btn btn-secondary btn-lg">
+            <i class="fas fa-heartbeat"></i>
+            Go to My Dashboard
+        </a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header" data-animate="fade-up">
+            <span class="section-badge">
+                <i class="fas fa-quote-left"></i>
+                Testimonials
+            </span>
+            <h2 class="section-title">What Our Users Say</h2>
+        </div>
+        
+        <div class="grid-3" data-animate-children>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-center gap-4 mb-4">
+                        <div class="avatar">
+                            <img src="{{ url_for('static', filename='images/testimonial-1.jpg') }}" alt="Sarah M.">
+                        </div>
+                        <div>
+                            <h4 class="mb-1">Sarah M.</h4>
+                            <p class="text-sm text-muted">Kampala</p>
+                        </div>
+                    </div>
+                    <p class="text-secondary">
+                        "LiverWatch helped me understand my liver condition better. The health 
+                        tracking feature is amazing, and the community support has been incredible."
+                    </p>
+                    <div class="text-warning mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-center gap-4 mb-4">
+                        <div class="avatar">
+                            <img src="{{ url_for('static', filename='images/testimonial-2.jpg') }}" alt="John K.">
+                        </div>
+                        <div>
+                            <h4 class="mb-1">John K.</h4>
+                            <p class="text-sm text-muted">Entebbe</p>
+                        </div>
+                    </div>
+                    <p class="text-secondary">
+                        "The AI recommendations have been spot-on. I've changed my diet based on 
+                        the suggestions and my recent test results show improvement!"
+                    </p>
+                    <div class="text-warning mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-center gap-4 mb-4">
+                        <div class="avatar">
+                            <img src="{{ url_for('static', filename='images/testimonial-3.jpg') }}" alt="Grace N.">
+                        </div>
+                        <div>
+                            <h4 class="mb-1">Grace N.</h4>
+                            <p class="text-sm text-muted">Jinja</p>
+                        </div>
+                    </div>
+                    <p class="text-secondary">
+                        "Finding a hepatologist near me was so easy with the appointment finder. 
+                        LiverWatch truly cares about liver health awareness in Uganda."
+                    </p>
+                    <div class="text-warning mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="section">
+    <div class="container">
+        <div class="card newsletter-card">
+            <div class="card-body p-8">
+                <div class="grid-2 align-center">
+                    <div data-animate="fade-right">
+                        <h2 class="mb-4">Subscribe to Our Newsletter</h2>
+                        <p class="text-secondary">
+                            Get weekly liver health tips, news updates, and exclusive content 
+                            delivered straight to your inbox.
+                        </p>
+                    </div>
+                    <div data-animate="fade-left">
+                        <form action="{{ url_for('main.subscribe') }}" method="POST" class="d-flex gap-3">
+                            <input type="email" name="email" class="form-control" 
+                                   placeholder="Enter your email" required>
+                            <button type="submit" class="btn btn-primary">
+                                Subscribe
+                                <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                        <p class="text-sm text-muted mt-2">
+                            <i class="fas fa-lock"></i> We respect your privacy. Unsubscribe anytime.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

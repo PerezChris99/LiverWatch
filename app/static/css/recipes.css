@@ -1,0 +1,152 @@
+/**
+ * Recipes Page Styles
+ * ===================
+ */
+
+/* Container */
+.recipes-container {
+    max-width: 900px;
+    padding: 2rem 1rem;
+}
+
+/* Header */
+.recipes-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.recipes-title {
+    font-size: 1.75rem;
+    color: var(--gray-800);
+    margin-bottom: 0.5rem;
+}
+
+.recipes-subtitle {
+    color: var(--gray-500);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Recipe Grid */
+.recipes-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+/* Recipe Card */
+.recipe-card {
+    padding: 1.5rem;
+}
+
+.recipe-card-header {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.recipe-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.recipe-icon.fish {
+    background: linear-gradient(135deg, var(--primary-100), var(--primary-50));
+}
+
+.recipe-icon.fish i {
+    color: var(--primary-500);
+    font-size: 1.5rem;
+}
+
+.recipe-icon.plant {
+    background: linear-gradient(135deg, var(--warning-light), var(--warning));
+}
+
+.recipe-icon.plant i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.recipe-icon.beverage {
+    background: linear-gradient(135deg, var(--accent-100), var(--accent-500));
+}
+
+.recipe-icon.beverage i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.recipe-icon.smoothie {
+    background: linear-gradient(135deg, var(--success-light), var(--success));
+}
+
+.recipe-icon.smoothie i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.recipe-card-title {
+    font-size: 1.1rem;
+    margin: 0 0 0.25rem 0;
+    color: var(--gray-800);
+}
+
+.recipe-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+/* Recipe Content */
+.recipe-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    font-size: 0.85rem;
+}
+
+.recipe-section-title {
+    font-size: 0.8rem;
+    color: var(--primary-500);
+    margin-bottom: 0.5rem;
+}
+
+.recipe-ingredients {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: var(--gray-600);
+}
+
+.recipe-instructions {
+    padding-left: 1rem;
+    margin: 0;
+    color: var(--gray-600);
+}
+
+/* Benefits Box */
+.recipe-benefits {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: var(--success-light);
+    border-radius: 8px;
+}
+
+.recipe-benefits-text {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--success);
+}
+
+/* CTA Section */
+.recipes-cta {
+    text-align: center;
+    margin-top: 2rem;
+}

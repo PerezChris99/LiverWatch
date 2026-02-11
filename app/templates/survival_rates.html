@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Liver Disease Survival Rates{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/survival-rates.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container survival-rates-container">
+    <!-- Header -->
+    <div class="survival-rates-header">
+        <span class="section-badge"><i class="fas fa-chart-line"></i> Statistics</span>
+        <h1 class="survival-rates-title">Liver Disease Survival Rates</h1>
+        <p class="survival-rates-description">Understanding survival statistics helps in early intervention and better outcomes.</p>
+    </div>
+
+    <!-- Key Statistics -->
+    <div class="survival-stats-grid">
+        <div class="card survival-stat-card success">
+            <div class="survival-stat-value">85%</div>
+            <div class="survival-stat-label">Early Stage Survival (5-year)</div>
+        </div>
+        <div class="card survival-stat-card warning">
+            <div class="survival-stat-value">50%</div>
+            <div class="survival-stat-label">Intermediate Stage (5-year)</div>
+        </div>
+        <div class="card survival-stat-card error">
+            <div class="survival-stat-value">15%</div>
+            <div class="survival-stat-label">Advanced Stage (5-year)</div>
+        </div>
+    </div>
+
+    <!-- Survival by Condition -->
+    <div class="card survival-conditions-card">
+        <h2 class="survival-section-title">
+            <i class="fas fa-heartbeat"></i> Survival Rates by Condition
+        </h2>
+        
+        <div class="survival-conditions-list">
+            <!-- Hepatitis B -->
+            <div>
+                <div class="survival-condition-item-header">
+                    <span class="survival-condition-name">Hepatitis B (with treatment)</span>
+                    <span class="survival-condition-percent success">90%</span>
+                </div>
+                <div class="survival-progress-bar-container">
+                    <div class="survival-progress-bar success" data-width="90"></div>
+                </div>
+            </div>
+            
+            <!-- Hepatitis C -->
+            <div>
+                <div class="survival-condition-item-header">
+                    <span class="survival-condition-name">Hepatitis C (cured)</span>
+                    <span class="survival-condition-percent success">95%</span>
+                </div>
+                <div class="survival-progress-bar-container">
+                    <div class="survival-progress-bar success" data-width="95"></div>
+                </div>
+            </div>
+            
+            <!-- Fatty Liver -->
+            <div>
+                <div class="survival-condition-item-header">
+                    <span class="survival-condition-name">Fatty Liver Disease (NAFLD)</span>
+                    <span class="survival-condition-percent primary">80%</span>
+                </div>
+                <div class="survival-progress-bar-container">
+                    <div class="survival-progress-bar primary" data-width="80"></div>
+                </div>
+            </div>
+            
+            <!-- Cirrhosis -->
+            <div>
+                <div class="survival-condition-item-header">
+                    <span class="survival-condition-name">Compensated Cirrhosis</span>
+                    <span class="survival-condition-percent warning">55%</span>
+                </div>
+                <div class="survival-progress-bar-container">
+                    <div class="survival-progress-bar warning" data-width="55"></div>
+                </div>
+            </div>
+            
+            <!-- Liver Cancer -->
+            <div>
+                <div class="survival-condition-item-header">
+                    <span class="survival-condition-name">Liver Cancer (all stages)</span>
+                    <span class="survival-condition-percent error">20%</span>
+                </div>
+                <div class="survival-progress-bar-container">
+                    <div class="survival-progress-bar error" data-width="20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Uganda Context -->
+    <div class="card survival-uganda-card">
+        <h2 class="survival-section-title">
+            <i class="fas fa-globe-africa"></i> Liver Disease in Uganda
+        </h2>
+        
+        <div class="survival-info-grid">
+            <div class="survival-info-item">
+                <div class="survival-info-icon">
+                    <i class="fas fa-virus"></i>
+                </div>
+                <div class="survival-info-content">
+                    <h3>High Hepatitis B Prevalence</h3>
+                    <p>Uganda has one of the highest rates of Hepatitis B in the world, affecting approximately 4.3% of the population.</p>
+                </div>
+            </div>
+            
+            <div class="survival-info-item">
+                <div class="survival-info-icon">
+                    <i class="fas fa-hospital"></i>
+                </div>
+                <div class="survival-info-content">
+                    <h3>Limited Access to Care</h3>
+                    <p>Many rural areas lack specialized liver care, making early detection and treatment challenging.</p>
+                </div>
+            </div>
+            
+            <div class="survival-info-item">
+                <div class="survival-info-icon">
+                    <i class="fas fa-syringe"></i>
+                </div>
+                <div class="survival-info-content">
+                    <h3>Vaccination Progress</h3>
+                    <p>Uganda's national immunization program now includes Hepatitis B vaccine for all infants, reducing future cases.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="card survival-conditions-card">
+        <h2 class="survival-section-title">
+            <i class="fas fa-lightbulb key-takeaways-icon"></i> Key Takeaways
+        </h2>
+        
+        <div class="survival-info-grid">
+            <div class="takeaway-item">
+                <i class="fas fa-check-circle takeaway-icon"></i>
+                <p class="takeaway-text">Early detection dramatically improves survival rates for all liver conditions</p>
+            </div>
+            <div class="takeaway-item">
+                <i class="fas fa-check-circle takeaway-icon"></i>
+                <p class="takeaway-text">Hepatitis B and C are now highly treatable with modern medications</p>
+            </div>
+            <div class="takeaway-item">
+                <i class="fas fa-check-circle takeaway-icon"></i>
+                <p class="takeaway-text">Lifestyle changes can reverse early-stage fatty liver disease</p>
+            </div>
+            <div class="takeaway-item">
+                <i class="fas fa-check-circle takeaway-icon"></i>
+                <p class="takeaway-text">Regular screening is essential for those with risk factors</p>
+            </div>
+        </div>
+        
+        <div class="takeaway-cta">
+            <a href="{{ url_for('health.tracker') }}" class="btn btn-primary">
+                <i class="fas fa-heartbeat"></i> Start Tracking Your Health
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

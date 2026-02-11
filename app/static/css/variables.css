@@ -1,0 +1,159 @@
+/**
+ * LiverWatch - CSS Variables & Theme
+ * ==================================
+ * 
+ * Color palette: Liver-themed (Maroon, Brown, Burgundy)
+ * - Primary: Deep Maroon (liver color, health, trust)
+ * - Secondary: Rich Brown (warmth, reliability)
+ * - Accent: Burgundy (energy, vitality)
+ */
+
+:root {
+    /* Primary Colors - Deep Maroon (Liver) */
+    --primary-50: #fdf2f2;
+    --primary-100: #fde8e8;
+    --primary-200: #fbd5d5;
+    --primary-300: #f8b4b4;
+    --primary-400: #f98080;
+    --primary-500: #8B2E2B; /* Main primary - liver maroon */
+    --primary-600: #7A231F;
+    --primary-700: #6B1F1C;
+    --primary-800: #5A1916;
+    --primary-900: #4A1412;
+
+    /* Secondary Colors - Rich Brown */
+    --secondary-50: #fdf8f6;
+    --secondary-100: #f2e8e5;
+    --secondary-200: #eaddd7;
+    --secondary-300: #e0cab9;
+    --secondary-400: #d2b7a3;
+    --secondary-500: #A0522D; /* Main secondary - sienna brown */
+    --secondary-600: #8B4513;
+    --secondary-700: #704010;
+    --secondary-800: #5C350D;
+    --secondary-900: #4A2A0B;
+
+    /* Accent Colors - Burgundy/Wine */
+    --accent-50: #fdf2f8;
+    --accent-100: #fce7f3;
+    --accent-200: #fbcfe8;
+    --accent-300: #f9a8d4;
+    --accent-400: #f472b6;
+    --accent-500: #9B2C2C; /* Main accent - burgundy */
+    --accent-600: #881F1F;
+    --accent-700: #7A1A1A;
+    --accent-800: #6B1515;
+    --accent-900: #5A1212;
+
+    /* Neutral Colors */
+    --gray-50: #fafafa;
+    --gray-100: #f5f5f5;
+    --gray-200: #eeeeee;
+    --gray-300: #e0e0e0;
+    --gray-400: #bdbdbd;
+    --gray-500: #9e9e9e;
+    --gray-600: #757575;
+    --gray-700: #616161;
+    --gray-800: #424242;
+    --gray-900: #212121;
+
+    /* Semantic Colors */
+    --success: #4ade80;
+    --success-light: #dcfce7;
+    --warning: #fbbf24;
+    --warning-light: #fef3c7;
+    --error: #f87171;
+    --error-light: #fee2e2;
+    --info: #60a5fa;
+    --info-light: #dbeafe;
+
+    /* Typography */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Poppins', var(--font-primary);
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Font Sizes */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* Shadows - Softer */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.1);
+    --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.03);
+    --shadow-glow: 0 0 20px rgb(139 46 43 / 0.15);
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+    --transition-slow: 350ms ease;
+    --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Z-index */
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-tooltip: 700;
+    --z-toast: 800;
+
+    /* Light mode specific */
+    --bg-primary: #ffffff;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: var(--gray-50);
+    --text-primary: var(--gray-800);
+    --text-secondary: var(--gray-600);
+    --text-tertiary: var(--gray-400);
+    --border-color: transparent;
+    --border-color-strong: var(--gray-100);
+}
+
+/* Dark Mode Theme */
+[data-theme="dark"],
+body.dark-mode {
+    --bg-primary: var(--gray-900);
+    --bg-secondary: var(--gray-800);
+    --bg-tertiary: var(--gray-700);
+    --text-primary: var(--gray-50);
+    --text-secondary: var(--gray-300);
+    --text-tertiary: var(--gray-500);
+    --border-color: var(--gray-700);
+    --border-color-strong: var(--gray-600);
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+}

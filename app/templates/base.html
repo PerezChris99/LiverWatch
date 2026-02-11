@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}LiverWatch - Your trusted companion for liver health awareness, education, and support in Uganda.{% endblock %}">
+    <meta name="keywords" content="liver health, hepatitis, liver disease, Uganda, health tracking, medical news">
+    <meta name="author" content="LiverWatch Team">
+    <meta name="theme-color" content="#8B2E2B">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:title" content="{% block og_title %}LiverWatch - Liver Health Awareness{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Empowering Ugandans with liver health knowledge and tools.{% endblock %}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.png') }}">
+    
+    <title>{% block title %}LiverWatch{% endblock %} | Liver Health Awareness</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <!-- Page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="navbar-container">
+            <!-- Brand -->
+            <a href="{{ url_for('main.index') }}" class="navbar-brand">
+                <img src="{{ url_for('static', filename='images/liver-logo.svg') }}" alt="Liver" class="navbar-logo">
+                <span>LiverWatch</span>
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Navigation Links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="{{ url_for('main.index') }}" class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <i class="fas fa-book-medical"></i>
+                        <span>Learn</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="{{ url_for('main.liver_3d') }}" class="dropdown-item">
+                            <i class="fas fa-cube"></i>
+                            3D Liver Model
+                        </a>
+                        <a href="{{ url_for('main.survival_rates') }}" class="dropdown-item">
+                            <i class="fas fa-chart-line"></i>
+                            Survival Rates
+                        </a>
+                        <a href="{{ url_for('main.child_health') }}" class="dropdown-item">
+                            <i class="fas fa-child"></i>
+                            Child Health
+                        </a>
+                        <a href="{{ url_for('main.diet_suggestions') }}" class="dropdown-item">
+                            <i class="fas fa-apple-alt"></i>
+                            Diet Suggestions
+                        </a>
+                        <a href="{{ url_for('main.recipes') }}" class="dropdown-item">
+                            <i class="fas fa-utensils"></i>
+                            Healthy Recipes
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="{{ url_for('health.tracker') }}" class="nav-link {% if 'health' in request.endpoint %}active{% endif %}">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Health Tracker</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="{{ url_for('forum.index') }}" class="nav-link {% if 'forum' in request.endpoint %}active{% endif %}">
+                        <i class="fas fa-comments"></i>
+                        <span>Forum</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="{{ url_for('main.ai_assistant') }}" class="nav-link {% if 'ai_assistant' in request.endpoint %}active{% endif %}">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Assistant</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="{{ url_for('main.medical_news') }}" class="nav-link {% if 'news' in request.endpoint %}active{% endif %}">
+                        <i class="fas fa-newspaper"></i>
+                        <span>News</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="{{ url_for('main.appointment_finder') }}" class="nav-link {% if 'appointment' in request.endpoint %}active{% endif %}">
+                        <i class="fas fa-hospital"></i>
+                        <span>Find Care</span>
+                    </a>
+                </li>
+                
+                <!-- User Actions -->
+                {% if current_user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <i class="fas fa-user-circle"></i>
+                        <span>{{ current_user.username }}</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="{{ url_for('auth.profile') }}" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </a>
+                        <a href="{{ url_for('auth.logout') }}" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </li>
+                {% endif %}
+                
+                <!-- Theme Toggle -->
+                <li class="nav-item">
+                    <button class="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages container mt-4">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible" data-dismiss="auto" role="alert">
+            {% if category == 'success' %}
+            <i class="fas fa-check-circle alert-icon"></i>
+            {% elif category == 'error' or category == 'danger' %}
+            <i class="fas fa-exclamation-circle alert-icon"></i>
+            {% elif category == 'warning' %}
+            <i class="fas fa-exclamation-triangle alert-icon"></i>
+            {% else %}
+            <i class="fas fa-info-circle alert-icon"></i>
+            {% endif %}
+            <span>{{ message }}</span>
+            <button type="button" class="btn-close" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    
+    <!-- Main Content -->
+    <main id="main-content" class="page-enter">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <!-- Brand Column -->
+            <div class="footer-brand-column">
+                <div class="footer-brand">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>LiverWatch</span>
+                </div>
+                <p class="footer-description">
+                    Empowering Ugandans with liver health knowledge and support.
+                </p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div>
+                <h4 class="footer-title">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('main.index') }}"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="{{ url_for('health.tracker') }}"><i class="fas fa-chevron-right"></i> Health Tracker</a></li>
+                    <li><a href="{{ url_for('forum.index') }}"><i class="fas fa-chevron-right"></i> Community Forum</a></li>
+                    <li><a href="{{ url_for('main.medical_news') }}"><i class="fas fa-chevron-right"></i> Medical News</a></li>
+                    <li><a href="{{ url_for('main.appointment_finder') }}"><i class="fas fa-chevron-right"></i> Find Care</a></li>
+                </ul>
+            </div>
+            
+            <!-- Resources -->
+            <div>
+                <h4 class="footer-title">Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('main.survival_rates') }}"><i class="fas fa-chevron-right"></i> Survival Rates</a></li>
+                    <li><a href="{{ url_for('main.child_health') }}"><i class="fas fa-chevron-right"></i> Child Health</a></li>
+                    <li><a href="{{ url_for('main.diet_suggestions') }}"><i class="fas fa-chevron-right"></i> Diet Tips</a></li>
+                    <li><a href="{{ url_for('main.recipes') }}"><i class="fas fa-chevron-right"></i> Healthy Recipes</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contact -->
+            <div>
+                <h4 class="footer-title">Contact Us</h4>
+                <ul class="footer-links">
+                    <li><a href="mailto:info@liverwatch.org"><i class="fas fa-envelope"></i> info@liverwatch.org</a></li>
+                    <li><a href="tel:+256700000000"><i class="fas fa-phone"></i> +256 700 000 000</a></li>
+                    <li><i class="fas fa-map-marker-alt"></i> Kampala, Uganda</li>
+                </ul>
+                
+                <!-- Newsletter -->
+                <form class="mt-4" action="{{ url_for('main.subscribe') }}" method="POST">
+                    <div class="input-group">
+                        <input type="email" name="email" class="form-control" placeholder="Your email" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="footer-copyright">
+                &copy; {{ current_year if current_year else '2024' }} LiverWatch. All rights reserved.
+            </p>
+            <div class="footer-legal">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Medical Disclaimer Modal -->
+    <div id="medical-disclaimer" class="medical-disclaimer hidden">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>Medical Disclaimer:</strong> The information provided on this website is for educational purposes only 
+        and is not intended as medical advice. Always consult with a qualified healthcare provider for diagnosis and treatment.
+    </div>
+    
+    <!-- App Data -->
+    <script type="application/json" id="app-data">
+    {
+        "currentUser": {% if current_user.is_authenticated and current_user.to_dict is defined %}{{ current_user.to_dict() | tojson }}{% else %}null{% endif %},
+        "csrfToken": "{{ csrf_token() if csrf_token is defined else '' }}"
+    }
+    </script>
+    <script>
+        (function() {
+            var data = JSON.parse(document.getElementById('app-data').textContent);
+            window.currentUser = data.currentUser;
+            window.csrfToken = data.csrfToken;
+        })();
+    </script>
+    
+    <!-- Chart.js (loaded conditionally) -->
+    {% if show_charts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg==" crossorigin="anonymous"></script>
+    {% endif %}
+    
+    <!-- Core Scripts -->
+    <script src="{{ url_for('static', filename='js/core.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/components.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
+    <!-- Page-specific Scripts -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

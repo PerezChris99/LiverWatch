@@ -1,0 +1,187 @@
+/**
+ * Medical News Page Styles
+ * =========================
+ */
+
+/* Container */
+.medical-news-container {
+    max-width: 900px;
+    padding: 2rem 1rem;
+}
+
+/* Header */
+.medical-news-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.medical-news-title {
+    font-size: 1.75rem;
+    color: var(--gray-800);
+    margin-bottom: 0.5rem;
+}
+
+.medical-news-subtitle {
+    color: var(--gray-500);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Featured Article */
+.featured-article {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-50), white);
+}
+
+.featured-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--primary-500);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+}
+
+.featured-article-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+}
+
+.featured-article-text {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin-bottom: 1rem;
+}
+
+.featured-article-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+/* News Grid */
+.news-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+/* News Item */
+.news-item {
+    padding: 1.25rem;
+}
+
+.news-item-content {
+    display: flex;
+    gap: 1rem;
+}
+
+.news-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.news-icon.pills {
+    background: var(--secondary-50);
+}
+
+.news-icon.pills i {
+    color: var(--secondary-500);
+}
+
+.news-icon.research {
+    background: var(--success-light);
+}
+
+.news-icon.research i {
+    color: var(--success);
+}
+
+.news-icon.vaccine {
+    background: var(--accent-100);
+}
+
+.news-icon.vaccine i {
+    color: var(--accent-500);
+}
+
+.news-icon.awareness {
+    background: var(--error-light);
+}
+
+.news-icon.awareness i {
+    color: var(--error);
+}
+
+.news-icon.tech {
+    background: var(--info-light);
+}
+
+.news-icon.tech i {
+    color: var(--info);
+}
+
+.news-icon.diet {
+    background: var(--warning-light);
+}
+
+.news-icon.diet i {
+    color: var(--warning);
+}
+
+.news-item-title {
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--gray-800);
+}
+
+.news-item-text {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    margin-bottom: 0.5rem;
+}
+
+.news-item-time {
+    font-size: 0.7rem;
+    color: var(--gray-400);
+}
+
+/* CTA Section */
+.medical-news-cta {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Info Box */
+.news-info-box {
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    background: var(--gray-50);
+    text-align: center;
+}
+
+.news-info-icon {
+    color: var(--primary-500);
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.news-info-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+}
+
+.news-info-text {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    margin-bottom: 1rem;
+}

@@ -1,0 +1,320 @@
+/**
+ * LiverWatch - Main Stylesheet
+ * ============================
+ * 
+ * This file imports all CSS modules in the correct order.
+ * Import only this file in HTML templates.
+ */
+
+/* Import order matters for CSS cascade */
+@import url('variables.css');   /* CSS Custom Properties */
+@import url('base.css');        /* Reset, Typography, Utilities */
+@import url('components.css');  /* UI Components */
+@import url('layout.css');      /* Page Layouts */
+@import url('pages.css');       /* Page-specific Styles */
+@import url('animations.css');  /* Animations & Transitions */
+
+/* ============================================
+   ADDITIONAL UTILITIES
+   ============================================ */
+
+/* Visually Hidden (for accessibility) */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip Link */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: var(--space-4);
+    padding: var(--space-3) var(--space-6);
+    background: var(--primary-500);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    z-index: var(--z-tooltip);
+    transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+    top: var(--space-4);
+}
+
+/* Print Styles */
+@media print {
+    .no-print,
+    .navbar,
+    .footer,
+    .sidebar {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+        color: black;
+        background: white;
+    }
+    
+    a {
+        color: black;
+        text-decoration: underline;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #000000;
+        --text-secondary: #000000;
+    }
+    
+    .btn {
+        border-width: 2px;
+    }
+    
+    .card,
+    .form-control {
+        border-width: 2px;
+    }
+}
+
+/* Focus Visible Polyfill Support */
+.js-focus-visible :focus:not(.focus-visible) {
+    outline: none;
+}
+
+/* Custom Scrollbar for WebKit */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-400);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-500);
+}
+
+/* Firefox Scrollbar */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray-400) var(--bg-tertiary);
+}
+
+/* Selection Color */
+::selection {
+    background: var(--primary-200);
+    color: var(--primary-900);
+}
+
+/* Placeholder Color */
+::placeholder {
+    color: var(--text-tertiary);
+    opacity: 1;
+}
+
+/* Image Optimization */
+img {
+    content-visibility: auto;
+}
+
+/* Lazy Load Images */
+img[loading="lazy"] {
+    background: var(--bg-tertiary);
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR FOR SPECIFIC ELEMENTS
+   ============================================ */
+
+.scrollable {
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: var(--radius-full);
+}
+
+/* ============================================
+   RESPONSIVE HELPERS
+   ============================================ */
+
+/* Hide/Show at breakpoints */
+@media (max-width: 576px) {
+    .hide-sm { display: none !important; }
+}
+
+@media (max-width: 768px) {
+    .hide-md { display: none !important; }
+}
+
+@media (max-width: 992px) {
+    .hide-lg { display: none !important; }
+}
+
+@media (min-width: 577px) {
+    .show-sm-only { display: none !important; }
+}
+
+@media (min-width: 769px) {
+    .show-md-only { display: none !important; }
+}
+
+@media (min-width: 993px) {
+    .show-lg-only { display: none !important; }
+}
+
+/* ============================================
+   LIVER HEALTH SPECIFIC STYLES
+   ============================================ */
+
+/* Health Score Indicator */
+.health-score {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    position: relative;
+}
+
+.health-score::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+}
+
+.health-score span {
+    position: relative;
+    z-index: 1;
+}
+
+.health-score.excellent {
+    background: conic-gradient(var(--success) calc(var(--score) * 1%), var(--gray-200) 0);
+    color: var(--success);
+}
+
+.health-score.good {
+    background: conic-gradient(var(--primary-500) calc(var(--score) * 1%), var(--gray-200) 0);
+    color: var(--primary-500);
+}
+
+.health-score.fair {
+    background: conic-gradient(var(--warning) calc(var(--score) * 1%), var(--gray-200) 0);
+    color: var(--warning-dark);
+}
+
+.health-score.poor {
+    background: conic-gradient(var(--error) calc(var(--score) * 1%), var(--gray-200) 0);
+    color: var(--error);
+}
+
+/* Risk Indicator */
+.risk-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+.risk-indicator.low {
+    background: var(--success-light);
+    color: var(--success-dark);
+}
+
+.risk-indicator.moderate {
+    background: var(--warning-light);
+    color: var(--warning-dark);
+}
+
+.risk-indicator.high {
+    background: var(--error-light);
+    color: var(--error);
+}
+
+.risk-indicator i {
+    font-size: var(--text-xs);
+}
+
+/* Liver Diagram Highlight */
+.liver-highlight {
+    fill: var(--primary-200);
+    transition: fill var(--transition-normal);
+}
+
+.liver-highlight:hover {
+    fill: var(--primary-400);
+}
+
+.liver-highlight.affected {
+    fill: var(--error-light);
+    animation: pulse 2s ease infinite;
+}
+
+/* Uganda Map Styles */
+.uganda-map path {
+    fill: var(--gray-200);
+    stroke: var(--gray-400);
+    stroke-width: 0.5;
+    transition: fill var(--transition-fast);
+}
+
+.uganda-map path:hover {
+    fill: var(--primary-200);
+}
+
+.uganda-map path.active {
+    fill: var(--primary-400);
+}
+
+/* Medical Disclaimer */
+.medical-disclaimer {
+    padding: var(--space-4);
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--warning-dark);
+}
+
+.medical-disclaimer i {
+    margin-right: var(--space-2);
+}

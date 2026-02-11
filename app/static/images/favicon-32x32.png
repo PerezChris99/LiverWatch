@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="liverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B2E2B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A94442;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Simplified liver shape -->
+  <path d="M 16 8 
+           Q 20 7, 23 9 
+           Q 26 11, 26 15
+           Q 26 19, 23 22
+           Q 20 25, 16 25
+           Q 12 25, 9 22
+           Q 6 19, 6 15
+           Q 6 11, 9 9
+           Q 12 7, 16 8 Z" 
+        fill="url(#liverGrad)" 
+        stroke="#6B1F1C" 
+        stroke-width="1"/>
+  
+  <!-- Health symbol -->
+  <circle cx="22" cy="11" r="4" fill="#5A1916"/>
+  <path d="M 20 11 L 21 12 L 24 9" 
+        stroke="#fff" 
+        stroke-width="1.5" 
+        fill="none" 
+        stroke-linecap="round"/>
+</svg>

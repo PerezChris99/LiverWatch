@@ -1,0 +1,264 @@
+/**
+ * LiverWatch - Survival Rates Page
+ * =================================
+ * 
+ * Styles for the liver disease survival statistics page.
+ */
+
+.survival-rates-container {
+    max-width: 900px;
+    padding: 2rem 1rem;
+}
+
+.survival-rates-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.survival-rates-title {
+    font-size: 1.75rem;
+    color: var(--gray-800);
+    margin-bottom: 0.5rem;
+}
+
+.survival-rates-description {
+    color: var(--gray-500);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Key Statistics Grid */
+.survival-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.survival-stat-card {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.survival-stat-card.success {
+    background: linear-gradient(135deg, var(--success-light), white);
+}
+
+.survival-stat-card.warning {
+    background: linear-gradient(135deg, var(--warning-light), white);
+}
+
+.survival-stat-card.error {
+    background: linear-gradient(135deg, var(--error-light), white);
+}
+
+.survival-stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.survival-stat-card.success .survival-stat-value {
+    color: var(--success);
+}
+
+.survival-stat-card.warning .survival-stat-value {
+    color: var(--warning);
+}
+
+.survival-stat-card.error .survival-stat-value {
+    color: var(--error);
+}
+
+.survival-stat-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+/* Survival by Condition Section */
+.survival-conditions-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.survival-section-title {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+.survival-section-title i {
+    color: var(--primary-500);
+}
+
+.survival-conditions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.survival-condition-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.survival-condition-name {
+    font-size: 0.875rem;
+    color: var(--gray-700);
+}
+
+.survival-condition-percent {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.survival-condition-percent.success {
+    color: var(--success);
+}
+
+.survival-condition-percent.warning {
+    color: var(--warning);
+}
+
+.survival-condition-percent.error {
+    color: var(--error);
+}
+
+.survival-condition-percent.primary {
+    color: var(--primary-500);
+}
+
+.survival-progress-bar-container {
+    background: var(--gray-100);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.survival-progress-bar {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.survival-progress-bar[data-width="90"] { width: 90%; }
+.survival-progress-bar[data-width="95"] { width: 95%; }
+.survival-progress-bar[data-width="80"] { width: 80%; }
+.survival-progress-bar[data-width="55"] { width: 55%; }
+.survival-progress-bar[data-width="20"] { width: 20%; }
+
+.survival-progress-bar.success {
+    background: var(--success);
+}
+
+.survival-progress-bar.warning {
+    background: var(--warning);
+}
+
+.survival-progress-bar.error {
+    background: var(--error);
+}
+
+.survival-progress-bar.primary {
+    background: var(--primary-500);
+}
+
+/* Uganda Context Section */
+.survival-uganda-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-50), white);
+}
+
+.survival-info-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.survival-info-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-500);
+}
+
+.survival-info-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-50);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-500);
+    flex-shrink: 0;
+}
+
+.survival-info-content h3 {
+    font-size: 0.875rem;
+    color: var(--gray-800);
+    margin: 0 0 0.25rem;
+}
+
+.survival-info-content p {
+    font-size: 0.8125rem;
+    color: var(--gray-600);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Important Note */
+.survival-important-note {
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, var(--warning-light), white);
+    border-left: 4px solid var(--warning);
+    border-radius: 8px;
+}
+
+.survival-important-note strong {
+    color: var(--warning-dark);
+}
+
+.survival-important-note p {
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    margin: 0.5rem 0 0;
+    line-height: 1.6;
+}
+
+/* Key Takeaways Section */
+.key-takeaways-icon {
+    color: var(--warning);
+}
+
+.takeaway-item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.takeaway-icon {
+    color: var(--success);
+    margin-top: 0.25rem;
+}
+
+.takeaway-text {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.takeaway-cta {
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .survival-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .survival-info-item {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}News - LiverWatch{% endblock %}
+
+{% block content %}
+<section class="news-feed">
+    <h2>Latest Liver Health News</h2>
+    {% for item in news %}
+    <div class="news-card">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+        <a href="{{ item.link }}" target="_blank">Read more</a>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

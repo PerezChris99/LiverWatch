@@ -1,0 +1,533 @@
+/**
+ * LiverWatch - 3D Liver Visualization Styles
+ * ===========================================
+ * 
+ * Styles for the interactive 3D liver model page.
+ */
+
+.liver-viz-container {
+    min-height: calc(100vh - 80px);
+    background: linear-gradient(180deg, #fdf2f2 0%, #ffffff 100%);
+    padding: var(--space-6) 0;
+}
+
+.liver-viz-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: var(--space-6);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* 3D Canvas Container */
+#liver-3d-container {
+    width: 100%;
+    height: 700px;
+    background: linear-gradient(135deg, #fdf2f2, #fff5f5);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-2xl);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #fbd5d5;
+}
+
+#liver-3d-container::before {
+    content: 'Loading 3D Model...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--gray-500);
+    font-size: var(--text-lg);
+    z-index: 0;
+}
+
+/* Control Panel */
+.liver-control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.control-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-md);
+    border: 1px solid #fbd5d5;
+}
+
+.control-card-title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--primary-500);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.control-card-title i {
+    font-size: var(--text-xl);
+}
+
+/* State Buttons */
+.state-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.state-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: linear-gradient(135deg, #fdf2f2, #ffffff);
+    border: 2px solid #fbd5d5;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.state-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-500);
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.state-btn:hover {
+    border-color: var(--primary-400);
+    background: linear-gradient(135deg, #ffffff, #fef3f2);
+    transform: translateX(4px);
+}
+
+.state-btn.active {
+    border-color: var(--primary-500);
+    background: linear-gradient(135deg, var(--primary-50), #ffffff);
+    box-shadow: 0 4px 12px rgba(139, 46, 43, 0.15);
+}
+
+.state-btn.active::before {
+    transform: scaleY(1);
+}
+
+.state-btn-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-xl);
+    flex-shrink: 0;
+}
+
+.state-btn[data-liver-state="healthy"] .state-btn-icon {
+    background: linear-gradient(135deg, #d1fae5, #10b981);
+    color: white;
+}
+
+.state-btn[data-liver-state="biliary_atresia"] .state-btn-icon {
+    background: linear-gradient(135deg, #fef3c7, #fbbf24);
+    color: #78350f;
+}
+
+.state-btn[data-liver-state="early_fibrosis"] .state-btn-icon {
+    background: linear-gradient(135deg, #fed7aa, #f59e0b);
+    color: white;
+}
+
+.state-btn[data-liver-state="cirrhosis"] .state-btn-icon {
+    background: linear-gradient(135deg, #fed7aa, #f97316);
+    color: white;
+}
+
+.state-btn[data-liver-state="liver_failure"] .state-btn-icon {
+    background: linear-gradient(135deg, #fecaca, #ef4444);
+    color: white;
+}
+
+.state-btn[data-liver-state="liver_cancer"] .state-btn-icon {
+    background: linear-gradient(135deg, #fca5a5, #dc2626);
+    color: white;
+}
+
+.state-btn-content h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 2px;
+}
+
+.state-btn-content p {
+    font-size: var(--text-xs);
+    color: var(--gray-600);
+    margin: 0;
+}
+
+/* Info Display */
+.liver-info-display {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-md);
+    border: 1px solid #fbd5d5;
+}
+
+.liver-state-header {
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 2px solid #fbd5d5;
+}
+
+#liver-state-name {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--primary-600);
+    margin-bottom: var(--space-2);
+}
+
+#liver-progression {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #78350f;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+}
+
+#liver-progression.hidden {
+    display: none;
+}
+
+/* Severity Indicator */
+.severity-indicator {
+    margin-bottom: var(--space-4);
+}
+
+.severity-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-2);
+}
+
+.severity-label-row strong {
+    font-size: var(--text-sm);
+    color: var(--gray-700);
+}
+
+#severity-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.severity-bar-container {
+    height: 24px;
+    background: #f5f5f5;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#severity-bar {
+    height: 100%;
+    width: 0%;
+    background: #10b981;
+    border-radius: var(--radius-full);
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+#severity-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Description */
+#liver-state-description {
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+}
+
+/* Facts List */
+#liver-facts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#liver-facts-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: #fdf2f2;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--gray-700);
+    border-left: 3px solid var(--primary-500);
+}
+
+#liver-facts-list li i {
+    color: var(--primary-500);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Auto-play Button */
+.auto-play-section {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 2px solid #fbd5d5;
+}
+
+#auto-play-progression {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(139, 46, 43, 0.3);
+}
+
+#auto-play-progression:hover {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 46, 43, 0.4);
+}
+
+#auto-play-progression:active {
+    transform: translateY(0);
+}
+
+/* Educational Note */
+.educational-note {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-left: 4px solid #f59e0b;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    margin: var(--space-6) 0;
+}
+
+.educational-note-icon {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: #92400e;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+}
+
+.educational-note-icon i {
+    font-size: var(--text-xl);
+}
+
+.educational-note p {
+    color: #78350f;
+    line-height: 1.6;
+    margin: 0;
+    font-size: var(--text-sm);
+}
+
+/* Controls Instructions */
+.liver-controls-card {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.liver-controls-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--gray-600);
+    font-size: var(--text-sm);
+}
+
+/* Journey Section */
+.liver-journey-section {
+    margin-top: var(--space-12);
+    padding: var(--space-8);
+    background: white;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lg);
+    border: 2px solid #fbd5d5;
+}
+
+.liver-journey-title {
+    text-align: center;
+    color: var(--primary-600);
+    margin-bottom: var(--space-6);
+}
+
+.liver-journey-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-5);
+}
+
+.journey-card {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+}
+
+.journey-card.prevention {
+    background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+    border-left: 4px solid #10b981;
+}
+
+.journey-card.detection {
+    background: linear-gradient(135deg, #fef3c7, #fefce8);
+    border-left: 4px solid #f59e0b;
+}
+
+.journey-card.treatment {
+    background: linear-gradient(135deg, #fed7aa, #ffedd5);
+    border-left: 4px solid #f97316;
+}
+
+.journey-card.care {
+    background: linear-gradient(135deg, #fecaca, #fee2e2);
+    border-left: 4px solid #ef4444;
+}
+
+.journey-card h3 {
+    margin-bottom: var(--space-2);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.journey-card.prevention h3 {
+    color: #065f46;
+}
+
+.journey-card.detection h3 {
+    color: #92400e;
+}
+
+.journey-card.treatment h3 {
+    color: #9a3412;
+}
+
+.journey-card.care h3 {
+    color: #991b1b;
+}
+
+.journey-card p {
+    margin: 0;
+    font-size: var(--text-sm);
+}
+
+.journey-card.prevention p {
+    color: #047857;
+}
+
+.journey-card.detection p {
+    color: #78350f;
+}
+
+.journey-card.treatment p {
+    color: #7c2d12;
+}
+
+.journey-card.care p {
+    color: #7f1d1d;
+}
+
+/* Page Header Styles */
+.liver-page-header {
+    margin-bottom: var(--space-8);
+    text-align: center;
+}
+
+.liver-page-description {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Hidden class for conditional visibility */
+#liver-progression.hidden {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .liver-viz-layout {
+        grid-template-columns: 1fr;
+    }
+
+    #liver-3d-container {
+        height: 500px;
+        order: -1;
+    }
+
+    .liver-control-panel {
+        grid-template-columns: 1fr 1fr;
+        display: grid;
+    }
+}
+
+@media (max-width: 768px) {
+    .liver-control-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .state-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #liver-3d-container {
+        height: 400px;
+    }
+}

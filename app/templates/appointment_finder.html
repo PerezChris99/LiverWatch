@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Find Care - LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; padding: 2rem 1rem;">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="section-badge"><i class="fas fa-hospital"></i> Find Care</span>
+        <h1 style="font-size: 1.75rem; color: var(--gray-800); margin-bottom: 0.5rem;">Find Liver Specialists in Uganda</h1>
+        <p style="color: var(--gray-500); max-width: 600px; margin: 0 auto;">Connect with qualified healthcare providers for liver care.</p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="card" style="padding: 1.5rem; margin-bottom: 2rem;">
+        <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+                <label style="display: block; font-size: 0.8rem; color: var(--gray-600); margin-bottom: 0.5rem;">Location</label>
+                <input type="text" name="location" value="{{ request.args.get('location', 'Kampala') }}" placeholder="Enter city or region" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--gray-200); border-radius: 8px; font-size: 0.9rem;">
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Featured Hospitals -->
+    <h2 style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--gray-800);">
+        <i class="fas fa-star" style="color: var(--warning);"></i> Major Hospitals with Liver Care
+    </h2>
+
+    <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
+        <!-- Hospital 1 -->
+        <div class="card" style="padding: 1.25rem;">
+            <div style="display: flex; gap: 1rem;">
+                <div style="width: 50px; height: 50px; background: var(--primary-50); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-hospital" style="color: var(--primary-500);"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                        <h3 style="font-size: 1rem; margin: 0; color: var(--gray-800);">Mulago National Referral Hospital</h3>
+                        <span style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--warning);">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                        </span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0.5rem 0;">Uganda's largest public hospital with a dedicated gastroenterology unit</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: var(--gray-500);">
+                        <span><i class="fas fa-map-marker-alt"></i> Kampala</span>
+                        <span><i class="fas fa-phone"></i> +256 414 541 884</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hospital 2 -->
+        <div class="card" style="padding: 1.25rem;">
+            <div style="display: flex; gap: 1rem;">
+                <div style="width: 50px; height: 50px; background: var(--secondary-50); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-hospital" style="color: var(--secondary-500);"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                        <h3 style="font-size: 1rem; margin: 0; color: var(--gray-800);">Nakasero Hospital</h3>
+                        <span style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--warning);">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0.5rem 0;">Private hospital with advanced liver diagnostics and treatment facilities</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: var(--gray-500);">
+                        <span><i class="fas fa-map-marker-alt"></i> Kampala</span>
+                        <span><i class="fas fa-phone"></i> +256 312 256 001</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hospital 3 -->
+        <div class="card" style="padding: 1.25rem;">
+            <div style="display: flex; gap: 1rem;">
+                <div style="width: 50px; height: 50px; background: var(--accent-50); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-hospital" style="color: var(--accent-500);"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                        <h3 style="font-size: 1rem; margin: 0; color: var(--gray-800);">Uganda Cancer Institute</h3>
+                        <span style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--warning);">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        </span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0.5rem 0;">Specialized care for liver cancer and related conditions</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: var(--gray-500);">
+                        <span><i class="fas fa-map-marker-alt"></i> Kampala</span>
+                        <span><i class="fas fa-phone"></i> +256 414 540 410</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hospital 4 -->
+        <div class="card" style="padding: 1.25rem;">
+            <div style="display: flex; gap: 1rem;">
+                <div style="width: 50px; height: 50px; background: var(--success-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-hospital" style="color: var(--success);"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                        <h3 style="font-size: 1rem; margin: 0; color: var(--gray-800);">Mengo Hospital</h3>
+                        <span style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--warning);">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                        </span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0.5rem 0;">Faith-based hospital with comprehensive medical services including liver screening</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: var(--gray-500);">
+                        <span><i class="fas fa-map-marker-alt"></i> Kampala</span>
+                        <span><i class="fas fa-phone"></i> +256 414 270 222</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Regional Clinics -->
+    <h2 style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--gray-800);">
+        <i class="fas fa-clinic-medical" style="color: var(--primary-500);"></i> Regional Health Centers
+    </h2>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div class="card" style="padding: 1rem; text-align: center;">
+            <h4 style="font-size: 0.9rem; color: var(--gray-800); margin-bottom: 0.5rem;">Mbarara Regional Hospital</h4>
+            <p style="font-size: 0.75rem; color: var(--gray-500); margin: 0;">Western Uganda</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+            <h4 style="font-size: 0.9rem; color: var(--gray-800); margin-bottom: 0.5rem;">Gulu Regional Hospital</h4>
+            <p style="font-size: 0.75rem; color: var(--gray-500); margin: 0;">Northern Uganda</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+            <h4 style="font-size: 0.9rem; color: var(--gray-800); margin-bottom: 0.5rem;">Jinja Regional Hospital</h4>
+            <p style="font-size: 0.75rem; color: var(--gray-500); margin: 0;">Eastern Uganda</p>
+        </div>
+        <div class="card" style="padding: 1rem; text-align: center;">
+            <h4 style="font-size: 0.9rem; color: var(--gray-800); margin-bottom: 0.5rem;">Fort Portal Hospital</h4>
+            <p style="font-size: 0.75rem; color: var(--gray-500); margin: 0;">Western Uganda</p>
+        </div>
+    </div>
+
+    <!-- Emergency Contact -->
+    <div class="card" style="padding: 1.5rem; background: linear-gradient(135deg, var(--error-light), white); text-align: center;">
+        <i class="fas fa-ambulance" style="color: var(--error); font-size: 1.5rem; margin-bottom: 0.75rem;"></i>
+        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--gray-800);">Emergency?</h3>
+        <p style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.5rem;">For medical emergencies, call:</p>
+        <p style="font-size: 1.5rem; font-weight: 700; color: var(--error); margin: 0;">999 or 112</p>
+    </div>
+</div>
+{% endblock %}

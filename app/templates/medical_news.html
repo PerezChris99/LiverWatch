@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Medical News - LiverWatch{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/medical-news.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container medical-news-container">
+    <!-- Header -->
+    <div class="medical-news-header">
+        <span class="section-badge"><i class="fas fa-newspaper"></i> News</span>
+        <h1 class="medical-news-title">Latest Liver Health News</h1>
+        <p class="medical-news-subtitle">Stay informed with the latest research and updates in liver health.</p>
+    </div>
+
+    <!-- Featured News -->
+    <div class="card featured-article">
+        <span class="featured-badge">FEATURED</span>
+        <h2 class="featured-article-title">Uganda Expands Hepatitis B Vaccination Program</h2>
+        <p class="featured-article-text">The Ministry of Health announces expanded coverage of Hepatitis B vaccination to reach more rural communities across the country.</p>
+        <div class="featured-article-meta">
+            <span><i class="fas fa-calendar"></i> June 2025</span>
+            <span><i class="fas fa-map-marker-alt"></i> Uganda</span>
+        </div>
+    </div>
+
+    <!-- News Grid -->
+    <div class="news-grid">
+        <!-- News Item 1 -->
+        <div class="card news-item">
+            <div class="news-item-content">
+                <div class="news-icon pills">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <div>
+                    <h3 class="news-item-title">New Hepatitis C Treatment Shows 98% Cure Rate</h3>
+                    <p class="news-item-text">Recent clinical trials demonstrate remarkable effectiveness of new direct-acting antivirals in treating Hepatitis C.</p>
+                    <span class="news-item-time"><i class="fas fa-clock"></i> 2 days ago</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Item 2 -->
+        <div class="card news-item">
+            <div class="news-item-content">
+                <div class="news-icon research">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <div>
+                    <h3 class="news-item-title">Research Links Coffee Consumption to Reduced Liver Disease Risk</h3>
+                    <p class="news-item-text">A comprehensive study finds that moderate coffee consumption may protect against fatty liver disease and cirrhosis.</p>
+                    <span class="news-item-time"><i class="fas fa-clock"></i> 1 week ago</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Item 3 -->
+        <div class="card news-item">
+            <div class="news-item-content">
+                <div class="news-icon vaccine">
+                    <i class="fas fa-globe-africa"></i>
+                </div>
+                <div>
+                    <h3 class="news-item-title">WHO Launches New Initiative for Liver Health in Africa</h3>
+                    <p class="news-item-text">The World Health Organization announces funding for liver disease prevention and treatment programs across Sub-Saharan Africa.</p>
+                    <span class="news-item-time"><i class="fas fa-clock"></i> 2 weeks ago</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Item 4 -->
+        <div class="card news-item">
+            <div class="news-item-content">
+                <div class="news-icon awareness">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div>
+                    <h3 class="news-item-title">Early Detection: New Blood Test Can Identify Liver Cancer Sooner</h3>
+                    <p class="news-item-text">Scientists develop a simple blood test that can detect liver cancer up to two years earlier than current methods.</p>
+                    <span class="news-item-time"><i class="fas fa-clock"></i> 3 weeks ago</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Item 5 -->
+        <div class="card news-item">
+            <div class="news-item-content">
+                <div class="news-icon diet">
+                    <i class="fas fa-salad"></i>
+                </div>
+                <div>
+                    <h3 class="news-item-title">Study: Traditional Ugandan Foods May Protect Liver Health</h3>
+                    <p class="news-item-text">Research at Makerere University finds that traditional foods like millet and leafy greens contain compounds beneficial for liver function.</p>
+                    <span class="news-item-time"><i class="fas fa-clock"></i> 1 month ago</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="card news-info-box">
+        <i class="fas fa-bell news-info-icon"></i>
+        <h3 class="news-info-title">Stay Updated</h3>
+        <p class="news-info-text">Get the latest liver health news delivered to your inbox.</p>
+        <a href="{{ url_for('main.subscribe') }}" class="btn btn-primary btn-sm">
+            <i class="fas fa-envelope"></i> Subscribe to Newsletter
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+/**
+ * LiverWatch - Utility Classes
+ * =============================
+ * 
+ * Common utility classes for layout, spacing, text alignment, etc.
+ */
+
+/* Layout Utilities */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+}
+
+.grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+.grid-span-3 {
+    grid-column: span 3;
+}
+
+/* Background Utilities */
+.bg-gradient-gray {
+    background: linear-gradient(180deg, var(--gray-50) 0%, white 100%);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+}
+
+/* Text Alignment */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* Spacing Utilities */
+.mt-8 {
+    margin-top: var(--space-8);
+}
+
+.mb-4 {
+    margin-bottom: var(--space-4);
+}
+
+.mb-8 {
+    margin-bottom: var(--space-8);
+}
+
+.p-8 {
+    padding: var(--space-8);
+}
+
+/* Text Utilities */
+.text-muted {
+    color: var(--gray-600);
+}
+
+.text-4xl {
+    font-size: var(--text-4xl);
+}

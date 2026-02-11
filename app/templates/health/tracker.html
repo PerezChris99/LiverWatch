@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Health Tracker{% endblock %}
+
+{% block content %}
+<div class="container tracker-container">
+    <div class="tracker-header">
+        <span class="section-badge"><i class="fas fa-heartbeat"></i> Track</span>
+        <h1 class="tracker-title">Health Tracker</h1>
+        <p class="tracker-subtitle">Monitor your liver health indicators daily</p>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="card stat-card">
+            <i class="fas fa-tint stat-icon water"></i>
+            <div class="stat-value">8</div>
+            <div class="stat-label">Glasses of Water</div>
+        </div>
+        <div class="card stat-card">
+            <i class="fas fa-running stat-icon exercise"></i>
+            <div class="stat-value">30</div>
+            <div class="stat-label">Min Exercise</div>
+        </div>
+        <div class="card stat-card">
+            <i class="fas fa-moon stat-icon sleep"></i>
+            <div class="stat-value">7.5</div>
+            <div class="stat-label">Hours Sleep</div>
+        </div>
+        <div class="card stat-card">
+            <i class="fas fa-heart stat-icon health-score"></i>
+            <div class="stat-value">85</div>
+            <div class="stat-label">Health Score</div>
+        </div>
+    </div>
+    
+    <!-- Log Entry Form -->
+    <div class="card log-form-card">
+        <h3 class="log-form-title">
+            <i class="fas fa-plus-circle log-form-icon"></i> Log Today's Health
+        </h3>
+        
+        <form method="POST" class="log-form">
+            <div>
+                <label class="form-field-label">Water Intake (glasses)</label>
+                <input type="number" name="water_intake" placeholder="8" class="form-control form-field-input">
+            </div>
+            <div>
+                <label class="form-field-label">Exercise (minutes)</label>
+                <input type="number" name="exercise_level" placeholder="30" class="form-control form-field-input">
+            </div>
+            <div>
+                <label class="form-field-label">Sleep (hours)</label>
+                <input type="number" name="sleep_hours" placeholder="8" step="0.5" class="form-control form-field-input">
+            </div>
+            <div>
+                <label class="form-field-label">Alcohol (units)</label>
+                <input type="number" name="alcohol_intake" placeholder="0" class="form-control form-field-input">
+            </div>
+            <div class="form-submit-wrapper">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Entry
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Tips -->
+    <div class="card tips-card">
+        <h3 class="tips-title">
+            <i class="fas fa-lightbulb tips-title-icon"></i> Health Tips
+        </h3>
+        <div class="tips-grid">
+            <div class="tip-item">
+                <i class="fas fa-check-circle tip-icon"></i>
+                <p class="tip-text">Drink at least 8 glasses of water daily to support liver function</p>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-check-circle tip-icon"></i>
+                <p class="tip-text">Aim for 30 minutes of moderate exercise most days</p>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-check-circle tip-icon"></i>
+                <p class="tip-text">Limit alcohol consumption to protect your liver</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/health-tracker.css') }}">
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}AI Health Assistant - LiverWatch{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="chat-header-icon">🏥</div>
+            <div class="chat-header-info">
+                <h2>LiverWatch AI Health Assistant</h2>
+                <p>Powered by Google Gemini • Ask me about liver health</p>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message" id="welcomeMessage">
+                <h3>Welcome to LiverWatch AI Assistant</h3>
+                <p>I'm here to help you with liver health information. I can assist with:</p>
+                
+                <div class="welcome-features">
+                    <div class="welcome-feature" data-question="What are the early warning signs of liver problems?">
+                        <div class="welcome-feature-icon">🔍</div>
+                        <h4>Symptom Assessment</h4>
+                        <p>Understand what your symptoms might mean</p>
+                    </div>
+                    
+                    <div class="welcome-feature" data-question="What foods are good for liver health?">
+                        <div class="welcome-feature-icon">🥗</div>
+                        <h4>Diet Advice</h4>
+                        <p>Get liver-friendly food recommendations</p>
+                    </div>
+                    
+                    <div class="welcome-feature" data-question="How do I read my liver function test results?">
+                        <div class="welcome-feature-icon">📊</div>
+                        <h4>Lab Interpretation</h4>
+                        <p>Understand your test results</p>
+                    </div>
+                    
+                    <div class="welcome-feature" data-question="Tell me about hepatitis B prevention">
+                        <div class="welcome-feature-icon">📚</div>
+                        <h4>Health Education</h4>
+                        <p>Learn about liver conditions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quick-actions" id="quickActions">
+            <button class="quick-action-btn" data-question="What symptoms should I watch for?">
+                🔍 Common Symptoms
+            </button>
+            <button class="quick-action-btn" data-question="Foods to avoid with fatty liver">
+                🥗 Diet Tips
+            </button>
+            <button class="quick-action-btn" data-question="What is hepatitis B?">
+                📚 Learn About Hepatitis
+            </button>
+            <button class="quick-action-btn" data-question="Find a hospital in Kampala">
+                🏥 Find Healthcare
+            </button>
+        </div>
+        
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <textarea 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Type your health question here..."
+                    rows="1"
+                ></textarea>
+                <button class="send-btn" id="sendBtn" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="disclaimer">
+            ⚠️ This AI assistant provides health information only, not medical diagnoses. 
+            Always consult a healthcare professional for medical concerns.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/ai-assistant.js') }}"></script>
+{% endblock %}

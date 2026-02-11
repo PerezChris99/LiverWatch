@@ -18,7 +18,7 @@ config.set_main_option('sqlalchemy.url', current_app.config.get('SQLALCHEMY_DATA
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from models import db
+from app import db
 target_metadata = db.metadata
 
 # other values from the config, defined by the needs of env.py,

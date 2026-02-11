@@ -1,0 +1,157 @@
+/* Authentication Pages Styles */
+
+.auth-container {
+    max-width: 400px;
+    padding: 3rem 1rem;
+}
+
+.auth-card {
+    padding: 2rem;
+    text-align: center;
+}
+
+.auth-heading {
+    margin-bottom: 1rem;
+    color: var(--primary-500);
+}
+
+.auth-subtitle {
+    color: var(--gray-500);
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control-auth {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+}
+
+.checkbox-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.checkbox-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.btn-full-width {
+    width: 100%;
+}
+
+.auth-footer-text {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--gray-500);
+}
+
+/* Profile Page Styles */
+
+.profile-container {
+    max-width: 600px;
+    padding: 2rem 1rem;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-100), var(--primary-50));
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar i {
+    font-size: 2rem;
+    color: var(--primary-500);
+}
+
+.profile-title {
+    font-size: 1.5rem;
+    color: var(--gray-800);
+    margin-bottom: 0.25rem;
+}
+
+.profile-subtitle {
+    color: var(--gray-500);
+    font-size: 0.875rem;
+}
+
+.profile-card {
+    padding: 1.5rem;
+}
+
+.profile-section-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+.profile-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.profile-setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.profile-setting-row:last-child {
+    border-bottom: none;
+}
+
+.profile-setting-label {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+.profile-setting-value {
+    color: var(--gray-800);
+    font-size: 0.875rem;
+}
+
+.profile-status-badge {
+    background: var(--success-light);
+    color: var(--success);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.profile-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.profile-actions .btn {
+    flex: 1;
+}
+
+.profile-guest-card {
+    padding: 2rem;
+    text-align: center;
+}
+
+.profile-guest-message {
+    color: var(--gray-500);
+    margin-bottom: 1rem;
+}

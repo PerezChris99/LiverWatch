@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+{% block title %}Interactive 3D Liver Model{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/liver-3d.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="liver-viz-container">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="liver-page-header">
+            <span class="section-badge">
+                <i class="fas fa-cube"></i>
+                Interactive 3D Model
+            </span>
+            <h1 class="section-title">Understanding Liver Disease Progression</h1>
+            <p class="section-description liver-page-description">
+                Explore a medically accurate 3D liver model showing how liver diseases develop and progress. 
+                Knowledge is power in prevention and early detection.
+            </p>
+        </div>
+
+        <!-- Educational Note -->
+        <div class="educational-note">
+            <div class="educational-note-icon">
+                <i class="fas fa-lightbulb"></i>
+                <span>Why This Matters</span>
+            </div>
+            <p>
+                Liver diseases often develop gradually, starting from simple inflammation or bile duct issues 
+                that can be treated if caught early. Understanding how these conditions progress helps you 
+                recognize warning signs and seek timely medical care. Early intervention can prevent progression 
+                to more serious stages. Select different disease states below to see how the liver changes.
+            </p>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="liver-viz-layout">
+            <!-- Control Panel (Left) -->
+            <div class="liver-control-panel">
+                <!-- State Selector -->
+                <div class="control-card">
+                    <h3 class="control-card-title">
+                        <i class="fas fa-sliders-h"></i>
+                        Select Disease State
+                    </h3>
+                    <div class="state-buttons">
+                        <button class="state-btn active" data-liver-state="healthy">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Healthy Liver</h4>
+                                <p>Normal function</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="biliary_atresia">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-baby"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Biliary Atresia</h4>
+                                <p>Bile duct blockage</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="early_fibrosis">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Early Scarring</h4>
+                                <p>Still reversible</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="cirrhosis">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Cirrhosis</h4>
+                                <p>Advanced scarring</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="liver_failure">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-ambulance"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Liver Failure</h4>
+                                <p>Critical condition</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="liver_cancer">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-radiation"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Liver Cancer</h4>
+                                <p>Tumor development</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="hepatitis_b">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-virus-slash"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Hepatitis B</h4>
+                                <p>Viral inflammation</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="hepatitis_c">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-disease"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Hepatitis C</h4>
+                                <p>Chronic infection</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="fatty_liver">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-cookie-bite"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Fatty Liver</h4>
+                                <p>Fat accumulation</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="alcoholic_liver">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-wine-glass"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Alcoholic Liver</h4>
+                                <p>Alcohol damage</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="hemochromatosis">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-magnet"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Hemochromatosis</h4>
+                                <p>Iron overload</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="wilsons_disease">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Wilson's Disease</h4>
+                                <p>Copper toxicity</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="autoimmune_hepatitis">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-shield-virus"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Autoimmune Hepatitis</h4>
+                                <p>Immune attack</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="portal_hypertension">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Portal Hypertension</h4>
+                                <p>Vascular pressure</p>
+                            </div>
+                        </button>
+
+                        <button class="state-btn" data-liver-state="liver_abscess">
+                            <div class="state-btn-icon">
+                                <i class="fas fa-bacterium"></i>
+                            </div>
+                            <div class="state-btn-content">
+                                <h4>Liver Abscess</h4>
+                                <p>Bacterial infection</p>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="auto-play-section">
+                        <button id="auto-play-progression">
+                            <i class="fas fa-play"></i>
+                            Show Progression
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Display -->
+                <div class="liver-info-display">
+                    <div class="liver-state-header">
+                        <h2 id="liver-state-name">Healthy Liver</h2>
+                        <span id="liver-progression" style="display: none;"></span>
+                        
+                        <!-- Severity Indicator -->
+                        <div class="severity-indicator">
+                            <div class="severity-label-row">
+                                <strong>Condition Severity:</strong>
+                                <span id="severity-label">Healthy</span>
+                            </div>
+                            <div class="severity-bar-container">
+                                <div id="severity-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p id="liver-state-description">
+                        A healthy liver is smooth, firm, and reddish-brown. It efficiently filters blood, 
+                        produces bile, and stores nutrients.
+                    </p>
+
+                    <ul id="liver-facts-list">
+                        <li><i class="fas fa-check-circle"></i> Weighs about 1.5 kg (3.3 lbs)</li>
+                        <li><i class="fas fa-check-circle"></i> Processes over 500 vital functions</li>
+                        <li><i class="fas fa-check-circle"></i> Regenerates damaged tissue naturally</li>
+                        <li><i class="fas fa-check-circle"></i> Filters 1.4 liters of blood per minute</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 3D Visualization (Right) -->
+            <div>
+                <div id="liver-3d-container"></div>
+                <div class="liver-controls-card">
+                    <div class="liver-controls-content">
+                        <i class="fas fa-mouse"></i>
+                        <span><strong>Click and drag</strong> to rotate | <strong>Scroll</strong> to zoom | <strong>Right-click drag</strong> to pan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="liver-journey-section">
+            <h2 class="liver-journey-title">
+                <i class="fas fa-heart-pulse"></i> The Journey of Liver Health
+            </h2>
+            
+            <div class="liver-journey-grid">
+                <div class="journey-card prevention">
+                    <h3>
+                        <i class="fas fa-seedling"></i> Prevention
+                    </h3>
+                    <p>
+                        Vaccinate against Hepatitis B, limit alcohol, maintain healthy weight, and avoid toxins.
+                    </p>
+                </div>
+
+                <div class="journey-card detection">
+                    <h3>
+                        <i class="fas fa-search"></i> Early Detection
+                    </h3>
+                    <p>
+                        Regular check-ups, liver function tests, and awareness of warning signs can catch issues early.
+                    </p>
+                </div>
+
+                <div class="journey-card treatment">
+                    <h3>
+                        <i class="fas fa-pills"></i> Treatment
+                    </h3>
+                    <p>
+                        Many liver conditions are treatable. Early fibrosis can be reversed with proper medical care.
+                    </p>
+                </div>
+
+                <div class="journey-card care">
+                    <h3>
+                        <i class="fas fa-hospital"></i> Advanced Care
+                    </h3>
+                    <p>
+                        Even advanced disease can be managed with medications, procedures, or transplant evaluation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load Three.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<!-- Fallback for OrbitControls if CDN fails -->
+<script>
+if (typeof THREE === 'undefined' || !THREE.OrbitControls) {
+    console.warn('Three.js or OrbitControls not loaded from CDN, loading alternative...');
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/three@0.128.0/build/three.min.js';
+    document.body.appendChild(script);
+}
+</script>
+
+<!-- Load our custom liver visualization -->
+<script src="{{ url_for('static', filename='js/liver-3d.js') }}"></script>
+{% endblock %}

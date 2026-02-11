@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Diet Suggestions - LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; padding: 2rem 1rem;">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="section-badge"><i class="fas fa-utensils"></i> Nutrition</span>
+        <h1 style="font-size: 1.75rem; color: var(--gray-800); margin-bottom: 0.5rem;">Liver-Friendly Diet Guide</h1>
+        <p style="color: var(--gray-500); max-width: 600px; margin: 0 auto;">Proper nutrition is essential for liver health and recovery.</p>
+    </div>
+
+    <!-- Foods to Eat -->
+    <div class="card" style="padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--success);">
+        <h2 style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--gray-800);">
+            <i class="fas fa-check-circle" style="color: var(--success);"></i> Foods to Eat
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--success-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-leaf" style="color: var(--success);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">Leafy Greens</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Spinach, kale, dodo (amaranth), nakati - rich in antioxidants</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--success-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-fish" style="color: var(--success);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">Lean Proteins</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Tilapia, Nile perch, chicken breast, beans, groundnuts</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--success-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-bread-slice" style="color: var(--success);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">Whole Grains</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Millet, sorghum, brown rice, whole wheat posho</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--success-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-apple-alt" style="color: var(--success);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">Fresh Fruits</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Papaya, mangoes, watermelon, oranges, passion fruit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Foods to Avoid -->
+    <div class="card" style="padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--error);">
+        <h2 style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--gray-800);">
+            <i class="fas fa-times-circle" style="color: var(--error);"></i> Foods to Avoid
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--error-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-wine-bottle" style="color: var(--error);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">Alcohol</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">All alcoholic beverages including local brews like waragi and tonto</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--error-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-oil-can" style="color: var(--error);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">Fried Foods</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Deep fried foods, excessive cooking oil, fatty meats</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--error-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-candy-cane" style="color: var(--error);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">Excess Sugar</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Sodas, sweetened drinks, sugary snacks, too much honey</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="width: 40px; height: 40px; background: var(--error-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fas fa-salt-shaker" style="color: var(--error);"></i>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--gray-800);">High Sodium</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Processed foods, excessive salt, packaged snacks</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Tips -->
+    <div class="card" style="padding: 1.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, var(--primary-50), white);">
+        <h2 style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--gray-800);">
+            <i class="fas fa-lightbulb" style="color: var(--primary-500);"></i> Daily Tips
+        </h2>
+        
+        <div style="display: grid; gap: 0.75rem;">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.75rem; background: white; border-radius: 8px;">
+                <div style="width: 30px; height: 30px; background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-500);">1</span>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.875rem; margin: 0 0 0.25rem 0; color: var(--gray-800);">Stay Hydrated</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">Drink at least 8 glasses of clean water daily</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.75rem; background: white; border-radius: 8px;">
+                <div style="width: 30px; height: 30px; background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-500);">2</span>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.875rem; margin: 0 0 0.25rem 0; color: var(--gray-800);">Eat Small, Frequent Meals</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">5-6 small meals instead of 3 large ones reduces liver strain</p>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.75rem; background: white; border-radius: 8px;">
+                <div style="width: 30px; height: 30px; background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--primary-500);">3</span>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.875rem; margin: 0 0 0.25rem 0; color: var(--gray-800);">Coffee in Moderation</h4>
+                    <p style="font-size: 0.8rem; color: var(--gray-600); margin: 0;">1-2 cups of coffee daily may help protect the liver</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align: center;">
+        <a href="{{ url_for('main.recipes') }}" class="btn btn-primary">
+            <i class="fas fa-book-open"></i> View Liver-Friendly Recipes
+        </a>
+    </div>
+</div>
+{% endblock %}

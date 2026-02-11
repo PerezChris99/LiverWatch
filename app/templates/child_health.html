@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Children's Liver Health{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; padding: 2rem 1rem;">
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="section-badge"><i class="fas fa-baby"></i> Pediatric Care</span>
+        <h1 style="font-size: 1.75rem; color: var(--gray-800); margin-bottom: 0.5rem;">Children's Liver Health</h1>
+        <p style="color: var(--gray-500); max-width: 600px; margin: 0 auto;">Early detection of liver problems in children is crucial for successful treatment.</p>
+    </div>
+
+    <!-- Age Groups -->
+    <div style="display: grid; gap: 1.5rem;">
+        <!-- Newborns -->
+        <div class="card" style="padding: 1.5rem; border-left: 4px solid var(--primary-500);">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 50px; height: 50px; background: var(--primary-50); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-baby" style="color: var(--primary-500); font-size: 1.25rem;"></i>
+                </div>
+                <div>
+                    <h2 style="font-size: 1.125rem; margin: 0; color: var(--gray-800);">Newborn Babies</h2>
+                    <span style="font-size: 0.75rem; color: var(--gray-500);">0-28 days</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--error); margin-bottom: 0.75rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Warning Signs
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--gray-600);">
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Yellowing of skin/eyes (jaundice)</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Sweet-smelling breath</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Swollen abdomen</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Poor feeding</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Dark urine or pale stools</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--success); margin-bottom: 0.75rem;">
+                        <i class="fas fa-medkit"></i> Treatment Options
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--gray-600);">
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Phototherapy for jaundice</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Liver function medications</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Kasai procedure if needed</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>IV fluids and nutrition</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infants -->
+        <div class="card" style="padding: 1.5rem; border-left: 4px solid var(--secondary-500);">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 50px; height: 50px; background: var(--secondary-50); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-child" style="color: var(--secondary-500); font-size: 1.25rem;"></i>
+                </div>
+                <div>
+                    <h2 style="font-size: 1.125rem; margin: 0; color: var(--gray-800);">Infants</h2>
+                    <span style="font-size: 0.75rem; color: var(--gray-500);">1-12 months</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--error); margin-bottom: 0.75rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Warning Signs
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--gray-600);">
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Poor weight gain</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Failure to thrive</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Persistent jaundice</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Excessive sleepiness</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Vomiting and irritability</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--success); margin-bottom: 0.75rem;">
+                        <i class="fas fa-medkit"></i> Treatment Options
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--gray-600);">
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Specialized formula feeding</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Vitamin supplements</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Regular monitoring</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Dietary modifications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toddlers -->
+        <div class="card" style="padding: 1.5rem; border-left: 4px solid var(--accent-500);">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 50px; height: 50px; background: rgba(20, 184, 166, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-child" style="color: var(--accent-500); font-size: 1.5rem;"></i>
+                </div>
+                <div>
+                    <h2 style="font-size: 1.125rem; margin: 0; color: var(--gray-800);">Toddlers & Children</h2>
+                    <span style="font-size: 0.75rem; color: var(--gray-500);">1-12 years</span>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--error); margin-bottom: 0.75rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Warning Signs
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--gray-600);">
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Delayed growth</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Chronic fatigue</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Abdominal pain</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Easy bruising</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-circle" style="font-size: 0.4rem; margin-right: 0.5rem; color: var(--error);"></i>Behavioral changes</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.875rem; color: var(--success); margin-bottom: 0.75rem;">
+                        <i class="fas fa-medkit"></i> Treatment Options
+                    </h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.8rem; color: var(--gray-600);">
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Liver-friendly diet</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Antiviral medications</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Physical therapy</li>
+                        <li style="padding: 0.25rem 0;"><i class="fas fa-check" style="margin-right: 0.5rem; color: var(--success);"></i>Liver transplant (severe)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- When to Seek Help -->
+    <div class="card" style="padding: 1.5rem; margin-top: 1.5rem; background: linear-gradient(135deg, var(--error-light), white);">
+        <h3 style="font-size: 1rem; color: var(--error); margin-bottom: 1rem;">
+            <i class="fas fa-phone-alt"></i> When to Seek Immediate Medical Help
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--gray-700);">
+                <i class="fas fa-arrow-right" style="color: var(--error); margin-top: 0.25rem;"></i>
+                <span>Sudden severe abdominal pain</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--gray-700);">
+                <i class="fas fa-arrow-right" style="color: var(--error); margin-top: 0.25rem;"></i>
+                <span>Vomiting blood</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--gray-700);">
+                <i class="fas fa-arrow-right" style="color: var(--error); margin-top: 0.25rem;"></i>
+                <span>Confusion or extreme drowsiness</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--gray-700);">
+                <i class="fas fa-arrow-right" style="color: var(--error); margin-top: 0.25rem;"></i>
+                <span>Rapidly spreading jaundice</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{{ url_for('main.appointment_finder') }}" class="btn btn-primary">
+            <i class="fas fa-hospital"></i> Find Pediatric Specialists
+        </a>
+    </div>
+</div>
+{% endblock %}
