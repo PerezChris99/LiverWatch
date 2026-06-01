@@ -1,89 +1,64 @@
 {% extends "base.html" %}
 
-{% block title %}Notifications - LiverWatch{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/notification-center.css') }}">
-{% endblock %}
+{% block title %}Notifications — LiverWatch{% endblock %}
 
 {% block content %}
-<div class="notification-center">
-    <div class="notification-header">
-        <h1>Notification Center</h1>
-        <div class="notification-controls">
-            <button class="btn btn-secondary">Mark All as Read</button>
-            <button class="btn btn-primary">Refresh</button>
-        </div>
-    </div>
+<div class="container" style="padding:2rem 1rem;max-width:800px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+    <h1><i class="fas fa-bell"></i> Notifications
+      {% if unread_count > 0 %}
+      <span style="background:#e74c3c;color:#fff;border-radius:999px;padding:2px 8px;font-size:.7em;vertical-align:middle;">{{ unread_count }}</span>
+      {% endif %}
+    </h1>
+    {% if unread_count > 0 %}
+    <form method="POST" action="{{ url_for('notifications.mark_all_read') }}">
+      <button type="submit" class="btn btn-secondary btn-sm">Mark all read</button>
+    </form>
+    {% endif %}
+  </div>
 
-    <div class="notification-filters">
-        <button class="filter-btn active">All</button>
-        <button class="filter-btn">Info</button>
-        <button class="filter-btn">Warnings</button>
-        <button class="filter-btn">Alerts</button>
-    </div>
-
-    <div class="notifications-list" id="notificationsList">
-        {% for notification in notifications %}
-        <div class="notification-item {{ notification.type }} {% if not notification.read %}unread{% endif %}" 
-             data-type="{{ notification.type }}" data-id="{{ notification.id }}">
-            <div class="notification-icon">
-                {% if notification.type == 'info' %}ℹ️
-                {% elif notification.type == 'warning' %}⚠️
-                {% elif notification.type == 'error' %}🔴
-                {% else %}✅{% endif %}
-            </div>
-            <div class="notification-content">
-                <h3>{{ notification.title }}</h3>
-                <p>{{ notification.message }}</p>
-                <div class="notification-meta">
-                    <span class="notification-time">{{ notification.created_at }}</span>
-                    {% if notification.action_url %}
-                    <a href="{{ notification.action_url }}" class="notification-action">Take Action</a>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="notification-actions">
-                <button class="mark-read-btn">✓</button>
-                <button class="dismiss-btn">✕</button>
-            </div>
+  {% if notifications %}
+  <div style="display:flex;flex-direction:column;gap:.75rem;">
+    {% for n in notifications %}
+    <div class="card" style="{% if not n.is_read %}border-left:4px solid var(--primary);{% endif %}">
+      <div class="card-body" style="display:flex;align-items:flex-start;gap:1rem;">
+        <div style="font-size:1.4rem;line-height:1;">
+          {% if n.notification_type == 'risk_alert' %}⚠️
+          {% elif n.notification_type == 'referral' %}🏥
+          {% elif n.notification_type == 'screening' %}📋
+          {% elif n.notification_type == 'warning' %}🔴
+          {% elif n.notification_type == 'education' %}📚
+          {% else %}ℹ️{% endif %}
         </div>
-        {% endfor %}
-    </div>
-
-    <div class="notification-settings">
-        <h3>Notification Preferences</h3>
-        <div class="settings-grid">
-            <div class="setting-item">
-                <label>
-                    <input type="checkbox" id="healthReminders" checked>
-                    Health Logging Reminders
-                </label>
-            </div>
-            <div class="setting-item">
-                <label>
-                    <input type="checkbox" id="riskAlerts" checked>
-                    Risk Factor Alerts
-                </label>
-            </div>
-            <div class="setting-item">
-                <label>
-                    <input type="checkbox" id="newContent" checked>
-                    New Content Notifications
-                </label>
-            </div>
-            <div class="setting-item">
-                <label>
-                    <input type="checkbox" id="emailNotifications">
-                    Email Notifications
-                </label>
-            </div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem;">
+            <strong>{{ n.title }}</strong>
+            {% if not n.is_read %}<span style="background:var(--primary);color:#fff;border-radius:999px;padding:1px 6px;font-size:.7em;">New</span>{% endif %}
+          </div>
+          <p class="text-muted" style="margin:0 0 .5rem;">{{ n.message }}</p>
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+            <span class="text-muted" style="font-size:.8rem;">{{ n.created_at | formatdate }}</span>
+            {% if n.action_url %}
+            <a href="{{ n.action_url }}" class="btn btn-primary btn-sm">Take Action</a>
+            {% endif %}
+            {% if not n.is_read %}
+            <form method="POST" action="{{ url_for('notifications.mark_read', notification_id=n.id) }}" style="margin:0;">
+              <button type="submit" class="btn btn-sm btn-secondary">✓ Mark read</button>
+            </form>
+            {% endif %}
+          </div>
         </div>
-        <button class="btn btn-primary save-settings-btn">Save Preferences</button>
+      </div>
     </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card">
+    <div class="card-body text-center text-muted" style="padding:3rem;">
+      <i class="fas fa-bell-slash" style="font-size:2rem;margin-bottom:1rem;display:block;"></i>
+      <p>No notifications yet.</p>
+    </div>
+  </div>
+  {% endif %}
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{{ url_for('static', filename='js/notifications-center.js') }}"></script>
 {% endblock %}

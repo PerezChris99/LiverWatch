@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Admin — CHW List{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:2rem 1rem;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+    <h1><i class="fas fa-user-nurse"></i> Community Health Workers</h1>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">← Dashboard</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding:0;overflow-x:auto;">
+      <table class="table" style="margin:0;">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>District</th><th>Organisation</th><th>Verified</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for w in workers %}
+          <tr>
+            <td>{{ w.worker_id }}</td>
+            <td>{{ w.full_name }}</td>
+            <td>{{ w.district }}</td>
+            <td>{{ w.organization or '—' }}</td>
+            <td>
+              {% if w.is_verified %}
+              <span class="text-success"><i class="fas fa-check-circle"></i> Verified</span>
+              {% else %}
+              <span class="text-warning"><i class="fas fa-clock"></i> Pending</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if not w.is_verified %}
+              <form method="POST" action="{{ url_for('admin.verify_chw', worker_id=w.id) }}">
+                <button type="submit" class="btn btn-success btn-sm">Verify</button>
+              </form>
+              {% else %}
+              <span class="text-muted">—</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" class="text-center text-muted">No CHWs registered yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

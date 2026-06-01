@@ -94,6 +94,7 @@ def create_app(config_class=None):
     from app.blueprints.health        import health_bp
     from app.blueprints.analytics     import analytics_bp
     from app.blueprints.notifications import notifications_bp
+    from app.blueprints.education     import education_bp
     from app.blueprints.agents        import agents_bp
     # Legacy API v0 (kept for transition)
     from app.blueprints.api_legacy    import legacy_api_bp
@@ -107,6 +108,7 @@ def create_app(config_class=None):
     app.register_blueprint(health_bp,        url_prefix='/health')
     app.register_blueprint(analytics_bp,     url_prefix='/analytics')
     app.register_blueprint(notifications_bp, url_prefix='/notifications')
+    app.register_blueprint(education_bp,     url_prefix='/education')
     app.register_blueprint(agents_bp,        url_prefix='/api/agents')
     app.register_blueprint(legacy_api_bp,    url_prefix='/api/v0')
     app.register_blueprint(api_bp)   # mounts /api with /api/v1 inside

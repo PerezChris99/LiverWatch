@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 2rem 1rem;">
+  <h1 class="mb-4"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+
+  <!-- Stats cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:2rem;">
+    <div class="card">
+      <div class="card-body text-center">
+        <div style="font-size:2rem;font-weight:700;color:var(--primary);">{{ users_count }}</div>
+        <div class="text-muted">Active Users</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body text-center">
+        <div style="font-size:2rem;font-weight:700;color:var(--primary);">{{ assessments_count }}</div>
+        <div class="text-muted">Assessments</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body text-center">
+        <div style="font-size:2rem;font-weight:700;color:{% if pending_posts > 0 %}#e74c3c{% else %}var(--primary){% endif %};">{{ pending_posts }}</div>
+        <div class="text-muted">Pending Posts</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body text-center">
+        <div style="font-size:2rem;font-weight:700;color:var(--primary);">{{ chw_count }}</div>
+        <div class="text-muted">Active CHWs</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body text-center">
+        <div style="font-size:2rem;font-weight:700;color:var(--primary);">{{ subs_count }}</div>
+        <div class="text-muted">Subscribers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick actions -->
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;">
+    <a href="{{ url_for('admin.users') }}" class="btn btn-primary"><i class="fas fa-users"></i> Manage Users</a>
+    <a href="{{ url_for('admin.forum_moderation') }}" class="btn btn-warning">
+      <i class="fas fa-gavel"></i> Moderate Forum
+      {% if pending_posts > 0 %}<span style="background:#e74c3c;color:#fff;border-radius:999px;padding:0 6px;font-size:.75rem;margin-left:4px;">{{ pending_posts }}</span>{% endif %}
+    </a>
+    <a href="{{ url_for('admin.chw_list') }}" class="btn btn-secondary"><i class="fas fa-user-nurse"></i> CHW List</a>
+  </div>
+
+  <!-- Recent users -->
+  <div class="card">
+    <div class="card-header"><h5 class="mb-0">Recent Registrations</h5></div>
+    <div class="card-body" style="padding:0;">
+      <table class="table" style="margin:0;">
+        <thead>
+          <tr><th>Username</th><th>Email</th><th>Role</th><th>Joined</th></tr>
+        </thead>
+        <tbody>
+          {% for u in recent_users %}
+          <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td><span class="badge badge-{{ 'danger' if u.role == 'admin' else 'info' }}">{{ u.role }}</span></td>
+            <td>{{ u.created_at | formatdate }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center text-muted">No users yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

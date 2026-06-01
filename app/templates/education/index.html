@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Educational Resources — LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:2rem 1rem;">
+  <div style="text-align:center;margin-bottom:2rem;">
+    <h1><i class="fas fa-book-medical"></i> Educational Resources</h1>
+    <p class="text-muted">Evidence-based, Uganda-localised liver health information.</p>
+  </div>
+
+  {% if grouped %}
+    {% for category, modules in grouped.items() %}
+    <section style="margin-bottom:2.5rem;">
+      <h2 style="margin-bottom:1rem;color:var(--primary);">
+        {{ category_labels.get(category, category | title) }}
+      </h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;">
+        {% for m in modules %}
+        <a href="{{ url_for('education.detail', slug=m.slug) }}" style="text-decoration:none;">
+          <div class="card h-100" style="transition:box-shadow .2s;">
+            <div class="card-body">
+              <h5 style="color:var(--text-primary);">{{ m.title }}</h5>
+              {% if m.description %}
+              <p class="text-muted" style="font-size:.9rem;">{{ m.description[:120] }}{% if m.description | length > 120 %}…{% endif %}</p>
+              {% endif %}
+              <div style="display:flex;align-items:center;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;">
+                {% if m.is_medically_reviewed %}
+                <span style="background:#27ae60;color:#fff;border-radius:4px;padding:2px 7px;font-size:.75rem;">
+                  <i class="fas fa-check-circle"></i> Reviewed
+                </span>
+                {% endif %}
+                <span style="background:var(--bg-secondary);border-radius:4px;padding:2px 7px;font-size:.75rem;">
+                  {{ m.target_audience | title }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+  {% else %}
+  <div class="card">
+    <div class="card-body text-center text-muted" style="padding:3rem;">
+      <i class="fas fa-book-open" style="font-size:2.5rem;margin-bottom:1rem;display:block;"></i>
+      <p>No educational content has been published yet. Check back soon.</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="card" style="margin-top:2rem;background:var(--bg-secondary);">
+    <div class="card-body">
+      <p class="text-muted" style="margin:0;font-size:.85rem;">
+        <i class="fas fa-info-circle"></i>
+        {{ medical_disclaimer }}
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
