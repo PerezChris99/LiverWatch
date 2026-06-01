@@ -44,6 +44,26 @@
         </div>
     </div>
 
+    <!-- Trend indicator -->
+    {% if trend %}
+    <div class="alert {% if trend == 'improving' %}alert-success{% elif trend == 'worsening' %}alert-danger{% else %}alert-secondary{% endif %} mb-4">
+        <strong>Trend:</strong>
+        {% if trend == 'improving' %}<i class="fas fa-arrow-down"></i> Improving since last assessment
+        {% elif trend == 'worsening' %}<i class="fas fa-arrow-up"></i> Score increased since last assessment
+        {% else %}<i class="fas fa-minus"></i> Stable since last assessment
+        {% endif %}
+        <span class="text-muted ms-2 small">This does not provide medical diagnosis.</span>
+    </div>
+    {% endif %}
+
+    <!-- Sparkline chart -->
+    {% if total_count > 0 %}
+    <div class="card p-4 mb-6">
+        <h2 class="text-xl font-semibold mb-3"><i class="fas fa-chart-area"></i> Risk Score Trend</h2>
+        <canvas id="riskTrendChart" height="80"></canvas>
+    </div>
+    {% endif %}
+
     <!-- Latest assessment -->
     {% if latest %}
     {% set lv = latest.risk_level | lower %}
@@ -129,13 +149,41 @@
     </div>
     {% endif %}
 
+    <p class="text-muted small text-center">This dashboard does not provide medical diagnosis or medical advice. Consult a qualified healthcare professional.</p>
 </div>
 </section>
-{% endblock %}
-</div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ url_for('static', filename='js/analytics-dashboard.js') }}"></script>
+<script>
+(function() {
+    var sparkData = {{ spark_json | safe }};
+    if (!sparkData.length) return;
+    var ctx = document.getElementById('riskTrendChart');
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: sparkData.map(function(d){ return d.date; }),
+            datasets: [{
+                label: 'Risk Score %',
+                data: sparkData.map(function(d){ return d.score; }),
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52,152,219,0.1)',
+                tension: 0.3,
+                fill: true,
+                pointRadius: 4,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { min: 0, max: 100, ticks: { callback: function(v){ return v + '%'; } } }
+            }
+        }
+    });
+})();
+</script>
 {% endblock %}

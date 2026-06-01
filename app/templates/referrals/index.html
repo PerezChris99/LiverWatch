@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}My Referrals — LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4">My Referrals</h2>
+
+  {% if referrals %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Referral Code</th>
+          <th>Facility</th>
+          <th>Urgency</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in referrals %}
+        <tr>
+          <td><code>{{ r.referral_code }}</code></td>
+          <td>
+            {% if r.facility %}
+              <a href="{{ url_for('referral.facility_detail', facility_id=r.facility_id) }}">
+                {{ r.facility.name }}
+              </a>
+              <small class="text-muted d-block">{{ r.facility.district }}</small>
+            {% else %}
+              <span class="text-muted">—</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if r.urgency == 'emergency' %}
+              <span class="badge bg-danger">Emergency</span>
+            {% elif r.urgency == 'urgent' %}
+              <span class="badge bg-warning text-dark">Urgent</span>
+            {% else %}
+              <span class="badge bg-secondary">Routine</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if r.status == 'completed' %}
+              <span class="badge bg-success">Completed</span>
+            {% elif r.status == 'acknowledged' %}
+              <span class="badge bg-info text-dark">Acknowledged</span>
+            {% elif r.status == 'sent' %}
+              <span class="badge bg-primary">Sent</span>
+            {% elif r.status == 'cancelled' %}
+              <span class="badge bg-dark">Cancelled</span>
+            {% else %}
+              <span class="badge bg-secondary">Pending</span>
+            {% endif %}
+          </td>
+          <td>{{ r.created_at.strftime('%d %b %Y') if r.created_at else '—' }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary"
+               href="{{ url_for('referral.referral_status', referral_code=r.referral_code) }}">
+              View
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    You have no referrals yet. A referral may be created after completing a risk assessment.
+  </div>
+  {% endif %}
+
+  <a class="btn btn-outline-secondary" href="{{ url_for('referral.facilities') }}">
+    Browse Facilities
+  </a>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{{ facility.name }} — LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('referral.facilities') }}">Facilities</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ facility.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">{{ facility.name }}</h4>
+      {% if facility.is_verified %}
+        <span class="badge bg-info text-dark">Verified</span>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <dl class="row">
+            <dt class="col-sm-4">District</dt>
+            <dd class="col-sm-8">{{ facility.district or '—' }}</dd>
+            <dt class="col-sm-4">Type</dt>
+            <dd class="col-sm-8">{{ facility.facility_type | replace('_', ' ') | title if facility.facility_type else '—' }}</dd>
+          </dl>
+        </div>
+        <div class="col-md-6">
+          <h6>Services</h6>
+          <ul class="list-unstyled">
+            <li>
+              {% if facility.hepatitis_treatment %}
+                <span class="text-success">&#10003;</span> Hepatitis Treatment
+              {% else %}
+                <span class="text-muted">&#10007;</span> Hepatitis Treatment
+              {% endif %}
+            </li>
+            <li>
+              {% if facility.liver_specialist %}
+                <span class="text-success">&#10003;</span> Liver Specialist
+              {% else %}
+                <span class="text-muted">&#10007;</span> Liver Specialist
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer bg-transparent text-muted small">
+      This directory does not provide medical diagnosis or advice.
+      Always consult a qualified healthcare professional.
+    </div>
+  </div>
+</div>
+{% endblock %}

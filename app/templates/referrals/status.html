@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Referral {{ referral.referral_code }} — LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:650px">
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('referral.index') }}">My Referrals</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ referral.referral_code }}</li>
+    </ol>
+  </nav>
+
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Referral <code>{{ referral.referral_code }}</code></h5>
+      {% if referral.status == 'completed' %}
+        <span class="badge bg-success fs-6">Completed</span>
+      {% elif referral.status == 'acknowledged' %}
+        <span class="badge bg-info text-dark fs-6">Acknowledged</span>
+      {% elif referral.status == 'sent' %}
+        <span class="badge bg-primary fs-6">Sent</span>
+      {% elif referral.status == 'cancelled' %}
+        <span class="badge bg-dark fs-6">Cancelled</span>
+      {% else %}
+        <span class="badge bg-secondary fs-6">Pending</span>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-4">Facility</dt>
+        <dd class="col-sm-8">
+          {% if referral.facility %}
+            <a href="{{ url_for('referral.facility_detail', facility_id=referral.facility_id) }}">
+              {{ referral.facility.name }}
+            </a>
+            <span class="text-muted">({{ referral.facility.district }})</span>
+          {% else %}—{% endif %}
+        </dd>
+
+        <dt class="col-sm-4">Urgency</dt>
+        <dd class="col-sm-8">
+          {% if referral.urgency == 'emergency' %}
+            <span class="badge bg-danger">Emergency</span>
+          {% elif referral.urgency == 'urgent' %}
+            <span class="badge bg-warning text-dark">Urgent</span>
+          {% else %}
+            <span class="badge bg-secondary">Routine</span>
+          {% endif %}
+        </dd>
+
+        <dt class="col-sm-4">Created</dt>
+        <dd class="col-sm-8">{{ referral.created_at.strftime('%d %b %Y, %H:%M') if referral.created_at else '—' }}</dd>
+
+        {% if referral.sent_at %}
+        <dt class="col-sm-4">Sent</dt>
+        <dd class="col-sm-8">{{ referral.sent_at.strftime('%d %b %Y, %H:%M') }}</dd>
+        {% endif %}
+
+        {% if referral.acknowledged_at %}
+        <dt class="col-sm-4">Acknowledged</dt>
+        <dd class="col-sm-8">{{ referral.acknowledged_at.strftime('%d %b %Y, %H:%M') }}</dd>
+        {% endif %}
+
+        {% if referral.completed_at %}
+        <dt class="col-sm-4">Completed</dt>
+        <dd class="col-sm-8">{{ referral.completed_at.strftime('%d %b %Y, %H:%M') }}</dd>
+        {% endif %}
+
+        {% if referral.referral_notes %}
+        <dt class="col-sm-4">Notes</dt>
+        <dd class="col-sm-8">{{ referral.referral_notes }}</dd>
+        {% endif %}
+      </dl>
+    </div>
+    <div class="card-footer text-muted small">
+      This application does not provide medical diagnosis.
+      Attend your referred facility and consult a qualified healthcare professional.
+    </div>
+  </div>
+
+  <div class="mt-3">
+    <a class="btn btn-outline-secondary" href="{{ url_for('referral.index') }}">Back to My Referrals</a>
+  </div>
+</div>
+{% endblock %}

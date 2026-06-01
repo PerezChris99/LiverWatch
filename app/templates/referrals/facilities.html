@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Healthcare Facilities — LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-3">Healthcare Facilities</h2>
+  <p class="text-muted">Find liver care services near you. This directory does not provide medical diagnosis or advice.</p>
+
+  <!-- Filter form -->
+  <form method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label class="form-label" for="district">District</label>
+      <select class="form-select" id="district" name="district">
+        <option value="">All districts</option>
+        {% for d in district_names %}
+          <option value="{{ d }}" {% if d == selected_district %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label" for="service">Service</label>
+      <select class="form-select" id="service" name="service">
+        <option value="">All services</option>
+        <option value="hepatitis" {% if selected_service == 'hepatitis' %}selected{% endif %}>Hepatitis Treatment</option>
+        <option value="specialist" {% if selected_service == 'specialist' %}selected{% endif %}>Liver Specialist</option>
+      </select>
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary me-2">Filter</button>
+      <a href="{{ url_for('referral.facilities') }}" class="btn btn-outline-secondary">Reset</a>
+    </div>
+  </form>
+
+  {% if facilities %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for f in facilities %}
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{ f.name }}</h5>
+          <p class="card-text text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ f.district }}</p>
+          <p class="card-text text-muted mb-2">
+            <span class="badge bg-light text-dark border">{{ f.facility_type | replace('_', ' ') | title }}</span>
+          </p>
+          <div class="d-flex gap-2 flex-wrap mb-2">
+            {% if f.hepatitis_treatment %}
+              <span class="badge bg-success">Hepatitis Treatment</span>
+            {% endif %}
+            {% if f.liver_specialist %}
+              <span class="badge bg-primary">Liver Specialist</span>
+            {% endif %}
+            {% if f.is_verified %}
+              <span class="badge bg-info text-dark">Verified</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-footer bg-transparent">
+          <a class="btn btn-sm btn-outline-primary"
+             href="{{ url_for('referral.facility_detail', facility_id=f.id) }}">
+            Details
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-warning">No facilities match your search criteria.</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Create Referral — LiverWatch{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:700px">
+  <h2 class="mb-4">Create Referral</h2>
+
+  <div class="alert alert-info mb-4">
+    <strong>Risk Assessment:</strong>
+    Risk level <strong>{{ assessment.risk_level | upper }}</strong>
+    — {{ assessment.overall_score | round(1) }}% risk score.
+    This application does not provide medical diagnosis. Refer to a qualified clinician.
+  </div>
+
+  <form method="post">
+    {{ form.hidden_tag() if form is defined else '' }}
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold" for="facility_id">Select Facility</label>
+      <select class="form-select" id="facility_id" name="facility_id" required>
+        <option value="">— Choose a facility —</option>
+        {% for f in facilities %}
+          <optgroup label="{{ f.district }}">
+            <option value="{{ f.id }}">
+              {{ f.name }}
+              {% if f.hepatitis_treatment %} · Hepatitis Treatment{% endif %}
+              {% if f.liver_specialist %} · Liver Specialist{% endif %}
+            </option>
+          </optgroup>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold" for="urgency">Urgency</label>
+      <select class="form-select" id="urgency" name="urgency">
+        <option value="routine">Routine</option>
+        <option value="urgent">Urgent</option>
+        <option value="emergency">Emergency</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold" for="notes">Additional Notes <span class="text-muted">(optional)</span></label>
+      <textarea class="form-control" id="notes" name="notes" rows="3" maxlength="1000"
+                placeholder="Any additional context for the receiving facility…"></textarea>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Create Referral</button>
+      <a href="{{ url_for('referral.index') }}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
