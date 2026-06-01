@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Register Patient{% endblock %}
+
+{% block content %}
+<section class="section">
+<div class="container" style="max-width: 640px; margin: 0 auto;">
+    <div class="text-center mb-8">
+        <span class="section-badge"><i class="fas fa-user-plus"></i> CHW Portal</span>
+        <h1 class="text-2xl font-bold mt-2">Register New Patient</h1>
+        <p class="text-muted mt-2">Patient data is stored securely and shared only with authorised health workers.</p>
+    </div>
+
+    <div class="card p-6">
+        <form method="POST" action="{{ url_for('health.chw_register') }}" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="form-group mb-4">
+                {{ form.full_name.label(class="form-label") }}
+                {{ form.full_name(class="form-control" + (' is-invalid' if form.full_name.errors else '')) }}
+                {% for e in form.full_name.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6">
+                    {{ form.age.label(class="form-label") }}
+                    {{ form.age(class="form-control" + (' is-invalid' if form.age.errors else '')) }}
+                    {% for e in form.age.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+                <div class="col-sm-6">
+                    {{ form.gender.label(class="form-label") }}
+                    {{ form.gender(class="form-control" + (' is-invalid' if form.gender.errors else '')) }}
+                    {% for e in form.gender.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+            </div>
+
+            <div class="form-group mb-4">
+                {{ form.district.label(class="form-label") }}
+                {{ form.district(class="form-control" + (' is-invalid' if form.district.errors else '')) }}
+                {% for e in form.district.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-sm-6">
+                    {{ form.sub_county.label(class="form-label") }}
+                    {{ form.sub_county(class="form-control") }}
+                </div>
+                <div class="col-sm-6">
+                    {{ form.village.label(class="form-label") }}
+                    {{ form.village(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="form-group mb-4">
+                {{ form.phone_number.label(class="form-label") }}
+                {{ form.phone_number(class="form-control") }}
+                <small class="text-muted">Optional. Will be stored securely.</small>
+            </div>
+
+            <div class="form-group mb-4">
+                <div class="form-check">
+                    {{ form.consent_given(class="form-check-input" + (' is-invalid' if form.consent_given.errors else '')) }}
+                    {{ form.consent_given.label(class="form-check-label") }}
+                    {% for e in form.consent_given.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-save"></i> Register Patient
+            </button>
+        </form>
+    </div>
+</div>
+</section>
+{% endblock %}

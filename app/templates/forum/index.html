@@ -1,110 +1,98 @@
 {% extends "base.html" %}
-
 {% block title %}Community Forum{% endblock %}
 
 {% block content %}
-<div class="container forum-container">
-    <div class="forum-header">
+<section class="section">
+<div class="container" style="max-width: 860px; margin: 0 auto;">
+
+    <div class="text-center mb-6">
         <span class="section-badge"><i class="fas fa-comments"></i> Community</span>
-        <h1 class="forum-title">Forum</h1>
-        <p class="forum-subtitle">Ask questions and share experiences about liver health</p>
+        <h1 class="text-3xl font-bold mt-2">Community Forum</h1>
+        <p class="text-muted mt-2">Share awareness stories, ask questions, and learn from verified health workers.
+            All posts are moderated before appearing publicly.</p>
     </div>
-    
-    <!-- Search & Filters -->
-    <div class="card forum-search-card">
-        <form class="forum-search-form">
-            <input type="text" name="search" placeholder="Search questions..." value="{{ search }}"
-                   class="forum-search-input">
-            <button type="submit" class="btn btn-primary btn-sm">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-        <div class="forum-filter-buttons">
-            <a href="?filter=date" class="btn btn-sm {% if filter_by == 'date' %}btn-primary{% else %}btn-ghost{% endif %}">Latest</a>
-            <a href="?filter=popularity" class="btn btn-sm {% if filter_by == 'popularity' %}btn-primary{% else %}btn-ghost{% endif %}">Popular</a>
-            <a href="?filter=unanswered" class="btn btn-sm {% if filter_by == 'unanswered' %}btn-primary{% else %}btn-ghost{% endif %}">Unanswered</a>
-        </div>
-    </div>
-    
-    <!-- Popular Tags -->
-    {% if popular_tags %}
-    <div class="forum-tags-wrapper">
-        {% for tag in popular_tags[:8] %}
-        <a href="?tag={{ tag.name }}" 
-           class="forum-tag {% if current_tag == tag.name %}active{% endif %}">
-            #{{ tag.name }}
+
+    {% if current_user.is_authenticated %}
+    <div class="text-end mb-4">
+        <a href="{{ url_for('forum.new_discussion') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Start a Discussion
         </a>
-        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle"></i>
+        <a href="{{ url_for('auth.login') }}">Log in</a> to start a discussion or reply.
     </div>
     {% endif %}
-    
-    <!-- Questions List -->
-    <div class="forum-questions-list">
-        {% if questions and questions.items %}
-            {% for question in questions.items %}
-            <div class="card forum-question-card">
-                <div class="forum-question-content">
-                    <!-- Vote count -->
-                    <div class="forum-vote-section">
-                        <div class="forum-vote-count">{{ question.upvotes - question.downvotes }}</div>
-                        <div class="forum-vote-label">votes</div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="forum-question-main">
-                        <h3 class="forum-question-title">
-                            <a href="{{ url_for('forum.question_detail', question_id=question.id) }}" 
-                               class="forum-question-link">
-                                {{ question.title }}
-                            </a>
-                        </h3>
-                        <p class="forum-question-excerpt">
-                            {{ question.content[:150] }}{% if question.content|length > 150 %}...{% endif %}
-                        </p>
-                        <div class="forum-question-meta">
-                            <span><i class="fas fa-user"></i> {{ question.author.username if question.author else 'Anonymous' }}</span>
-                            <span><i class="fas fa-clock"></i> {{ question.date_posted.strftime('%b %d') if question.date_posted else '' }}</span>
-                            <span><i class="fas fa-comment"></i> {{ question.answers|length if question.answers else 0 }} answers</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-            
-            <!-- Pagination -->
-            {% if questions.pages > 1 %}
-            <div class="forum-pagination">
-                {% if questions.has_prev %}
-                <a href="?page={{ questions.prev_num }}&filter={{ filter_by }}&search={{ search }}" class="btn btn-sm btn-ghost">
-                    <i class="fas fa-chevron-left"></i> Prev
-                </a>
-                {% endif %}
-                <span class="forum-page-info">
-                    Page {{ questions.page }} of {{ questions.pages }}
+
+    <!-- Discussion list -->
+    {% if discussions and discussions.items %}
+    <div class="discussions-list">
+        {% for d in discussions.items %}
+        <div class="card p-5 mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h3 class="font-semibold mb-0" style="font-size:1.1rem">
+                    <a href="{{ url_for('forum.discussion_detail', discussion_id=d.id) }}"
+                       class="text-dark text-decoration-none">
+                        {{ d.title }}
+                    </a>
+                </h3>
+                <span class="badge bg-secondary ms-3 text-nowrap" style="font-size:0.7rem">
+                    {{ d.discussion_type | replace('_', ' ') | title }}
                 </span>
-                {% if questions.has_next %}
-                <a href="?page={{ questions.next_num }}&filter={{ filter_by }}&search={{ search }}" class="btn btn-sm btn-ghost">
-                    Next <i class="fas fa-chevron-right"></i>
-                </a>
-                {% endif %}
             </div>
-            {% endif %}
-        {% else %}
-            <div class="card forum-empty-state">
-                <i class="fas fa-comments forum-empty-icon"></i>
-                <h3 class="forum-empty-title">No questions yet</h3>
-                <p class="forum-empty-text">Be the first to ask a question!</p>
+            <p class="text-muted mb-3" style="font-size:0.9rem">
+                {{ d.content[:200] }}{% if d.content | length > 200 %}…{% endif %}
+            </p>
+            <div class="d-flex gap-4 text-muted" style="font-size:0.82rem">
+                <span><i class="fas fa-user"></i>
+                    {{ d.author.username if d.author else 'Anonymous' }}
+                    {% if d.is_verified_contributor %}
+                    <span class="badge bg-success ms-1">Verified</span>
+                    {% endif %}
+                </span>
+                <span><i class="fas fa-clock"></i> {{ d.created_at.strftime('%d %b %Y') }}</span>
+                <span><i class="fas fa-comment"></i>
+                    {{ d.replies.filter_by(status='approved').count() }} replies
+                </span>
+                <span><i class="fas fa-eye"></i> {{ d.views }}</span>
             </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if discussions.pages > 1 %}
+    <nav class="d-flex justify-content-center gap-2 mt-4">
+        {% if discussions.has_prev %}
+        <a href="?page={{ discussions.prev_num }}" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-chevron-left"></i> Prev
+        </a>
+        {% endif %}
+        <span class="btn btn-light btn-sm disabled">
+            Page {{ discussions.page }} of {{ discussions.pages }}
+        </span>
+        {% if discussions.has_next %}
+        <a href="?page={{ discussions.next_num }}" class="btn btn-outline-secondary btn-sm">
+            Next <i class="fas fa-chevron-right"></i>
+        </a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <div class="card p-8 text-center">
+        <i class="fas fa-comments fa-3x text-muted mb-4"></i>
+        <h3 class="mb-2">No approved discussions yet</h3>
+        <p class="text-muted">Be the first — start a discussion below.</p>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('forum.new_discussion') }}" class="btn btn-primary mt-2">Start a Discussion</a>
         {% endif %}
     </div>
-    
-    <!-- Ask Question CTA -->
-    <div class="forum-cta">
-        <a href="{{ url_for('forum.ask_question') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Ask a Question
-        </a>
-    </div>
+    {% endif %}
+
 </div>
+</section>
 {% endblock %}
 
 {% block extra_css %}

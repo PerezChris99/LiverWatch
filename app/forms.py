@@ -273,3 +273,12 @@ class SearchForm(FlaskForm):
     query  = StringField('Search', validators=[DataRequired(), Length(min=2, max=100)])
     submit = SubmitField('Search')
 
+
+class HealthLogForm(FlaskForm):
+    """Daily health log entry — linked to LongitudinalRecord."""
+    alcohol_intake   = FloatField('Alcohol (units/day)', validators=[Optional()])
+    water_intake     = FloatField('Water (litres)',       validators=[Optional()])
+    exercise_minutes = IntegerField('Exercise (minutes)', validators=[Optional()])
+    sleep_hours      = FloatField('Sleep (hours)',        validators=[Optional()])
+    notes            = TextAreaField('Notes',             validators=[Optional(), Length(max=500)])
+    submit           = SubmitField('Save Log')

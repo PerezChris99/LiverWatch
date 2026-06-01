@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}Liver Risk Assessment{% endblock %}
+{% block meta_description %}Free Uganda liver risk screening — hepatitis, alcohol, symptoms, environmental factors.{% endblock %}
+
+{% block content %}
+<section class="section">
+<div class="container" style="max-width: 780px; margin: 0 auto;">
+
+    <div class="text-center mb-8">
+        <span class="section-badge"><i class="fas fa-heartbeat"></i> Risk Screening</span>
+        <h1 class="text-3xl font-bold mt-2">Liver Risk Assessment</h1>
+        <p class="text-muted mt-2">Answer honestly — all information is private and used only for your risk profile.</p>
+    </div>
+
+    <!-- Disclaimer banner -->
+    <div class="alert alert-info mb-6" role="alert">
+        <i class="fas fa-info-circle"></i>
+        <strong>Important:</strong> {{ disclaimer }}
+    </div>
+
+    <form method="POST" action="{{ url_for('health.risk_assessment') }}" novalidate>
+        {{ form.hidden_tag() }}
+
+        <!-- ── Section 1: Hepatitis ─────────────────────────────────── -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-virus text-danger"></i> Hepatitis History
+            </h2>
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ form.hbsag_positive(class="form-check-input") }}
+                    {{ form.hbsag_positive.label(class="form-check-label") }}
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ form.hcv_positive(class="form-check-input") }}
+                    {{ form.hcv_positive.label(class="form-check-label") }}
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ form.vaccinated_hbv(class="form-check-input") }}
+                    {{ form.vaccinated_hbv.label(class="form-check-label") }}
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ form.hbv_exposure_risk(class="form-check-input") }}
+                    {{ form.hbv_exposure_risk.label(class="form-check-label") }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    {{ form.hbv_family_history(class="form-check-input") }}
+                    {{ form.hbv_family_history.label(class="form-check-label") }}
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Section 2: Alcohol ──────────────────────────────────── -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-wine-bottle text-warning"></i> Alcohol Use
+            </h2>
+            <div class="form-group mb-3">
+                {{ form.drinks_per_day.label(class="form-label") }}
+                {{ form.drinks_per_day(class="form-control", placeholder="e.g. 2", style="max-width:160px") }}
+                {% for e in form.drinks_per_day.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+                <small class="text-muted">1 standard drink = 350ml beer / 150ml wine / 45ml spirits</small>
+            </div>
+            <div class="form-group mb-3">
+                {{ form.years_drinking.label(class="form-label") }}
+                {{ form.years_drinking(class="form-control", placeholder="e.g. 5", style="max-width:160px") }}
+                {% for e in form.years_drinking.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    {{ form.binge_drinking(class="form-check-input") }}
+                    {{ form.binge_drinking.label(class="form-check-label") }}
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Section 3: Symptoms ─────────────────────────────────── -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-1">
+                <i class="fas fa-notes-medical text-primary"></i> Current Symptoms
+            </h2>
+            <p class="text-muted text-sm mb-4">Check any you are currently experiencing.</p>
+
+            <!-- Emergency warning -->
+            <div id="emergency-banner" class="alert alert-danger mb-4" style="display:none">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>EMERGENCY SYMPTOMS SELECTED.</strong>
+                If you are vomiting blood or severely confused, go to hospital immediately — do not wait for this assessment.
+            </div>
+
+            <div class="row">
+                {% for field in [
+                    form.symptom_jaundice, form.symptom_dark_urine, form.symptom_pale_stools,
+                    form.symptom_fatigue, form.symptom_abdominal_pain, form.symptom_swollen_abdomen,
+                    form.symptom_nausea, form.symptom_itching, form.symptom_bleeding_easily
+                ] %}
+                <div class="col-md-6 mb-2">
+                    <div class="form-check">
+                        {{ field(class="form-check-input") }}
+                        {{ field.label(class="form-check-label") }}
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- Emergency symptoms get red highlight -->
+                <div class="col-md-6 mb-2">
+                    <div class="form-check border border-danger rounded p-2">
+                        {{ form.symptom_vomiting_blood(class="form-check-input emergency-sym") }}
+                        {{ form.symptom_vomiting_blood.label(class="form-check-label text-danger fw-bold") }}
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="form-check border border-danger rounded p-2">
+                        {{ form.symptom_confusion(class="form-check-input emergency-sym") }}
+                        {{ form.symptom_confusion.label(class="form-check-label text-danger fw-bold") }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Section 4: Medications ──────────────────────────────── -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-pills"></i> Medications & Treatments
+            </h2>
+            {% for field in [form.otc_painkillers, form.tb_treatment, form.herbal_remedies, form.multiple_medications] %}
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ field(class="form-check-input") }}
+                    {{ field.label(class="form-check-label") }}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="form-group">
+                {{ form.painkiller_frequency.label(class="form-label") }}
+                {{ form.painkiller_frequency(class="form-control", style="max-width:280px") }}
+            </div>
+        </div>
+
+        <!-- ── Section 5: Environmental ───────────────────────────── -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-leaf"></i> Environmental Exposures
+            </h2>
+            {% for field in [form.aflatoxin_exposure, form.chemical_exposure, form.unsafe_water] %}
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ field(class="form-check-input") }}
+                    {{ field.label(class="form-check-label") }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ── Section 6: Family History ──────────────────────────── -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-dna"></i> Family History
+            </h2>
+            {% for field in [form.liver_cancer_family, form.cirrhosis_family] %}
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ field(class="form-check-input") }}
+                    {{ field.label(class="form-check-label") }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ── Section 7: Nutrition ────────────────────────────────── -->
+        <div class="card p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-apple-alt"></i> Nutrition & Metabolic Health
+            </h2>
+            <div class="form-group mb-3">
+                {{ form.bmi.label(class="form-label") }}
+                {{ form.bmi(class="form-control", placeholder="e.g. 24.5", style="max-width:160px") }}
+                {% for e in form.bmi.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+                <small class="text-muted">BMI = weight(kg) ÷ height(m)²  — leave blank if unknown</small>
+            </div>
+            {% for field in [form.high_fat_diet, form.low_water_intake, form.diabetes] %}
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    {{ field(class="form-check-input") }}
+                    {{ field.label(class="form-check-label") }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ── Disclaimer acknowledgement ─────────────────────────── -->
+        <div class="card p-6 mb-6 border-primary">
+            <div class="form-group">
+                <div class="form-check">
+                    {{ form.disclaimer_acknowledged(class="form-check-input" + (' is-invalid' if form.disclaimer_acknowledged.errors else '')) }}
+                    {{ form.disclaimer_acknowledged.label(class="form-check-label") }}
+                    {% for e in form.disclaimer_acknowledged.errors %}
+                        <div class="invalid-feedback">{{ e }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-8">
+            {{ form.submit(class="btn btn-primary btn-lg px-8") }}
+        </div>
+    </form>
+</div>
+</section>
+
+<script>
+// Show emergency banner if any emergency symptom is checked
+document.querySelectorAll('.emergency-sym').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+        var any = Array.from(document.querySelectorAll('.emergency-sym')).some(c => c.checked);
+        document.getElementById('emergency-banner').style.display = any ? 'block' : 'none';
+    });
+});
+</script>
+{% endblock %}

@@ -1,91 +1,163 @@
 {% extends "base.html" %}
-
 {% block title %}Health Tracker{% endblock %}
 
 {% block content %}
-<div class="container tracker-container">
-    <div class="tracker-header">
-        <span class="section-badge"><i class="fas fa-heartbeat"></i> Track</span>
-        <h1 class="tracker-title">Health Tracker</h1>
-        <p class="tracker-subtitle">Monitor your liver health indicators daily</p>
+<section class="section">
+<div class="container" style="max-width: 900px; margin: 0 auto;">
+
+    <div class="text-center mb-8">
+        <span class="section-badge"><i class="fas fa-heartbeat"></i> Dashboard</span>
+        <h1 class="text-3xl font-bold mt-2">Your Liver Health Tracker</h1>
+        <p class="text-muted mt-2">Track your liver risk over time. This is not a medical diagnosis.</p>
     </div>
-    
-    <!-- Quick Stats -->
-    <div class="stats-grid">
-        <div class="card stat-card">
-            <i class="fas fa-tint stat-icon water"></i>
-            <div class="stat-value">8</div>
-            <div class="stat-label">Glasses of Water</div>
+
+    <!-- Latest assessment card -->
+    {% if latest_assessment %}
+    {% set level = latest_assessment.risk_level | lower %}
+    {% set colors = {
+        'minimal':  ('success', '#2ecc71'),
+        'low':      ('success', '#2ecc71'),
+        'moderate': ('warning', '#f39c12'),
+        'high':     ('danger',  '#e74c3c'),
+        'urgent':   ('danger',  '#c0392b'),
+        'critical': ('danger',  '#8e1010'),
+    } %}
+    {% set color_class, hex_color = colors.get(level, ('secondary', '#7f8c8d')) %}
+    <div class="card p-6 mb-6 text-center" style="border-top: 5px solid {{ hex_color }}">
+        <p class="text-muted text-sm mb-1">Latest assessment — {{ latest_assessment.created_at.strftime('%d %b %Y') }}</p>
+        <div style="font-size: 3rem; font-weight: 800; color: {{ hex_color }};">
+            {{ (latest_assessment.overall_score * 100) | round(0) | int }}
+            <span style="font-size: 1rem; font-weight: 400; color:#666;">/100</span>
         </div>
-        <div class="card stat-card">
-            <i class="fas fa-running stat-icon exercise"></i>
-            <div class="stat-value">30</div>
-            <div class="stat-label">Min Exercise</div>
-        </div>
-        <div class="card stat-card">
-            <i class="fas fa-moon stat-icon sleep"></i>
-            <div class="stat-value">7.5</div>
-            <div class="stat-label">Hours Sleep</div>
-        </div>
-        <div class="card stat-card">
-            <i class="fas fa-heart stat-icon health-score"></i>
-            <div class="stat-value">85</div>
-            <div class="stat-label">Health Score</div>
+        <span class="badge bg-{{ color_class }} text-lg py-1 px-3 mt-1">
+            {{ latest_assessment.risk_level | upper }}
+        </span>
+        <div class="mt-4">
+            <a href="{{ url_for('health.result', assessment_id=latest_assessment.id) }}" class="btn btn-outline-primary btn-sm me-2">
+                View Full Result
+            </a>
+            <a href="{{ url_for('health.risk_assessment') }}" class="btn btn-primary btn-sm">
+                New Assessment
+            </a>
         </div>
     </div>
-    
-    <!-- Log Entry Form -->
-    <div class="card log-form-card">
-        <h3 class="log-form-title">
-            <i class="fas fa-plus-circle log-form-icon"></i> Log Today's Health
-        </h3>
-        
-        <form method="POST" class="log-form">
-            <div>
-                <label class="form-field-label">Water Intake (glasses)</label>
-                <input type="number" name="water_intake" placeholder="8" class="form-control form-field-input">
+    {% else %}
+    <div class="card p-8 mb-6 text-center">
+        <i class="fas fa-clipboard-list fa-3x text-muted mb-4"></i>
+        <h3 class="mb-2">No assessments yet</h3>
+        <p class="text-muted mb-4">Complete your first liver risk assessment to start tracking.</p>
+        <a href="{{ url_for('health.risk_assessment') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Start Risk Assessment
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Assessment history -->
+    {% if recent_assessments %}
+    <div class="card p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4"><i class="fas fa-history"></i> Assessment History</h2>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Risk Level</th>
+                        <th>Score</th>
+                        <th>Referral</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for a in recent_assessments %}
+                {% set lvl = a.risk_level | lower %}
+                {% set cls_map = {'minimal':'success','low':'success','moderate':'warning','high':'danger','urgent':'danger','critical':'danger'} %}
+                {% set cls = cls_map.get(lvl, 'secondary') %}
+                <tr>
+                    <td>{{ a.created_at.strftime('%d %b %Y') }}</td>
+                    <td><span class="badge bg-{{ cls }}">{{ a.risk_level | upper }}</span></td>
+                    <td>{{ (a.overall_score * 100) | round(0) | int }}/100</td>
+                    <td>
+                        {% if a.requires_referral %}
+                        <span class="text-warning"><i class="fas fa-hospital"></i> {{ a.referral_urgency | default('Yes') | title }}</span>
+                        {% else %}
+                        <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('health.result', assessment_id=a.id) }}" class="btn btn-outline-secondary btn-sm">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Daily log entries -->
+    {% if recent_records %}
+    <div class="card p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4"><i class="fas fa-calendar-day"></i> Recent Logs</h2>
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Alcohol (units/day)</th>
+                        <th>Water (L)</th>
+                        <th>Exercise (min)</th>
+                        <th>Sleep (h)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for rec in recent_records %}
+                <tr>
+                    <td>{{ rec.record_date.strftime('%d %b') }}</td>
+                    <td>{{ rec.alcohol_units_per_day if rec.alcohol_units_per_day is not none else '—' }}</td>
+                    <td>{{ rec.water_intake_liters if rec.water_intake_liters is not none else '—' }}</td>
+                    <td>{{ rec.exercise_minutes if rec.exercise_minutes is not none else '—' }}</td>
+                    <td>{{ rec.sleep_hours if rec.sleep_hours is not none else '—' }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Add log form -->
+    <div class="card p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4"><i class="fas fa-plus-circle"></i> Add Today's Log</h2>
+        <form method="POST" action="{{ url_for('health.log_entry') }}">
+            {{ log_form.hidden_tag() }}
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label">Alcohol (units/day)</label>
+                    <input type="number" name="alcohol_intake" class="form-control" step="0.5" min="0" placeholder="0">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label">Water (litres)</label>
+                    <input type="number" name="water_intake" class="form-control" step="0.25" min="0" placeholder="2.0">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label">Exercise (minutes)</label>
+                    <input type="number" name="exercise_minutes" class="form-control" min="0" placeholder="30">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label">Sleep (hours)</label>
+                    <input type="number" name="sleep_hours" class="form-control" step="0.5" min="0" max="24" placeholder="7.5">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Notes (optional)</label>
+                    <input type="text" name="notes" class="form-control" maxlength="500" placeholder="Any symptoms or notes...">
+                </div>
             </div>
-            <div>
-                <label class="form-field-label">Exercise (minutes)</label>
-                <input type="number" name="exercise_level" placeholder="30" class="form-control form-field-input">
-            </div>
-            <div>
-                <label class="form-field-label">Sleep (hours)</label>
-                <input type="number" name="sleep_hours" placeholder="8" step="0.5" class="form-control form-field-input">
-            </div>
-            <div>
-                <label class="form-field-label">Alcohol (units)</label>
-                <input type="number" name="alcohol_intake" placeholder="0" class="form-control form-field-input">
-            </div>
-            <div class="form-submit-wrapper">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Save Entry
-                </button>
-            </div>
+            <button type="submit" class="btn btn-success mt-3"><i class="fas fa-save"></i> Save Log</button>
         </form>
     </div>
-    
-    <!-- Tips -->
-    <div class="card tips-card">
-        <h3 class="tips-title">
-            <i class="fas fa-lightbulb tips-title-icon"></i> Health Tips
-        </h3>
-        <div class="tips-grid">
-            <div class="tip-item">
-                <i class="fas fa-check-circle tip-icon"></i>
-                <p class="tip-text">Drink at least 8 glasses of water daily to support liver function</p>
-            </div>
-            <div class="tip-item">
-                <i class="fas fa-check-circle tip-icon"></i>
-                <p class="tip-text">Aim for 30 minutes of moderate exercise most days</p>
-            </div>
-            <div class="tip-item">
-                <i class="fas fa-check-circle tip-icon"></i>
-                <p class="tip-text">Limit alcohol consumption to protect your liver</p>
-            </div>
-        </div>
-    </div>
+
 </div>
+</section>
 {% endblock %}
 
 {% block extra_css %}

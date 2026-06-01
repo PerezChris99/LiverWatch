@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Your Liver Risk Result{% endblock %}
+{% block meta_description %}Your liver risk assessment result from LiverWatch.{% endblock %}
+
+{% block content %}
+<section class="section">
+<div class="container" style="max-width: 760px; margin: 0 auto;">
+
+    <!-- Result header -->
+    {% set level = assessment.risk_level | lower %}
+    {% set level_colors = {
+        'minimal':  ('success', '#2ecc71', 'fa-check-circle'),
+        'low':      ('success', '#2ecc71', 'fa-check-circle'),
+        'moderate': ('warning', '#f39c12', 'fa-exclamation-circle'),
+        'high':     ('danger',  '#e74c3c', 'fa-exclamation-triangle'),
+        'urgent':   ('danger',  '#c0392b', 'fa-exclamation-triangle'),
+        'critical': ('danger',  '#8e1010', 'fa-ambulance'),
+    } %}
+    {% set color_class, hex_color, icon_class = level_colors.get(level, ('secondary', '#7f8c8d', 'fa-question-circle')) %}
+
+    {% if level in ('urgent', 'critical') %}
+    <div class="alert alert-danger mb-6 text-center" role="alert">
+        <h3><i class="fas fa-ambulance"></i> URGENT — Seek medical attention now</h3>
+        <p class="mb-0">Based on your responses, your pattern indicates factors that require prompt medical evaluation.
+        Go to your nearest health facility today.</p>
+    </div>
+    {% endif %}
+
+    <!-- Score card -->
+    <div class="card p-6 mb-6 text-center" style="border-top: 5px solid {{ hex_color }}">
+        <span class="section-badge text-{{ color_class }}">
+            <i class="fas {{ icon_class }}"></i> {{ assessment.risk_level | upper }} RISK
+        </span>
+        <div class="my-4">
+            <div style="font-size: 3.5rem; font-weight: 800; color: {{ hex_color }};">
+                {{ (assessment.overall_score * 100) | round(0) | int }}
+                <span style="font-size: 1.2rem; font-weight: 400; color: #666;">/100</span>
+            </div>
+            <div class="text-muted">Risk Score</div>
+        </div>
+        <div class="progress mb-3" style="height: 14px; border-radius: 7px;">
+            <div class="progress-bar bg-{{ color_class }}"
+                 role="progressbar"
+                 style="width: {{ (assessment.overall_score * 100) | round(0) | int }}%; border-radius: 7px;">
+            </div>
+        </div>
+        <p class="text-muted text-sm">
+            Confidence: {{ (assessment.confidence_level * 100) | round(0) | int }}% &nbsp;·&nbsp;
+            Assessed: {{ assessment.created_at.strftime('%d %B %Y, %H:%M') }}
+        </p>
+    </div>
+
+    <!-- Explanation -->
+    <div class="card p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-3"><i class="fas fa-clipboard-list"></i> What this means</h2>
+        <p>{{ assessment.explanation }}</p>
+        {% if assessment.requires_referral %}
+        <div class="alert alert-warning mt-3">
+            <i class="fas fa-hospital"></i>
+            <strong>Referral recommended</strong>
+            {% if assessment.referral_urgency %}
+            — <em>{{ assessment.referral_urgency | title }}</em>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Risk factor breakdown -->
+    {% if factors %}
+    <div class="card p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4"><i class="fas fa-chart-bar"></i> Risk Factor Breakdown</h2>
+        {% for f in factors %}
+        {% set f_pct = (f.contribution * 100) | round(0) | int %}
+        <div class="mb-4">
+            <div class="d-flex justify-content-between mb-1">
+                <span class="font-medium {% if f.is_elevated %}text-danger{% endif %}">
+                    {% if f.is_elevated %}<i class="fas fa-exclamation text-danger"></i>{% endif %}
+                    {{ f.factor_name }}
+                    <small class="text-muted">({{ f.factor_category }})</small>
+                </span>
+                <span class="text-muted text-sm">{{ f_pct }}%</span>
+            </div>
+            <div class="progress mb-1" style="height: 8px; border-radius: 4px;">
+                <div class="progress-bar {% if f.is_elevated %}bg-danger{% else %}bg-info{% endif %}"
+                     role="progressbar"
+                     style="width: {{ f_pct }}%; border-radius: 4px;">
+                </div>
+            </div>
+            {% if f.explanation %}
+            <small class="text-muted">{{ f.explanation }}</small>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Recommendations -->
+    {% if recommendations %}
+    <div class="card p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-3"><i class="fas fa-list-check"></i> Recommendations</h2>
+        <ul class="list-unstyled">
+            {% for rec in recommendations %}
+            {% if rec.strip() %}
+            <li class="mb-2">
+                <i class="fas fa-check-circle text-success me-2"></i> {{ rec }}
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Disclaimer -->
+    <div class="alert alert-secondary mb-6">
+        <i class="fas fa-shield-alt"></i>
+        {{ disclaimer }}
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-3 mb-8 flex-wrap justify-content-center">
+        <a href="{{ url_for('health.tracker') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Tracker
+        </a>
+        <a href="{{ url_for('health.risk_assessment') }}" class="btn btn-primary">
+            <i class="fas fa-redo"></i> New Assessment
+        </a>
+    </div>
+
+</div>
+</section>
+{% endblock %}
