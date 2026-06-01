@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+{% block meta_description %}Update your LiverWatch profile information.{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container" style="max-width: 600px; margin: 0 auto;">
+        <div class="card p-8">
+            <h1 class="text-2xl font-bold mb-6">Edit Profile</h1>
+
+            <form method="POST" action="{{ url_for('auth.edit_profile') }}" novalidate>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control"
+                           value="{{ current_user.email }}" placeholder="your@email.com">
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" class="form-control"
+                           value="{{ current_user.full_name or '' }}" placeholder="Your full name">
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="form-label" for="district">District</label>
+                    <input type="text" id="district" name="district" class="form-control"
+                           value="{{ current_user.district or '' }}" placeholder="e.g. Kampala">
+                </div>
+
+                <div class="form-group mb-6">
+                    <label class="form-label" for="preferred_language">Preferred Language</label>
+                    <select id="preferred_language" name="preferred_language" class="form-control">
+                        <option value="en" {% if current_user.preferred_language == 'en' %}selected{% endif %}>English</option>
+                        <option value="lg" {% if current_user.preferred_language == 'lg' %}selected{% endif %}>Luganda</option>
+                        <option value="sw" {% if current_user.preferred_language == 'sw' %}selected{% endif %}>Swahili</option>
+                    </select>
+                </div>
+
+                <div class="d-flex gap-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <a href="{{ url_for('auth.profile') }}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

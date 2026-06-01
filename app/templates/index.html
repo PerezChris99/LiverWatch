@@ -32,7 +32,7 @@
                     <i class="fas fa-heartbeat"></i>
                     Track My Health
                 </a>
-                <a href="{{ url_for('main.survival_rates') }}" class="btn btn-outline">
+                <a href="{{ url_for('main.about') }}" class="btn btn-outline">
                     <i class="fas fa-info-circle"></i>
                     Learn More
                 </a>
@@ -227,10 +227,10 @@
                 </div>
                 
                 <div class="priority-actions">
-                    <a href="{{ url_for('main.ai_assistant') }}" class="btn btn-danger btn-block">
+                    <a href="{{ url_for('health.tracker') }}" class="btn btn-danger btn-block">
                         <i class="fas fa-robot"></i> Get AI Assessment
                     </a>
-                    <a href="{{ url_for('main.child_health') }}" class="btn btn-outline btn-block">
+                    <a href="{{ url_for('main.about') }}" class="btn btn-outline btn-block">
                         <i class="fas fa-info-circle"></i> Learn More
                     </a>
                 </div>
@@ -277,7 +277,7 @@
                     <a href="{{ url_for('health.tracker') }}" class="btn btn-warning btn-block">
                         <i class="fas fa-chart-line"></i> Track My Health
                     </a>
-                    <a href="{{ url_for('main.diet_suggestions') }}" class="btn btn-outline btn-block">
+                    <a href="{{ url_for('main.about') }}" class="btn btn-outline btn-block">
                         <i class="fas fa-apple-alt"></i> Diet Guide
                     </a>
                 </div>
@@ -319,7 +319,7 @@
                     <a href="tel:+256414231234" class="btn btn-danger btn-block">
                         <i class="fas fa-phone"></i> Call Emergency
                     </a>
-                    <a href="{{ url_for('main.appointment_finder') }}" class="btn btn-outline btn-block">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline btn-block">
                         <i class="fas fa-hospital"></i> Find Hospital
                     </a>
                 </div>
@@ -379,7 +379,7 @@
                         <span>Watch automatic progression demonstration</span>
                     </li>
                 </ul>
-                <a href="{{ url_for('main.liver_3d') }}" class="liver-3d-cta-btn">
+                <a href="{{ url_for('health.tracker') }}" class="liver-3d-cta-btn">
                     <i class="fas fa-cube"></i>
                     Explore 3D Liver Model
                     <i class="fas fa-arrow-right"></i>
@@ -437,7 +437,7 @@
                     <div class="news-content">
                         <span class="news-category">{{ article.category or 'Health' }}</span>
                         <h3 class="news-title">
-                            <a href="{{ url_for('main.medical_news_detail', id=article.id) }}">
+                            <a href="{{ article.url or '#' }}" target="_blank" rel="noopener noreferrer">
                                 {{ article.title }}
                             </a>
                         </h3>
@@ -459,7 +459,7 @@
         </div>
         
         <div class="text-center mt-8" data-animate="fade-up">
-            <a href="{{ url_for('main.medical_news') }}" class="btn btn-outline-primary btn-lg">
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary btn-lg">
                 View All News
                 <i class="fas fa-arrow-right ml-2"></i>
             </a>

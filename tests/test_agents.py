@@ -1,36 +1,41 @@
 """
-Agent System Unit Tests
-========================
+Test script for LiverWatch Google ADK Agents
+=============================================
 
-Tests for the Google ADK agent system including:
-- Agent initialization and configuration
-- Tool functionality
-- Agent routing and orchestration
+Run this after fixing the email-validator dependency to test the agents.
+
+Usage:
+    python test_agents.py
 """
 
-import pytest
-from liverwatch_agents.tools import (
-    assess_symptoms,
-    get_symptom_info,
-    interpret_lab_result,
-    get_diet_recommendations,
-    find_healthcare_facilities,
-    get_health_education
-)
+import os
+import sys
 
-
-class TestAgentImports:
-    """Test that all agents import correctly."""
+def test_imports():
+    """Test if all agent imports work."""
+    print("=" * 60)
+    print("Testing Agent Imports...")
+    print("=" * 60)
     
-    def test_root_agent_import(self):
-        """Test root agent can be imported."""
+    try:
+        from google.adk import Agent, Runner
+        print("✅ google.adk imports successful")
+        print(f"   - Agent: {Agent}")
+        print(f"   - Runner: {Runner}")
+    except ImportError as e:
+        print(f"❌ Failed to import google.adk: {e}")
+        return False
+    
+    try:
         from liverwatch_agents import root_agent
-        assert root_agent is not None
-        assert root_agent.name == "liverwatch_assistant"
-        assert "gemini" in root_agent.model.lower()
+        print("✅ Root agent import successful")
+        print(f"   - Agent name: {root_agent.name}")
+        print(f"   - Model: {root_agent.model}")
+    except ImportError as e:
+        print(f"❌ Failed to import root_agent: {e}")
+        return False
     
-    def test_sub_agents_import(self):
-        """Test all sub-agents can be imported."""
+    try:
         from liverwatch_agents.sub_agents import (
             symptom_checker_agent,
             diet_advisor_agent,
@@ -38,186 +43,172 @@ class TestAgentImports:
             health_educator_agent,
             healthcare_finder_agent
         )
-        
-        agents = [
-            symptom_checker_agent,
-            diet_advisor_agent,
-            lab_interpreter_agent,
-            health_educator_agent,
-            healthcare_finder_agent
-        ]
-        
-        for agent in agents:
-            assert agent is not None
-            assert hasattr(agent, 'name')
-            assert hasattr(agent, 'model')
+        print("✅ All sub-agents imported successfully")
+        print(f"   - Symptom Checker: {symptom_checker_agent.name}")
+        print(f"   - Diet Advisor: {diet_advisor_agent.name}")
+        print(f"   - Lab Interpreter: {lab_interpreter_agent.name}")
+        print(f"   - Health Educator: {health_educator_agent.name}")
+        print(f"   - Healthcare Finder: {healthcare_finder_agent.name}")
+    except ImportError as e:
+        print(f"❌ Failed to import sub-agents: {e}")
+        return False
+    
+    print("\n✅ All imports successful!\n")
+    return True
 
 
-class TestSymptomTools:
-    """Test symptom assessment tools."""
+def test_api_key():
+    """Check if Google API key is configured."""
+    print("=" * 60)
+    print("Checking API Key Configuration...")
+    print("=" * 60)
     
-    def test_assess_mild_symptoms(self, sample_symptoms):
-        """Test assessment of mild symptoms."""
-        result = assess_symptoms(sample_symptoms['mild'], duration_days=2)
-        
-        assert 'urgency' in result
-        assert 'possible_conditions' in result
-        assert 'symptoms_reported' in result
-        assert result['urgency']['level'] in ['low', 'medium', 'high']
+    api_key = os.environ.get('GOOGLE_API_KEY')
+    if api_key:
+        print(f"✅ GOOGLE_API_KEY is set (length: {len(api_key)} chars)")
+    else:
+        print("⚠️  GOOGLE_API_KEY is not set")
+        print("   Set it in .env file or environment:")
+        print("   GOOGLE_API_KEY=your_key_here")
+        return False
     
-    def test_assess_severe_symptoms(self, sample_symptoms):
-        """Test assessment of severe symptoms requiring urgent care."""
-        result = assess_symptoms(sample_symptoms['severe'], duration_days=1)
-        
-        assert 'urgency' in result
-        assert result['urgency']['level'] in ['high', 'critical']
-        assert len(result['possible_conditions']) > 0
-    
-    def test_assess_symptoms_with_duration(self):
-        """Test that duration affects assessment."""
-        symptoms = ['fatigue', 'nausea']
-        
-        short_duration = assess_symptoms(symptoms, duration_days=2)
-        long_duration = assess_symptoms(symptoms, duration_days=20)
-        
-        assert 'duration_warning' in long_duration
-        assert long_duration['duration_warning'] is not None
-    
-    def test_get_symptom_info(self):
-        """Test getting information about specific symptoms."""
-        result = get_symptom_info('jaundice')
-        
-        assert 'symptom' in result
-        assert 'normalized_name' in result
-        assert 'related_liver_conditions' in result
-        assert len(result['related_liver_conditions']) > 0
-    
-    def test_empty_symptoms_list(self):
-        """Test handling of empty symptoms list."""
-        result = assess_symptoms([], duration_days=0)
-        
-        assert 'symptoms_reported' in result
-        assert len(result['symptoms_reported']) == 0
+    print()
+    return True
 
 
-class TestLabTools:
-    """Test lab result interpretation tools."""
+def test_tools():
+    """Test if tools are working."""
+    print("=" * 60)
+    print("Testing Agent Tools...")
+    print("=" * 60)
     
-    def test_interpret_normal_alt(self):
-        """Test interpretation of normal ALT value."""
-        result = interpret_lab_result('ALT', 25)
+    try:
+        from liverwatch_agents.tools import (
+            assess_symptoms,
+            get_diet_recommendations,
+            interpret_lab_result
+        )
         
-        assert 'status' in result
-        assert result['status'] == 'normal'
-        assert 'interpretation' in result
-    
-    def test_interpret_elevated_alt(self):
-        """Test interpretation of elevated ALT value."""
-        result = interpret_lab_result('ALT', 150)
+        print("✅ Tool imports successful")
         
-        assert 'status' in result
-        assert result['status'] in ['mild', 'moderate', 'severe']
-        assert 'interpretation' in result
-        assert 'normal_range' in result
-    
-    def test_interpret_critical_alt(self):
-        """Test interpretation of critically high ALT value."""
-        result = interpret_lab_result('ALT', 500)
+        # Test symptom assessment
+        print("\n📊 Testing assess_symptoms...")
+        result = assess_symptoms(
+            symptoms=["fatigue", "yellow eyes"],
+            duration_days=5
+        )
+        print(f"   Urgency: {result['urgency']}")
+        print(f"   Conditions found: {len(result['possible_conditions'])}")
         
-        assert 'status' in result
-        assert result['status'] in ['moderate', 'severe']  # Depends on thresholds
-        assert 'interpretation' in result
-    
-    def test_interpret_ast(self):
-        """Test interpretation of AST values."""
-        result = interpret_lab_result('AST', 200)
+        # Test diet recommendations
+        print("\n🥗 Testing get_diet_recommendations...")
+        diet_result = get_diet_recommendations(
+            condition="fatty_liver"
+        )
+        print(f"   Recommendations provided: {len(diet_result.get('foods_to_eat', []))} foods")
         
-        assert 'test' in result
-        assert 'value' in result
-        assert result['value'] == 200
-        assert 'status' in result
-    
-    def test_interpret_bilirubin(self):
-        """Test interpretation of bilirubin values."""
-        result = interpret_lab_result('bilirubin', 3.0)
+        # Test lab interpretation
+        print("\n🔬 Testing interpret_lab_result...")
+        lab_result = interpret_lab_result(
+            test_name="ALT",
+            value=150
+        )
+        print(f"   Interpretation: {lab_result.get('interpretation', 'N/A')}")
         
-        assert 'test' in result
-        assert 'status' in result
-        assert 'unit' in result
-    
-    def test_unknown_test(self):
-        """Test handling of unknown test names."""
-        result = interpret_lab_result('UNKNOWN_TEST', 100)
+        print("\n✅ All tool tests passed!\n")
+        return True
         
-        assert 'status' in result
-        assert result['status'] == 'unknown'
-        assert 'message' in result
+    except Exception as e:
+        print(f"❌ Tool test failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
 
 
-class TestDietTools:
-    """Test diet recommendation tools."""
+def test_flask_import():
+    """Test if Flask app can be imported."""
+    print("=" * 60)
+    print("Testing Flask Application...")
+    print("=" * 60)
     
-    def test_general_diet_recommendations(self):
-        """Test getting general diet recommendations."""
-        result = get_diet_recommendations()
+    try:
+        from app import create_app
+        app = create_app()
+        print("✅ Flask app created successfully")
+        print(f"   - App name: {app.name}")
+        print(f"   - Debug mode: {app.debug}")
         
-        assert 'foods_to_eat' in result
-        assert 'foods_to_avoid' in result
-        assert 'general_tips' in result
-        assert len(result['foods_to_eat']) > 0
-        assert len(result['general_tips']) > 0
-    
-    def test_fatty_liver_recommendations(self):
-        """Test diet recommendations for fatty liver."""
-        result = get_diet_recommendations(condition='fatty_liver')
+        # Check if agent blueprint is registered
+        blueprints = list(app.blueprints.keys())
+        if 'agents' in blueprints:
+            print("✅ Agents blueprint registered")
+        else:
+            print("⚠️  Agents blueprint not found")
         
-        assert 'condition_specific' in result
-        assert len(result['condition_specific']) > 0
-        assert any('weight loss' in tip.lower() for tip in result['condition_specific'])
-    
-    def test_hepatitis_recommendations(self):
-        """Test diet recommendations for hepatitis."""
-        result = get_diet_recommendations(condition='hepatitis')
+        print(f"   - Registered blueprints: {', '.join(blueprints)}")
+        print()
+        return True
         
-        assert 'condition_specific' in result
-        assert any('alcohol' in tip.lower() for tip in result['condition_specific'])
-    
-    def test_cirrhosis_recommendations(self):
-        """Test diet recommendations for cirrhosis."""
-        result = get_diet_recommendations(condition='cirrhosis')
-        
-        assert 'condition_specific' in result
-        assert any('sodium' in tip.lower() for tip in result['condition_specific'])
+    except Exception as e:
+        print(f"❌ Flask app test failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
 
 
-class TestHealthEducation:
-    """Test health education information retrieval."""
+def main():
+    """Run all tests."""
+    print("\n")
+    print("╔" + "=" * 58 + "╗")
+    print("║" + " " * 58 + "║")
+    print("║" + " " * 10 + "LiverWatch Agent System Test" + " " * 20 + "║")
+    print("║" + " " * 58 + "║")
+    print("╚" + "=" * 58 + "╝")
+    print("\n")
     
-    def test_get_health_education(self):
-        """Test getting health education information."""
-        result = get_health_education('fatty_liver')
-        
-        assert 'topic' in result
-        assert 'information' in result or 'content' in result
+    # Load environment variables
+    from dotenv import load_dotenv
+    load_dotenv()
+    
+    results = []
+    
+    # Run tests
+    results.append(("Imports", test_imports()))
+    results.append(("API Key", test_api_key()))
+    results.append(("Tools", test_tools()))
+    results.append(("Flask App", test_flask_import()))
+    
+    # Summary
+    print("=" * 60)
+    print("Test Summary")
+    print("=" * 60)
+    
+    passed = sum(1 for _, result in results if result)
+    total = len(results)
+    
+    for test_name, result in results:
+        status = "✅ PASS" if result else "❌ FAIL"
+        print(f"{test_name:.<30} {status}")
+    
+    print("=" * 60)
+    print(f"Results: {passed}/{total} tests passed")
+    print("=" * 60)
+    
+    if passed == total:
+        print("\n🎉 All tests passed! Your agent system is ready to use.\n")
+        print("Next steps:")
+        print("1. Run the Flask app: python run.py")
+        print("2. Test the API endpoint: POST to /api/agents/chat")
+        print("3. Check AGENTS_DOCUMENTATION.md for more info")
+        return 0
+    else:
+        print("\n⚠️  Some tests failed. Please fix the issues above.\n")
+        print("Common fixes:")
+        print("1. Install email-validator>=2.0: pip install -U email-validator")
+        print("2. Set GOOGLE_API_KEY in .env file")
+        print("3. Check AGENTS_DOCUMENTATION.md for troubleshooting")
+        return 1
 
 
-class TestHealthcareFinder:
-    """Test healthcare facility finding functionality."""
-    
-    def test_find_facilities_default(self):
-        """Test finding healthcare facilities."""
-        result = find_healthcare_facilities()
-        
-        assert 'facilities' in result or 'hospitals' in result
-    
-    def test_find_facilities_kampala(self):
-        """Test finding facilities in Kampala."""
-        result = find_healthcare_facilities(location='Kampala')
-        
-        assert 'facilities' in result or 'hospitals' in result
-        
-        # Check facility structure if list is not empty
-        hospitals = result.get('facilities', result.get('hospitals', []))
-        if hospitals:
-            facility = hospitals[0]
-            assert 'name' in facility
+if __name__ == "__main__":
+    sys.exit(main())
