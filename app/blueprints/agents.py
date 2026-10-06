@@ -221,7 +221,7 @@ def quick_assess():
     except Exception as e:
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': 'AI service temporarily unavailable.'
         }), 500
 
 
