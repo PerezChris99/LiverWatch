@@ -16,6 +16,14 @@ A Uganda-focused health technology platform designed to connect patient monitori
 
 ---
 
+## Copyright & Ownership
+
+**Copyright © 2026 Kweezi Perez Christopher. All rights reserved to the copyright owner, subject to the permissions granted by the MIT License below.**
+
+The original LiverWatch source code, system architecture, original documentation, original application design, and other original project materials in this repository are copyrighted works of **Kweezi Perez Christopher**. The copyright notice must not be removed from copies or substantial portions of the project. Third-party libraries, frameworks, models, APIs, and other dependencies remain the property of their respective authors and are governed by their own licenses.
+
+LiverWatch is distributed under the **MIT License**. The MIT License grants the permissions described in `LICENSE`; it does not transfer copyright ownership of the original LiverWatch work.
+
 ## What LiverWatch Is
 
 LiverWatch is being developed as a **health monitoring and clinical-support infrastructure**, not simply a health-information website.
@@ -477,6 +485,8 @@ LiverWatch should become infrastructure that helps people get from **measurement
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+**Copyright © 2026 Kweezi Perez Christopher.**
 
-© 2026 Kweezi Perez Christopher.
+The original LiverWatch work is copyrighted and is licensed under the MIT License. See [LICENSE](LICENSE) for the complete license text. Third-party components retain their respective copyrights and licenses.
+
+For security vulnerabilities, see [SECURITY.md](SECURITY.md).
