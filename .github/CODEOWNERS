@@ -1,0 +1,11 @@
+# Default ownership for application, infrastructure and documentation changes
+* @PerezChris99
+
+# Security-sensitive paths
+/app/ @PerezChris99
+/app/blueprints/ @PerezChris99
+/app/models.py @PerezChris99
+/app/config.py @PerezChris99
+/migrations/ @PerezChris99
+/.github/ @PerezChris99
+SECURITY.md @PerezChris99
