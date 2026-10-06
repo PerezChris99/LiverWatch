@@ -9,9 +9,15 @@ def test_risk_assessment_object_access_is_denied_to_other_users(client, db, regu
     from app.blueprints.api.v1.auth import _create_access_token
     from app.models import RiskAssessment
 
-    other = __import__('tests.conftest', fromlist=['make_user']).make_user(
-        db, username='otheruser', email='other@example.com'
+    from app.models import User
+    from werkzeug.security import generate_password_hash
+    other = User(
+        username='otheruser', email='other@example.com',
+        password=generate_password_hash('OtherStrongPass1!'),
+        role='patient', email_verified=True, consent_given=True,
     )
+    db.session.add(other)
+    db.session.flush()
     assessment = RiskAssessment(
         user_id=other.id,
         risk_level='low',
