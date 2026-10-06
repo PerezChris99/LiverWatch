@@ -888,6 +888,31 @@ class ForumReply(db.Model):
 #  11. NOTIFICATIONS
 # ═══════════════════════════════════════════════════════════════════════════
 
+class MonitoringAlert(db.Model):
+    """Actionable monitoring event; never a diagnosis."""
+    __tablename__ = 'monitoring_alerts'
+    __table_args__ = (db.Index('ix_alert_user_created','user_id','created_at'), db.Index('ix_alert_patient_created','patient_id','created_at'))
+    id=db.Column(db.Integer,primary_key=True)
+    user_id=db.Column(db.Integer,db.ForeignKey('users.id'),nullable=True,index=True)
+    patient_id=db.Column(db.Integer,db.ForeignKey('patients.id'),nullable=True,index=True)
+    alert_type=db.Column(db.String(50),nullable=False,index=True)
+    severity=db.Column(db.String(20),nullable=False)
+    title=db.Column(db.String(200),nullable=False)
+    message=db.Column(db.Text,nullable=False)
+    evidence=db.Column(db.Text,nullable=True)
+    source_observation_id=db.Column(db.Integer,db.ForeignKey('clinical_observations.id'),nullable=True)
+    status=db.Column(db.String(20),nullable=False,default='open',index=True)
+    dedupe_key=db.Column(db.String(128),nullable=False,index=True)
+    created_at=db.Column(db.DateTime,default=utcnow,nullable=False,index=True)
+    acknowledged_at=db.Column(db.DateTime,nullable=True)
+    resolved_at=db.Column(db.DateTime,nullable=True)
+
+    def set_evidence(self,data:dict): self.evidence=json.dumps(data)
+    def get_evidence(self):
+        try: return json.loads(self.evidence) if self.evidence else {}
+        except (ValueError,TypeError): return {}
+
+
 class Notification(db.Model):
     """In-app notification — risk alerts, referral updates, screening reminders."""
 
