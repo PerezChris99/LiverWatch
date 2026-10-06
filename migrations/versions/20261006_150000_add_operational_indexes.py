@@ -26,7 +26,8 @@ def upgrade():
     for name,table,columns in INDEXES:
         if table in inspector.get_table_names():
             existing={x["name"] for x in inspector.get_indexes(table)}
-            if name not in existing:
+            same_columns={tuple(x.get("column_names") or []) for x in inspector.get_indexes(table)}
+            if name not in existing and tuple(columns) not in same_columns:
                 op.create_index(name,table,columns)
 
 def downgrade():
