@@ -148,6 +148,35 @@ See **[docs/DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md)** for the detai
 
 ---
 
+# Security & Production Engineering Baseline
+
+LiverWatch treats security, reliability, availability, privacy, and clinical safety as engineering requirements rather than optional hardening work.
+
+The implementation follows the applicable principles of:
+
+- OWASP Application Security Verification Standard (ASVS)
+- OWASP API Security Top 10
+- OWASP Secure Coding Practices
+- defense in depth and least privilege
+- server-side input validation and bounded resource consumption
+- object-level and function-level authorization
+- secure session and JWT lifecycle management
+- CSRF protection for browser-cookie-backed state changes
+- distributed rate limiting with Redis in production
+- request correlation IDs and sanitized error handling
+- security headers and strict transport security in production
+- encrypted/protected sensitive data
+- database constraints, foreign keys, indexes, migrations, and transaction rollback
+- cache isolation for private health data
+- deterministic and bounded pagination
+- audit logging and operational observability
+- dependency-update automation
+- backup, restore, incident-response, and recovery planning
+
+No checklist can prove an application is secure. Production assurance also requires environment-specific configuration review, dependency scanning, load testing, backup/restore drills, monitoring, threat modelling, and independent security testing.
+
+See SECURITY.md and docs/PRODUCTION_READINESS.md for the project's security and operational expectations.
+
 # Technology Stack
 
 ## Backend
