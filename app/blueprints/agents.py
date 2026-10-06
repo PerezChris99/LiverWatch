@@ -8,7 +8,8 @@ Flask API endpoints for interacting with the Google ADK agents.
 import asyncio
 import sys
 import os
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, current_app
+from flask_login import current_user, login_required
 from functools import wraps
 from app import limiter
 
@@ -58,20 +59,20 @@ def get_or_create_session_id():
     return session['agent_session_id']
 
 
-async def run_agent_async(user_message: str, session_id: str):
+async def run_agent_async(user_message: str, session_id: str, user_id: str):
     """Run the agent asynchronously and collect response."""
     try:
         # Create or get session
         agent_session = await session_service.get_session(
             app_name="liverwatch",
-            user_id="web_user",
+            user_id=user_id,
             session_id=session_id
         )
         
         if agent_session is None:
             agent_session = await session_service.create_session(
                 app_name="liverwatch",
-                user_id="web_user",
+                user_id=user_id,
                 session_id=session_id
             )
         
@@ -91,7 +92,7 @@ async def run_agent_async(user_message: str, session_id: str):
         # Collect response
         response_text = ""
         async for event in runner.run_async(
-            user_id="web_user",
+            user_id=user_id,
             session_id=session_id,
             new_message=user_content
         ):
@@ -110,12 +111,13 @@ async def run_agent_async(user_message: str, session_id: str):
     except Exception as e:
         return {
             'success': False,
-            'error': str(e),
+            'error': 'AI service temporarily unavailable.',
             'session_id': session_id
         }
 
 
 @agents_bp.route('/chat', methods=['POST'])
+@login_required
 @limiter.limit("30 per minute")
 @agents_required
 def chat():
@@ -144,21 +146,28 @@ def chat():
                 'error': 'Message is required'
             }), 400
         
-        user_message = data['message'].strip()
+        user_message = str(data['message']).strip()
         if not user_message:
             return jsonify({
                 'success': False,
                 'error': 'Message cannot be empty'
             }), 400
+        if len(user_message) > 4000:
+            return jsonify({
+                'success': False,
+                'error': 'Message exceeds the 4000-character limit.'
+            }), 400
         
         # Get or use provided session ID
         session_id = data.get('session_id') or get_or_create_session_id()
+        if not isinstance(session_id, str) or len(session_id) > 100:
+            return jsonify({'success': False, 'error': 'Invalid session ID.'}), 400
         
         # Run the agent
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
-            result = loop.run_until_complete(run_agent_async(user_message, session_id))
+            result = loop.run_until_complete(run_agent_async(user_message, session_id, str(current_user.id)))
         finally:
             loop.close()
         
@@ -170,7 +179,7 @@ def chat():
     except Exception as e:
         return jsonify({
             'success': False,
-            'error': f'An error occurred: {str(e)}'
+            'error': 'AI service temporarily unavailable.'
         }), 500
 
 
@@ -216,6 +225,8 @@ def quick_assess():
 
 
 @agents_bp.route('/interpret-labs', methods=['POST'])
+@login_required
+@limiter.limit("20 per minute")
 @agents_required
 def interpret_labs():
     """
@@ -256,6 +267,8 @@ def interpret_labs():
 
 
 @agents_bp.route('/diet-advice', methods=['POST'])
+@login_required
+@limiter.limit("20 per minute")
 @agents_required
 def diet_advice():
     """
@@ -287,6 +300,8 @@ def diet_advice():
 
 
 @agents_bp.route('/find-healthcare', methods=['POST'])
+@login_required
+@limiter.limit("20 per minute")
 @agents_required
 def find_healthcare():
     """
@@ -320,6 +335,8 @@ def find_healthcare():
 
 
 @agents_bp.route('/health-info', methods=['POST'])
+@login_required
+@limiter.limit("20 per minute")
 @agents_required
 def health_info():
     """
@@ -351,6 +368,7 @@ def health_info():
 
 
 @agents_bp.route('/status', methods=['GET'])
+@login_required
 def status():
     """Check if agents are available and working."""
     return jsonify({
