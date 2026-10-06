@@ -740,6 +740,9 @@ class ClinicalObservation(db.Model):
     __table_args__ = (
         db.Index('ix_obs_patient_time', 'patient_id', 'observed_at'),
         db.Index('ix_obs_user_time', 'user_id', 'observed_at'),
+        db.CheckConstraint('quality_score IS NULL OR (quality_score >= 0 AND quality_score <= 1)', name='chk_clinical_observation_quality'),
+        db.CheckConstraint("source_type IN ('patient','chw','clinician','laboratory','device','research')", name='chk_clinical_observation_source'),
+        db.CheckConstraint("validation_state IN ('pending','validated','rejected','corrected')", name='chk_clinical_observation_state'),
     )
 
     id = db.Column(db.Integer, primary_key=True)
