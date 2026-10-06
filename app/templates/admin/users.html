@@ -22,7 +22,8 @@
             <td>{{ u.username }}</td>
             <td>{{ u.email }}</td>
             <td>
-              <form method="POST" action="{{ url_for('admin.change_role', user_id=u.id) }}" style="display:inline-flex;gap:.25rem;">
+              <form method="POST" action="{{ url_for('admin.change_role', user_id=u.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> style="display:inline-flex;gap:.25rem;">
                 <select name="role" class="form-control form-control-sm" style="width:auto;">
                   {% for role in roles %}
                   <option value="{{ role }}" {% if u.role == role %}selected{% endif %}>{{ role }}</option>
@@ -35,7 +36,8 @@
             <td>{{ u.created_at | formatdate }}</td>
             <td>
               {% if u.id != current_user.id %}
-              <form method="POST" action="{{ url_for('admin.delete_user', user_id=u.id) }}"
+              <form method="POST" action="{{ url_for('admin.delete_user', user_id=u.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"
                     onsubmit="return confirm('Deactivate {{ u.username }}?');" style="display:inline;">
                 <button type="submit" class="btn btn-sm btn-danger">Deactivate</button>
               </form>
