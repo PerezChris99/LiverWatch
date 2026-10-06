@@ -167,8 +167,8 @@ def api_register():
         errors['username'] = 'Username must be at least 3 characters.'
     if not email or '@' not in email:
         errors['email'] = 'A valid email address is required.'
-    if not password or len(password) < 8:
-        errors['password'] = 'Password must be at least 8 characters.'
+    if not password or len(password) < 12:
+        errors['password'] = 'Password must be at least 12 characters.'
     if not data.get('consent_data_collection'):
         errors['consent'] = 'Data collection consent is required to use this platform.'
     if not data.get('consent_terms'):
