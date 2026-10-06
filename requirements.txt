@@ -53,7 +53,7 @@ ipinfo>=4.2.1
 
 # ---- Monitoring & Observability (production) ----
 sentry-sdk[flask]>=2.0.0   # Error tracking
-structlog>=24.1.0           # Structured logging
+structlog>=26.1.0           # Structured logging
 
 # ==========================================
 # AI & ML - Structured Risk Support Only
