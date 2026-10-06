@@ -32,7 +32,7 @@ psycopg2-binary>=2.9.9
 # ---- Cache & Task Queue ----
 redis>=5.0.0
 celery>=5.3.6
-flower>=2.0.1          # Celery task monitor (optional)
+flower>=2.2.0          # Celery task monitor (optional)
 
 # ---- Security ----
 PyJWT>=2.8.0
