@@ -32,6 +32,7 @@
             <td>
               {% if not w.is_verified %}
               <form method="POST" action="{{ url_for('admin.verify_chw', worker_id=w.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <button type="submit" class="btn btn-success btn-sm">Verify</button>
               </form>
               {% else %}

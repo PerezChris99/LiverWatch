@@ -33,11 +33,14 @@ from flask_limiter.util import get_remote_address
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect, CSRFError
+from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_sqlalchemy import SQLAlchemy
 
 # ── Extension singletons ─────────────────────────────────────────────────
 db           = SQLAlchemy()
 mail         = Mail()
+csrf         = CSRFProtect()
 cache        = Cache()
 migrate      = Migrate()
 login_manager = LoginManager()
@@ -70,9 +73,16 @@ def create_app(config_class=None):
         config_class = DevelopmentConfig
     app.config.from_object(config_class)
 
+    # Only trust forwarded client metadata when the deployment explicitly
+    # declares the number of trusted reverse-proxy hops.
+    proxy_hops = max(int(app.config.get('TRUSTED_PROXY_HOPS', 0)), 0)
+    if proxy_hops:
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=proxy_hops, x_proto=proxy_hops, x_host=proxy_hops)
+
     # ── Extensions ────────────────────────────────────────────────────────
     db.init_app(app)
     mail.init_app(app)
+    csrf.init_app(app)
     cache.init_app(app, config={'CACHE_TYPE': app.config.get('CACHE_TYPE', 'simple')})
     migrate.init_app(app, db)
     login_manager.init_app(app)
@@ -85,6 +95,15 @@ def create_app(config_class=None):
     @app.before_request
     def _request_context():
         g.request_id = request.headers.get('X-Request-ID', '')[:100] or str(uuid.uuid4())
+
+    @app.before_request
+    def _validate_api_content_type():
+        if request.path.startswith('/api/') and request.method in {'POST', 'PUT', 'PATCH'}:
+            if not request.is_json:
+                return jsonify({
+                    'error': 'unsupported_media_type',
+                    'message': 'API mutation endpoints require application/json.',
+                }), 415
 
     @app.after_request
     def _security_headers(response):
@@ -119,6 +138,10 @@ def create_app(config_class=None):
     def _rollback_failed_request(exception):
         if exception is not None:
             db.session.rollback()
+
+    @app.errorhandler(CSRFError)
+    def _csrf_error(_error):
+        return jsonify({'error': 'csrf_validation_failed', 'message': 'CSRF validation failed.'}), 400
 
     @app.errorhandler(413)
     def _payload_too_large(_error):
@@ -163,6 +186,10 @@ def create_app(config_class=None):
     app.register_blueprint(agents_bp,        url_prefix='/api/agents')
     app.register_blueprint(legacy_api_bp,    url_prefix='/api/v0')
     app.register_blueprint(api_bp)   # mounts /api with /api/v1 inside
+    # REST APIs authenticate with bearer tokens rather than browser cookies.
+    # Keep CSRF protection enabled for the cookie-backed web/agent surfaces.
+    csrf.exempt(legacy_api_bp)
+    csrf.exempt(api_bp)
 
     # ── Template context ──────────────────────────────────────────────────
     @app.context_processor

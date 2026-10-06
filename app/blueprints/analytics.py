@@ -73,7 +73,12 @@ def dashboard():
 
 @analytics_bp.route('/trend-data')
 @login_required
-@cache.cached(timeout=60, query_string=True)
+def _trend_cache_key():
+    """Build a user-scoped cache key; private health data must never share cache entries."""
+    return f"analytics:trend:{current_user.get_id()}:{request.full_path}"
+
+
+@cache.cached(timeout=60, key_prefix=_trend_cache_key)
 def trend_data():
     """Chart-ready JSON for risk score trend (last 90 days)."""
     days = request.args.get('days', 90, type=int)
@@ -87,6 +92,7 @@ def trend_data():
             RiskAssessment.created_at >= since,
         )
         .order_by(RiskAssessment.created_at.asc(), RiskAssessment.id.asc())
+        .limit(500)
         .all()
     )
 
@@ -112,15 +118,11 @@ def trend_data():
 @analytics_bp.route('/summary')
 @login_required
 def summary():
-    """High-level statistics for the authenticated user."""
-    all_assessments = (
-        RiskAssessment.query
-        .filter_by(user_id=current_user.id)
-        .order_by(RiskAssessment.created_at.desc())
-        .limit(500)
-        .all()
-    )
-    if not all_assessments:
+    """High-level statistics for the authenticated user using database aggregates."""
+    base = RiskAssessment.query.filter_by(user_id=current_user.id)
+    total = base.with_entities(func.count(RiskAssessment.id)).scalar() or 0
+
+    if not total:
         return jsonify({
             'total': 0,
             'latest_risk_level': None,
@@ -128,32 +130,48 @@ def summary():
             'avg_score': None,
             'referrals_needed': 0,
             'trend': None,
+            'distribution': {},
             'disclaimer': 'This data does not provide medical diagnosis.',
         })
 
-    total = len(all_assessments)
-    latest = all_assessments[0]
-    avg_score = round(sum(a.overall_score for a in all_assessments) / total * 100, 1)
-    referrals_needed = sum(1 for a in all_assessments if a.requires_referral)
+    latest = (
+        base.order_by(RiskAssessment.created_at.desc(), RiskAssessment.id.desc())
+        .first()
+    )
+    previous = (
+        base.filter(RiskAssessment.id != latest.id)
+        .order_by(RiskAssessment.created_at.desc(), RiskAssessment.id.desc())
+        .first()
+    )
+    avg_score = base.with_entities(func.avg(RiskAssessment.overall_score)).scalar()
+    referrals_needed = (
+        base.filter(RiskAssessment.requires_referral.is_(True))
+        .with_entities(func.count(RiskAssessment.id))
+        .scalar() or 0
+    )
 
     trend = None
-    if total >= 2:
-        delta = all_assessments[0].overall_score - all_assessments[1].overall_score
+    if previous is not None:
+        delta = latest.overall_score - previous.overall_score
         trend = 'improving' if delta < -0.03 else 'worsening' if delta > 0.03 else 'stable'
 
-    # Distribution by risk level
-    dist: dict[str, int] = {}
-    for a in all_assessments:
-        dist[a.risk_level] = dist.get(a.risk_level, 0) + 1
+    distribution_rows = (
+        base.with_entities(
+            RiskAssessment.risk_level,
+            func.count(RiskAssessment.id),
+        )
+        .group_by(RiskAssessment.risk_level)
+        .all()
+    )
+    dist = {level: count for level, count in distribution_rows}
 
     return jsonify({
         'total': total,
         'latest_risk_level': latest.risk_level,
         'latest_score': round(latest.overall_score * 100, 1),
-        'avg_score': avg_score,
+        'avg_score': round(float(avg_score) * 100, 1) if avg_score is not None else None,
         'referrals_needed': referrals_needed,
         'trend': trend,
         'distribution': dist,
         'disclaimer': 'This data does not provide medical diagnosis.',
     })
-

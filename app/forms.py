@@ -52,7 +52,7 @@ class RegistrationForm(FlaskForm):
         DataRequired(), Email(),
     ])
     password = PasswordField('Password', validators=[
-        DataRequired(), Length(min=8, message='Password must be at least 8 characters'),
+        DataRequired(), Length(min=12, message='Password must be at least 12 characters'),
     ])
     confirm_password = PasswordField('Confirm Password', validators=[
         DataRequired(), EqualTo('password', message='Passwords must match'),
@@ -79,7 +79,7 @@ class PasswordResetRequestForm(FlaskForm):
 
 class PasswordResetForm(FlaskForm):
     password = PasswordField('New Password', validators=[
-        DataRequired(), Length(min=8),
+        DataRequired(), Length(min=12),
     ])
     confirm_password = PasswordField('Confirm New Password', validators=[
         DataRequired(), EqualTo('password', message='Passwords must match'),

@@ -16,6 +16,14 @@ A Uganda-focused health technology platform designed to connect patient monitori
 
 ---
 
+## Copyright & Ownership
+
+**Copyright © 2026 Kweezi Perez Christopher. All rights reserved to the copyright owner, subject to the permissions granted by the MIT License below.**
+
+The original LiverWatch source code, system architecture, original documentation, original application design, and other original project materials in this repository are copyrighted works of **Kweezi Perez Christopher**. The copyright notice must not be removed from copies or substantial portions of the project. Third-party libraries, frameworks, models, APIs, and other dependencies remain the property of their respective authors and are governed by their own licenses.
+
+LiverWatch is distributed under the **MIT License**. The MIT License grants the permissions described in `LICENSE`; it does not transfer copyright ownership of the original LiverWatch work.
+
 ## What LiverWatch Is
 
 LiverWatch is being developed as a **health monitoring and clinical-support infrastructure**, not simply a health-information website.
@@ -139,6 +147,35 @@ The transformation is deliberately divided into independently merged phases.
 See **[docs/DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md)** for the detailed engineering plan, exit criteria, branch protocol and clinical boundaries.
 
 ---
+
+# Security & Production Engineering Baseline
+
+LiverWatch treats security, reliability, availability, privacy, and clinical safety as engineering requirements rather than optional hardening work.
+
+The implementation follows the applicable principles of:
+
+- OWASP Application Security Verification Standard (ASVS)
+- OWASP API Security Top 10
+- OWASP Secure Coding Practices
+- defense in depth and least privilege
+- server-side input validation and bounded resource consumption
+- object-level and function-level authorization
+- secure session and JWT lifecycle management
+- CSRF protection for browser-cookie-backed state changes
+- distributed rate limiting with Redis in production
+- request correlation IDs and sanitized error handling
+- security headers and strict transport security in production
+- encrypted/protected sensitive data
+- database constraints, foreign keys, indexes, migrations, and transaction rollback
+- cache isolation for private health data
+- deterministic and bounded pagination
+- audit logging and operational observability
+- dependency-update automation
+- backup, restore, incident-response, and recovery planning
+
+No checklist can prove an application is secure. Production assurance also requires environment-specific configuration review, dependency scanning, load testing, backup/restore drills, monitoring, threat modelling, and independent security testing.
+
+See SECURITY.md and docs/PRODUCTION_READINESS.md for the project's security and operational expectations.
 
 # Technology Stack
 
@@ -477,6 +514,8 @@ LiverWatch should become infrastructure that helps people get from **measurement
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+**Copyright © 2026 Kweezi Perez Christopher.**
 
-© 2026 Kweezi Perez Christopher.
+The original LiverWatch work is copyrighted and is licensed under the MIT License. See [LICENSE](LICENSE) for the complete license text. Third-party components retain their respective copyrights and licenses.
+
+For security vulnerabilities, see [SECURITY.md](SECURITY.md).

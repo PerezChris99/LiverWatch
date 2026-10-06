@@ -14,7 +14,8 @@ Anomalies do NOT imply disease — they trigger a screening recommendation.
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+import math
+from datetime import datetime, timezone
 
 import pytz
 from flask import Blueprint, g, jsonify, request
@@ -80,13 +81,19 @@ def register_device():
     if WearableDevice.query.filter_by(device_id=device_id).first():
         return jsonify({'error': 'A device with this ID is already registered'}), 409
 
+    manufacturer = str(data.get('manufacturer', '') or '').strip()
+    model = str(data.get('model', '') or '').strip()
+    firmware_version = str(data.get('firmware_version', '') or '').strip()
+    if len(manufacturer) > 200 or len(model) > 200 or len(firmware_version) > 100:
+        return jsonify({'error': 'Device metadata exceeds the allowed length.'}), 400
+
     dev = WearableDevice(
         user_id=user.id,
         device_id=device_id,
         device_type=dtype,
-        manufacturer=data.get('manufacturer', ''),
-        model=data.get('model', ''),
-        firmware_version=data.get('firmware_version', ''),
+        manufacturer=manufacturer,
+        model=model,
+        firmware_version=firmware_version,
         status=DeviceStatus.INACTIVE.value,
     )
     db.session.add(dev)
@@ -157,17 +164,29 @@ def sync_readings(device_id: str):
 
         try:
             value = float(r['value'])
+            if not math.isfinite(value):
+                raise ValueError
         except (KeyError, TypeError, ValueError):
-            errors.append(f'readings[{i}]: value must be a number')
+            errors.append(f'readings[{i}]: value must be a finite number')
             continue
 
         try:
-            ts = datetime.fromisoformat(r.get('timestamp', '').replace('Z', '+00:00'))
+            raw_timestamp = str(r.get('timestamp', '')).strip()
+            ts = datetime.fromisoformat(raw_timestamp.replace('Z', '+00:00'))
+            if ts.tzinfo is None:
+                raise ValueError
+            ts = ts.astimezone(timezone.utc)
         except (ValueError, TypeError):
-            ts = datetime.now(pytz.utc)
+            errors.append(f'readings[{i}]: timestamp must be a valid timezone-aware ISO-8601 value')
+            continue
 
-        quality = float(r.get('quality_score', 1.0))
-        quality = max(0.0, min(1.0, quality))
+        try:
+            quality = float(r.get('quality_score', 1.0))
+            if not math.isfinite(quality) or not 0.0 <= quality <= 1.0:
+                raise ValueError
+        except (TypeError, ValueError):
+            errors.append(f'readings[{i}]: quality_score must be a finite number between 0 and 1')
+            continue
 
         anomaly = _is_anomaly(btype, value)
         if anomaly:
@@ -214,9 +233,16 @@ def sync_readings(device_id: str):
 @jwt_required
 @limiter.limit('60 per minute')
 def list_devices():
-    """GET /api/v1/wearable/devices — list authenticated user's devices."""
-    user    = g.current_user
-    devices = WearableDevice.query.filter_by(user_id=user.id, is_active=True).all()
+    """GET /api/v1/wearable/devices — paginated authenticated user's devices."""
+    user = g.current_user
+    page = max(request.args.get('page', 1, type=int) or 1, 1)
+    limit = min(max(request.args.get('limit', 50, type=int) or 50, 1), 100)
+    pagination = (
+        WearableDevice.query
+        .filter_by(user_id=user.id, is_active=True)
+        .order_by(WearableDevice.registered_at.desc(), WearableDevice.id.desc())
+        .paginate(page=page, per_page=limit, error_out=False)
+    )
 
     return jsonify({
         'devices': [
@@ -230,7 +256,10 @@ def list_devices():
                 'last_sync_at': d.last_sync_at.isoformat() if d.last_sync_at else None,
             }
             for d in devices
-        ]
+        ],
+        'total': pagination.total,
+        'page': page,
+        'pages': pagination.pages,
     }), 200
 
 

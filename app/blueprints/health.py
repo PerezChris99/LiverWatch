@@ -175,9 +175,7 @@ def risk_assessment():
 @login_required
 def result(assessment_id: int):
     ra = RiskAssessment.query.get_or_404(assessment_id)
-    if ra.user_id != current_user.id and current_user.role not in (
-        UserRole.ADMIN.value, UserRole.CLINICIAN.value, UserRole.CHW.value
-    ):
+    if ra.user_id != current_user.id and current_user.role != UserRole.ADMIN.value:
         abort(403)
     factors = RiskFactor.query.filter_by(assessment_id=ra.id).all()
     recs = ra.recommendations.split('\n') if ra.recommendations else []
@@ -195,21 +193,24 @@ def result(assessment_id: int):
 @health_bp.route('/log', methods=['GET', 'POST'])
 @login_required
 def log_entry():
-    if request.method == 'POST':
+    form = HealthLogForm()
+    if form.validate_on_submit():
         record = LongitudinalRecord(
             user_id=current_user.id,
             record_date=date.today(),
-            alcohol_units_per_day=_safe_float(request.form.get('alcohol_intake')),
-            water_intake_liters=_safe_float(request.form.get('water_intake')),
-            exercise_minutes=_safe_int(request.form.get('exercise_minutes')),
-            sleep_hours=_safe_float(request.form.get('sleep_hours')),
-            notes=request.form.get('notes', '').strip()[:500],
+            alcohol_units_per_day=form.alcohol_intake.data,
+            water_intake_liters=form.water_intake.data,
+            exercise_minutes=form.exercise_minutes.data,
+            sleep_hours=form.sleep_hours.data,
+            notes=(form.notes.data or '').strip()[:500],
             data_source='self_report',
         )
         db.session.add(record)
         db.session.commit()
         flash('Health log saved.', 'success')
         return redirect(url_for('health.tracker'))
+    if request.method == 'POST':
+        flash('Please correct the highlighted health log fields.', 'error')
     return redirect(url_for('health.tracker'))
 
 

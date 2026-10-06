@@ -119,6 +119,10 @@ class User(db.Model, UserMixin):
     """Core user account with role-based access."""
 
     __tablename__ = 'users'
+    __table_args__ = (
+        db.CheckConstraint('token_version >= 0', name='chk_user_token_version'),
+        db.CheckConstraint('failed_login_count >= 0', name='chk_user_failed_login_count'),
+    )
 
     id       = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80),  unique=True, nullable=False, index=True)
@@ -431,6 +435,8 @@ class RiskAssessment(db.Model):
     __table_args__ = (
         db.Index('ix_risk_user_date',    'user_id',    'created_at'),
         db.Index('ix_risk_patient_date', 'patient_id', 'created_at'),
+        db.CheckConstraint('overall_score >= 0 AND overall_score <= 1', name='chk_risk_overall_score'),
+        db.CheckConstraint('confidence_level >= 0 AND confidence_level <= 1', name='chk_risk_confidence'),
     )
 
     id            = db.Column(db.Integer, primary_key=True)
@@ -892,7 +898,12 @@ class ForumReply(db.Model):
 class MonitoringAlert(db.Model):
     """Actionable monitoring event; never a diagnosis."""
     __tablename__ = 'monitoring_alerts'
-    __table_args__ = (db.Index('ix_alert_user_created','user_id','created_at'), db.Index('ix_alert_patient_created','patient_id','created_at'))
+    __table_args__ = (
+        db.Index('ix_alert_user_created','user_id','created_at'),
+        db.Index('ix_alert_patient_created','patient_id','created_at'),
+        db.CheckConstraint("severity IN ('minimal','low','moderate','high','urgent','critical')", name='chk_alert_severity'),
+        db.CheckConstraint("status IN ('open','acknowledged','resolved')", name='chk_alert_status'),
+    )
     id=db.Column(db.Integer,primary_key=True)
     user_id=db.Column(db.Integer,db.ForeignKey('users.id'),nullable=True,index=True)
     patient_id=db.Column(db.Integer,db.ForeignKey('patients.id'),nullable=True,index=True)

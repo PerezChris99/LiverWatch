@@ -72,6 +72,7 @@ class Config:
     # Token expiry
     JWT_ISSUER = os.environ.get('JWT_ISSUER', 'liverwatch')
     JWT_AUDIENCE = os.environ.get('JWT_AUDIENCE', 'liverwatch-api')
+    JWT_ACCESS_TOKEN_EXPIRES_HOURS = int(os.environ.get('JWT_ACCESS_TOKEN_EXPIRES_HOURS', '1'))
 
     PASSWORD_RESET_EXPIRY_HOURS = 2
     EMAIL_VERIFY_EXPIRY_HOURS   = 24
