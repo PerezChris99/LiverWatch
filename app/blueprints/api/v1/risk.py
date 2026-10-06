@@ -191,7 +191,7 @@ def history():
     pagination = (
         RiskAssessment.query
         .filter_by(user_id=user.id)
-        .order_by(RiskAssessment.created_at.desc())
+        .order_by(RiskAssessment.created_at.desc(), RiskAssessment.id.desc())
         .paginate(page=page, per_page=limit, error_out=False)
     )
 
