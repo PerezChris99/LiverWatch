@@ -253,7 +253,7 @@ def get_readings(device_id: str):
     if btype:
         q = q.filter_by(biomarker_type=btype)
 
-    pagination = q.order_by(BiomarkerReading.timestamp.desc()).paginate(
+    pagination = q.order_by(BiomarkerReading.timestamp.desc(), BiomarkerReading.id.desc()).paginate(
         page=page, per_page=limit, error_out=False
     )
 
