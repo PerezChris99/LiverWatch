@@ -70,6 +70,9 @@ class Config:
     PERMANENT_SESSION_LIFETIME = timedelta(days=14)
 
     # Token expiry
+    JWT_ISSUER = os.environ.get('JWT_ISSUER', 'liverwatch')
+    JWT_AUDIENCE = os.environ.get('JWT_AUDIENCE', 'liverwatch-api')
+
     PASSWORD_RESET_EXPIRY_HOURS = 2
     EMAIL_VERIFY_EXPIRY_HOURS   = 24
 
