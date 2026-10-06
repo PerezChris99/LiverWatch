@@ -33,11 +33,13 @@ from flask_limiter.util import get_remote_address
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_sqlalchemy import SQLAlchemy
 
 # ── Extension singletons ─────────────────────────────────────────────────
 db           = SQLAlchemy()
 mail         = Mail()
+csrf         = CSRFProtect()
 cache        = Cache()
 migrate      = Migrate()
 login_manager = LoginManager()
@@ -73,6 +75,7 @@ def create_app(config_class=None):
     # ── Extensions ────────────────────────────────────────────────────────
     db.init_app(app)
     mail.init_app(app)
+    csrf.init_app(app)
     cache.init_app(app, config={'CACHE_TYPE': app.config.get('CACHE_TYPE', 'simple')})
     migrate.init_app(app, db)
     login_manager.init_app(app)
@@ -120,6 +123,10 @@ def create_app(config_class=None):
         if exception is not None:
             db.session.rollback()
 
+    @app.errorhandler(CSRFError)
+    def _csrf_error(_error):
+        return jsonify({'error': 'csrf_validation_failed', 'message': 'CSRF validation failed.'}), 400
+
     @app.errorhandler(413)
     def _payload_too_large(_error):
         return jsonify({'error': 'payload_too_large', 'message': 'Request body exceeds the allowed size.'}), 413
@@ -163,6 +170,10 @@ def create_app(config_class=None):
     app.register_blueprint(agents_bp,        url_prefix='/api/agents')
     app.register_blueprint(legacy_api_bp,    url_prefix='/api/v0')
     app.register_blueprint(api_bp)   # mounts /api with /api/v1 inside
+    # REST APIs authenticate with bearer tokens rather than browser cookies.
+    # Keep CSRF protection enabled for the cookie-backed web/agent surfaces.
+    csrf.exempt(legacy_api_bp)
+    csrf.exempt(api_bp)
 
     # ── Template context ──────────────────────────────────────────────────
     @app.context_processor
