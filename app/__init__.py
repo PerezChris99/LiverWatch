@@ -22,9 +22,11 @@ Blueprints registered:
 """
 
 import os
+import secrets
+import uuid
 
 import pytz
-from flask import Flask
+from flask import Flask, g, jsonify, request
 from flask_caching import Cache
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -78,6 +80,41 @@ def create_app(config_class=None):
     login_manager.login_message      = 'Please log in to access this page.'
     login_manager.login_message_category = 'info'
     limiter.init_app(app)
+
+    # ── Request/response hardening ───────────────────────────────────────
+    @app.before_request
+    def _request_context():
+        g.request_id = request.headers.get('X-Request-ID', '')[:100] or str(uuid.uuid4())
+
+    @app.after_request
+    def _security_headers(response):
+        response.headers['X-Request-ID'] = g.get('request_id', '')
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'DENY'
+        response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        response.headers['Permissions-Policy'] = 'camera=(), microphone=(), geolocation=()'
+        response.headers['Content-Security-Policy'] = (
+            "default-src 'self'; "
+            "base-uri 'self'; frame-ancestors 'none'; form-action 'self'; "
+            "img-src 'self' data: https:; "
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; "
+            "connect-src 'self'; object-src 'none'"
+        )
+        if not app.debug:
+            response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+        if request.path.startswith('/api/'):
+            response.headers['Cache-Control'] = 'no-store'
+        return response
+
+    @app.errorhandler(413)
+    def _payload_too_large(_error):
+        return jsonify({'error': 'payload_too_large', 'message': 'Request body exceeds the allowed size.'}), 413
+
+    @app.errorhandler(429)
+    def _rate_limited(_error):
+        return jsonify({'error': 'rate_limited', 'message': 'Too many requests. Please retry later.'}), 429
 
     # ── User loader ───────────────────────────────────────────────────────
     from app.models import User
@@ -140,8 +177,10 @@ def create_app(config_class=None):
         return value.strftime(fmt)
 
     # ── Database setup ────────────────────────────────────────────────────
+    # Do not create production schema implicitly. Migrations are the source of truth.
     with app.app_context():
-        db.create_all()
+        if app.config.get('TESTING') or app.config.get('DEBUG'):
+            db.create_all()
 
     return app
 
