@@ -41,7 +41,7 @@ cryptography>=42.0.0   # Fernet encryption for PII fields
 
 # ---- Utilities ----
 python-dotenv>=1.0.0
-requests>=2.31.0
+requests>=2.34.2
 beautifulsoup4>=4.12.3
 pytz>=2024.1
 
