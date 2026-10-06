@@ -336,7 +336,7 @@ pytest tests/integration/test_auth.py -v
 pytest tests/unit/test_models.py -v
 pytest tests/api/ -v
 pytest tests/security/ -v
-pytest tests/test_agents.py -v
+pytest tests/integration/test_agents.py -v
 ```
 
 A phase is not considered complete until its relevant tests pass and the full regression suite remains green.
