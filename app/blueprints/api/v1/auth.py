@@ -33,11 +33,12 @@ auth_api_v1 = Blueprint('auth_api_v1', __name__, url_prefix='/auth')
 
 # ── JWT helpers ───────────────────────────────────────────────────────────
 
-def _create_access_token(user_id: int, role: str, expires_hours: int = 12) -> str:
+def _create_access_token(user_id: int, role: str, expires_hours: int | None = None) -> str:
+    expires_hours = expires_hours or current_app.config.get('JWT_ACCESS_TOKEN_EXPIRES_HOURS', 1)
     payload = {
         'sub':  str(user_id),
         'role': role,
-        'ver': current_app.config.get('APP_VERSION', '3.0'),
+        'typ': 'access',
         'tv': 0,
         'jti': str(uuid.uuid4()),
         'iss': current_app.config.get('JWT_ISSUER', 'liverwatch'),
@@ -70,7 +71,15 @@ def jwt_required(f):
         except jwt.InvalidTokenError:
             return jsonify({'error': 'Invalid token'}), 401
 
-        user = db.session.get(User, int(payload['sub']))
+        try:
+            user_id = int(payload['sub'])
+        except (KeyError, TypeError, ValueError):
+            return jsonify({'error': 'Invalid token'}), 401
+
+        if payload.get('typ') != 'access':
+            return jsonify({'error': 'Invalid token'}), 401
+
+        user = db.session.get(User, user_id)
         if not user or not user.is_active or user.is_deleted or payload.get('tv') != user.token_version:
             return jsonify({'error': 'User not found or inactive'}), 401
         g.current_user = user
@@ -109,7 +118,7 @@ def api_login():
                 user.locked_until = datetime.now(pytz.utc) + timedelta(minutes=lockout_mins)
             db.session.commit()
         _audit(None, 'login_failed', 'user', ip_address=ip,
-               details={'email': email})
+               details={'identifier_type': 'email'})
         return jsonify({'error': 'Invalid email or password'}), 401
 
     if user.is_deleted:
