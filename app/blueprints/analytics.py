@@ -34,7 +34,7 @@ def dashboard():
     assessments = (
         RiskAssessment.query
         .filter_by(user_id=current_user.id)
-        .order_by(RiskAssessment.created_at.desc())
+        .order_by(RiskAssessment.created_at.desc(), RiskAssessment.id.desc())
         .limit(20)
         .all()
     )
@@ -86,7 +86,7 @@ def trend_data():
             RiskAssessment.user_id == current_user.id,
             RiskAssessment.created_at >= since,
         )
-        .order_by(RiskAssessment.created_at.asc())
+        .order_by(RiskAssessment.created_at.asc(), RiskAssessment.id.asc())
         .all()
     )
 
