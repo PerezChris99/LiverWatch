@@ -12,6 +12,7 @@
     </h1>
     {% if unread_count > 0 %}
     <form method="POST" action="{{ url_for('notifications.mark_all_read') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <button type="submit" class="btn btn-secondary btn-sm">Mark all read</button>
     </form>
     {% endif %}
@@ -43,6 +44,7 @@
             {% endif %}
             {% if not n.is_read %}
             <form method="POST" action="{{ url_for('notifications.mark_read', notification_id=n.id) }}" style="margin:0;">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <button type="submit" class="btn btn-sm btn-secondary">✓ Mark read</button>
             </form>
             {% endif %}
