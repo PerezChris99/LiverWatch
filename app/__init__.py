@@ -96,6 +96,15 @@ def create_app(config_class=None):
     def _request_context():
         g.request_id = request.headers.get('X-Request-ID', '')[:100] or str(uuid.uuid4())
 
+    @app.before_request
+    def _validate_api_content_type():
+        if request.path.startswith('/api/') and request.method in {'POST', 'PUT', 'PATCH'}:
+            if not request.is_json:
+                return jsonify({
+                    'error': 'unsupported_media_type',
+                    'message': 'API mutation endpoints require application/json.',
+                }), 415
+
     @app.after_request
     def _security_headers(response):
         response.headers['X-Request-ID'] = g.get('request_id', '')
