@@ -24,7 +24,7 @@ gunicorn>=21.2.0
 
 # ---- Database ----
 SQLAlchemy>=2.0.0
-alembic>=1.13.0
+alembic>=1.20.0
 # Production: PostgreSQL
 psycopg2-binary>=2.9.9
 # Development fallback: SQLite is built-in
