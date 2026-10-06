@@ -19,7 +19,7 @@ import jwt
 from flask import Blueprint, current_app, g, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import db
+from app import db, limiter
 from app.models import AuditLog, User, UserConsent
 from app.services.token_service import generate_token, token_expiry
 from app.models import EmailVerificationToken
@@ -72,6 +72,7 @@ def jwt_required(f):
 # ── Endpoints ─────────────────────────────────────────────────────────────
 
 @auth_api_v1.post('/login')
+@limiter.limit('5 per minute')
 def api_login():
     """
     POST /api/v1/auth/login
@@ -125,6 +126,7 @@ def api_login():
 
 
 @auth_api_v1.post('/register')
+@limiter.limit('3 per hour')
 def api_register():
     """
     POST /api/v1/auth/register
