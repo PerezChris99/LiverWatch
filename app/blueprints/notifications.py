@@ -27,7 +27,7 @@ def notification_center():
     pagination = (
         Notification.query
         .filter_by(user_id=current_user.id)
-        .order_by(Notification.created_at.desc())
+        .order_by(Notification.created_at.desc(), Notification.id.desc())
         .paginate(page=page, per_page=limit, error_out=False)
     )
     notifications = pagination.items
