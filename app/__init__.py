@@ -34,6 +34,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, CSRFError
+from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_sqlalchemy import SQLAlchemy
 
 # ── Extension singletons ─────────────────────────────────────────────────
@@ -71,6 +72,12 @@ def create_app(config_class=None):
         from app.config import DevelopmentConfig
         config_class = DevelopmentConfig
     app.config.from_object(config_class)
+
+    # Only trust forwarded client metadata when the deployment explicitly
+    # declares the number of trusted reverse-proxy hops.
+    proxy_hops = max(int(app.config.get('TRUSTED_PROXY_HOPS', 0)), 0)
+    if proxy_hops:
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=proxy_hops, x_proto=proxy_hops, x_host=proxy_hops)
 
     # ── Extensions ────────────────────────────────────────────────────────
     db.init_app(app)
