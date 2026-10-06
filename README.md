@@ -144,7 +144,7 @@ The transformation is deliberately divided into independently merged phases.
 | 11 | Production operations, scale & governance | Complete |
 | 12 | External integration completion | Complete |
 
-See **[docs/DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md)** for the detailed engineering plan, exit criteria, branch protocol and clinical boundaries.
+See **[docs/development/DEVELOPMENT_ROADMAP.md](docs/development/DEVELOPMENT_ROADMAP.md)** for the detailed engineering plan, exit criteria, branch protocol and clinical boundaries.
 
 ---
 
@@ -175,7 +175,7 @@ The implementation follows the applicable principles of:
 
 No checklist can prove an application is secure. Production assurance also requires environment-specific configuration review, dependency scanning, load testing, backup/restore drills, monitoring, threat modelling, and independent security testing.
 
-See SECURITY.md and docs/PRODUCTION_READINESS.md for the project's security and operational expectations.
+See SECURITY.md and docs/operations/PRODUCTION_READINESS.md for the project's security and operational expectations.
 
 # Technology Stack
 
@@ -223,10 +223,17 @@ AI is constrained to structured health-support use cases. Deterministic clinical
 ```
 LiverWatch/
 ├── app/
-│   ├── blueprints/       # HTTP routes and application interfaces
-│   ├── services/         # Business and domain services
-│   ├── templates/        # Jinja2 views
-│   ├── static/           # CSS, JavaScript and assets
+│   ├── blueprints/       # Web routes, legacy API and versioned REST API
+│   ├── services/         # Business, clinical and integration services
+│   ├── templates/        # Feature-grouped Jinja2 views
+│   │   ├── auth/         # Authentication and account views
+│   │   ├── health/       # Health and risk views
+│   │   ├── forum/        # Community views
+│   │   ├── referrals/    # Referral workflow views
+│   │   ├── admin/        # Administrative views
+│   │   ├── pages/        # Active public pages
+│   │   └── legacy/       # Preserved, currently unused legacy templates
+│   ├── static/           # CSS, JavaScript and images
 │   ├── models.py         # Domain/data models
 │   ├── forms.py          # Input validation and forms
 │   ├── config.py         # Environment configuration
@@ -234,8 +241,18 @@ LiverWatch/
 │
 ├── liverwatch_agents/    # AI agent and tool architecture
 ├── migrations/           # Database migrations
-├── tests/                # Unit, integration and security tests
-├── docs/                 # Architecture, roadmap and engineering docs
+├── tests/
+│   ├── api/              # Versioned API tests
+│   ├── integration/      # Route and application workflow tests
+│   ├── security/         # Security-boundary tests
+│   └── unit/             # Domain/service/model tests
+├── docs/
+│   ├── architecture/     # Architecture and security design
+│   ├── clinical/         # Clinical validation and biosensing
+│   ├── development/      # Roadmap and engineering contracts
+│   ├── operations/      # Production and test operations
+│   ├── ai/               # AI agent documentation
+│   └── audits/           # System audit records
 ├── run.py                # Development entry point
 ├── requirements.txt      # Python dependencies
 └── pytest.ini            # Test configuration
@@ -315,11 +332,11 @@ pytest --cov=app --cov=liverwatch_agents --cov-report=term-missing
 Run a focused suite:
 
 ```bash
-pytest tests/test_auth.py -v
-pytest tests/test_models.py -v
-pytest tests/test_api.py -v
-pytest tests/test_security.py -v
-pytest tests/test_agents.py -v
+pytest tests/integration/test_auth.py -v
+pytest tests/unit/test_models.py -v
+pytest tests/api/ -v
+pytest tests/security/ -v
+pytest tests/integration/test_agents.py -v
 ```
 
 A phase is not considered complete until its relevant tests pass and the full regression suite remains green.

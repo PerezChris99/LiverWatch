@@ -19,7 +19,7 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
     form = SubscriptionForm()
-    return render_template('index.html', form=form)
+    return render_template('pages/index.html', form=form)
 
 
 @main_bp.route('/subscribe', methods=['GET', 'POST'])
@@ -39,7 +39,7 @@ def subscribe():
             db.session.commit()
             flash('Subscribed successfully!', 'success')
         return redirect(url_for('main.index'))
-    return render_template('subscribe.html', form=form)
+    return render_template('pages/subscribe.html', form=form)
 
 
 @main_bp.route('/unsubscribe')
@@ -55,4 +55,4 @@ def unsubscribe():
 
 @main_bp.route('/about')
 def about():
-    return render_template('index.html')
+    return render_template('pages/index.html')
