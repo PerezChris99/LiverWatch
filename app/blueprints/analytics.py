@@ -73,7 +73,12 @@ def dashboard():
 
 @analytics_bp.route('/trend-data')
 @login_required
-@cache.cached(timeout=60, query_string=True)
+def _trend_cache_key():
+    """Build a user-scoped cache key; private health data must never share cache entries."""
+    return f"analytics:trend:{current_user.get_id()}:{request.full_path}"
+
+
+@cache.cached(timeout=60, key_prefix=_trend_cache_key)
 def trend_data():
     """Chart-ready JSON for risk score trend (last 90 days)."""
     days = request.args.get('days', 90, type=int)
@@ -87,6 +92,7 @@ def trend_data():
             RiskAssessment.created_at >= since,
         )
         .order_by(RiskAssessment.created_at.asc(), RiskAssessment.id.asc())
+        .limit(500)
         .all()
     )
 
