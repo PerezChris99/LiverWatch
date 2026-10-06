@@ -404,6 +404,7 @@ class Patient(db.Model):
     referrals         = db.relationship('Referral',        foreign_keys='Referral.patient_id',
                                         backref='patient',  lazy='dynamic')
     longitudinal_records = db.relationship('LongitudinalRecord', backref='patient', lazy='dynamic')
+    clinical_observations = db.relationship('ClinicalObservation', foreign_keys='ClinicalObservation.patient_id', backref='patient', lazy='dynamic')
 
     @staticmethod
     def next_patient_code() -> str:
