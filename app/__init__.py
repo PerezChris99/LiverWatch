@@ -108,6 +108,18 @@ def create_app(config_class=None):
             response.headers['Cache-Control'] = 'no-store'
         return response
 
+    @app.errorhandler(500)
+    def _internal_error(_error):
+        db.session.rollback()
+        if request.path.startswith('/api/'):
+            return jsonify({'error': 'internal_error', 'message': 'An unexpected server error occurred.', 'request_id': g.get('request_id')}), 500
+        return 'An unexpected server error occurred.', 500
+
+    @app.teardown_request
+    def _rollback_failed_request(exception):
+        if exception is not None:
+            db.session.rollback()
+
     @app.errorhandler(413)
     def _payload_too_large(_error):
         return jsonify({'error': 'payload_too_large', 'message': 'Request body exceeds the allowed size.'}), 413
