@@ -23,7 +23,7 @@ Jinja2>=3.0.0
 gunicorn>=21.2.0
 
 # ---- Database ----
-SQLAlchemy>=2.0.0
+SQLAlchemy>=2.1.3
 alembic>=1.13.0
 # Production: PostgreSQL
 psycopg2-binary>=2.9.9
