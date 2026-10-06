@@ -18,7 +18,7 @@ from datetime import datetime
 import pytz
 from flask import Blueprint, g, jsonify, request
 
-from app import db
+from app import db, limiter
 from app.blueprints.api.v1.auth import jwt_required
 from app.models import (
     AuditLog, RiskAssessment, RiskFactor, RiskLevel, UserSymptomReport
@@ -33,6 +33,7 @@ DISCLAIMER = MEDICAL_DISCLAIMER
 
 
 @risk_api_v1.post('/assess')
+@limiter.limit('20 per minute')
 @jwt_required
 def assess():
     """
@@ -179,12 +180,13 @@ def assess():
 
 
 @risk_api_v1.get('/history')
+@limiter.limit('60 per minute')
 @jwt_required
 def history():
     """GET /api/v1/risk/history — paginated assessment history for current user."""
     user  = g.current_user
-    page  = request.args.get('page',  1,  type=int)
-    limit = min(request.args.get('limit', 10, type=int), 50)
+    page = max(request.args.get('page', 1, type=int) or 1, 1)
+    limit = min(max(request.args.get('limit', 10, type=int) or 10, 1), 50)
 
     pagination = (
         RiskAssessment.query
@@ -216,6 +218,7 @@ def history():
 
 
 @risk_api_v1.get('/<int:assessment_id>')
+@limiter.limit('120 per minute')
 @jwt_required
 def get_assessment(assessment_id: int):
     """GET /api/v1/risk/<id> — full assessment detail."""
