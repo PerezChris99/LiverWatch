@@ -28,10 +28,11 @@ referral_bp = Blueprint('referral', __name__)
 @referral_bp.route('/')
 @login_required
 def index():
+    page = max(request.args.get('page', 1, type=int) or 1, 1)
     referrals = (Referral.query
                  .filter_by(user_id=current_user.id)
-                 .order_by(Referral.created_at.desc())
-                 .all())
+                 .order_by(Referral.created_at.desc(), Referral.id.desc())
+                 .paginate(page=page, per_page=25, error_out=False))
     return render_template('referrals/index.html', referrals=referrals)
 
 
@@ -48,8 +49,10 @@ def facilities():
         query = query.filter_by(hepatitis_treatment=True)
     elif service == 'specialist':
         query = query.filter_by(liver_specialist=True)
-    facilities_list = query.order_by(HealthcareFacility.district,
-                                     HealthcareFacility.name).all()
+    facilities_list = (query.order_by(HealthcareFacility.district,
+                                      HealthcareFacility.name)
+                       .limit(200)
+                       .all())
     districts = (db.session.query(HealthcareFacility.district)
                  .filter_by(is_active=True)
                  .distinct()
@@ -80,8 +83,7 @@ def create_referral(assessment_id):
     if not assessment:
         abort(404)
     # Only the assessment owner or staff can create a referral
-    if assessment.user_id != current_user.id and current_user.role not in (
-            UserRole.ADMIN.value, UserRole.CLINICIAN.value, UserRole.CHW.value):
+    if assessment.user_id != current_user.id and current_user.role != UserRole.ADMIN.value:
         abort(403)
 
     if request.method == 'POST':
@@ -129,7 +131,6 @@ def create_referral(assessment_id):
 def referral_status(referral_code):
     referral = Referral.query.filter_by(referral_code=referral_code).first_or_404()
     # Access control: owner or staff
-    if referral.user_id != current_user.id and current_user.role not in (
-            UserRole.ADMIN.value, UserRole.CLINICIAN.value, UserRole.CHW.value):
+    if referral.user_id != current_user.id and current_user.role != UserRole.ADMIN.value:
         abort(403)
     return render_template('referrals/status.html', referral=referral)
