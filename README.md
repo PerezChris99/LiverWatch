@@ -122,19 +122,19 @@ The transformation is deliberately divided into independently merged phases.
 
 | Phase | Objective | Status |
 |---|---|---|
-| 0 | Foundation reset & production baseline | In progress |
-| 1 | Test, CI & reliability foundation | Planned |
-| 2 | Secure clinical data core | In progress |
-| 3 | Liver risk & clinical decision support | Planned |
-| 4 | Patient monitoring & alerting | Planned |
-| 5 | CHW/VHT field system | Planned |
-| 6 | Clinician & healthcare facility platform | Planned |
-| 7 | Device & wearable integration platform | Planned |
-| 8 | Non-invasive biosensing research interface | Planned |
-| 9 | Clinical validation & evidence platform | Planned |
-| 10 | Intelligence, population health & research | Planned |
-| 11 | Production operations, scale & governance | Planned |
-| 12 | External integration completion | Planned |
+| 0 | Foundation reset & production baseline | Complete |
+| 1 | Test, CI & reliability foundation | In progress |
+| 2 | Secure clinical data core | Complete |
+| 3 | Liver risk & clinical decision support | Complete |
+| 4 | Patient monitoring & alerting | Complete |
+| 5 | CHW/VHT field system | Complete |
+| 6 | Clinician & healthcare facility platform | Complete |
+| 7 | Device & wearable integration platform | Complete |
+| 8 | Non-invasive biosensing research interface | Complete |
+| 9 | Clinical validation & evidence platform | Complete |
+| 10 | Intelligence, population health & research | Complete |
+| 11 | Production operations, scale & governance | Complete |
+| 12 | External integration completion | Complete |
 
 See **[docs/DEVELOPMENT_ROADMAP.md](docs/DEVELOPMENT_ROADMAP.md)** for the detailed engineering plan, exit criteria, branch protocol and clinical boundaries.
 
