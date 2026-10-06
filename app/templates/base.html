@@ -7,6 +7,8 @@
     <meta name="keywords" content="liver health, hepatitis, liver disease, Uganda, health tracking, medical news">
     <meta name="author" content="LiverWatch Team">
     <meta name="theme-color" content="#8B2E2B">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="{% block robots %}index,follow{% endblock %}">
     
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
@@ -48,7 +50,7 @@
         <div class="navbar-container">
             <!-- Brand -->
             <a href="{{ url_for('main.index') }}" class="navbar-brand">
-                <img src="{{ url_for('static', filename='images/liver-logo.svg') }}" alt="Liver" class="navbar-logo">
+                <img src="{{ url_for('static', filename='images/liver-logo.svg') }}" alt="LiverWatch" class="navbar-logo" width="42" height="42" decoding="async">
                 <span>LiverWatch</span>
             </a>
             
@@ -272,9 +274,9 @@
     {% endif %}
     
     <!-- Core Scripts -->
-    <script src="{{ url_for('static', filename='js/core.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/components.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/components.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
     
     <!-- Page-specific Scripts -->
     {% block extra_js %}{% endblock %}
