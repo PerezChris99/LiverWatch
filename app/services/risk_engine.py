@@ -56,6 +56,11 @@ RISK_WEIGHTS: Dict[str, float] = {
     'biomarkers':       0.05,
 }
 
+# Clinical measurements are intentionally separated from experimental wearable
+# ranges. Reference intervals vary by laboratory, method, age, sex and context.
+# LiverWatch stores/validates their provenance but does not hard-code diagnosis.
+SUPPORTED_CLINICAL_BIOMARKERS = {'ALT', 'AST', 'ALP', 'GGT', 'bilirubin_total', 'albumin', 'INR'}
+
 # ── Symptom severity lists ────────────────────────────────────────────────
 EMERGENCY_SYMPTOMS: List[str] = [
     'vomiting_blood',
