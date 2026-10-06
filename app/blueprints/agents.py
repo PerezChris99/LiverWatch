@@ -184,6 +184,7 @@ def chat():
 
 
 @agents_bp.route('/quick-assess', methods=['POST'])
+@login_required
 @limiter.limit("20 per minute")
 @agents_required
 def quick_assess():
@@ -369,6 +370,7 @@ def health_info():
 
 @agents_bp.route('/status', methods=['GET'])
 @login_required
+@limiter.limit("60 per minute")
 def status():
     """Check if agents are available and working."""
     return jsonify({
