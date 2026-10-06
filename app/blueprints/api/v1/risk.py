@@ -228,8 +228,14 @@ def get_assessment(assessment_id: int):
     if not a:
         return jsonify({'error': 'Assessment not found'}), 404
 
-    # Users can only access their own assessments (CHW/admin can access others)
-    if a.user_id != user.id and user.role not in ('admin', 'chw', 'clinician'):
+    # Object-level authorization: default deny. Administrative access must be explicit.
+    # CHW/clinician workflows should resolve through their scoped patient/referral
+    # relationships rather than accepting an arbitrary assessment ID.
+    if a.user_id != user.id and user.role != 'admin':
+        logger.warning(
+            "risk_object_access_denied user_id=%s assessment_id=%s target_user_id=%s",
+            user.id, assessment_id, a.user_id,
+        )
         return jsonify({'error': 'Access denied'}), 403
 
     factors = [
