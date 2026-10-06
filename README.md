@@ -124,7 +124,7 @@ The transformation is deliberately divided into independently merged phases.
 |---|---|---|
 | 0 | Foundation reset & production baseline | In progress |
 | 1 | Test, CI & reliability foundation | Planned |
-| 2 | Secure clinical data core | Planned |
+| 2 | Secure clinical data core | In progress |
 | 3 | Liver risk & clinical decision support | Planned |
 | 4 | Patient monitoring & alerting | Planned |
 | 5 | CHW/VHT field system | Planned |
