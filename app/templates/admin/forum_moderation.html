@@ -21,9 +21,11 @@
         <p>{{ d.content[:300] }}{% if d.content | length > 300 %}…{% endif %}</p>
         <div style="display:flex;gap:.5rem;">
           <form method="POST" action="{{ url_for('admin.moderate_discussion', discussion_id=d.id, action='approve') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn-success btn-sm">Approve</button>
           </form>
-          <form method="POST" action="{{ url_for('admin.moderate_discussion', discussion_id=d.id, action='reject') }}"
+          <form method="POST" action="{{ url_for('admin.moderate_discussion', discussion_id=d.id, action='reject') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"
                 onsubmit="return confirm('Reject this discussion?');">
             <button type="submit" class="btn btn-danger btn-sm">Reject</button>
           </form>
@@ -49,9 +51,11 @@
         <p>{{ r.content[:300] }}{% if r.content | length > 300 %}…{% endif %}</p>
         <div style="display:flex;gap:.5rem;">
           <form method="POST" action="{{ url_for('admin.moderate_reply', reply_id=r.id, action='approve') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn-success btn-sm">Approve</button>
           </form>
-          <form method="POST" action="{{ url_for('admin.moderate_reply', reply_id=r.id, action='reject') }}"
+          <form method="POST" action="{{ url_for('admin.moderate_reply', reply_id=r.id, action='reject') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"
                 onsubmit="return confirm('Reject this reply?');">
             <button type="submit" class="btn btn-danger btn-sm">Reject</button>
           </form>
