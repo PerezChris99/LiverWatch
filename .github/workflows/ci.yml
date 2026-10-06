@@ -1,6 +1,7 @@
 name: LiverWatch CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [perez, main]
   pull_request:
