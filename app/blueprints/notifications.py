@@ -12,7 +12,7 @@ Routes:
 from flask import Blueprint, jsonify, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
-from app import db
+from app import db, limiter
 from app.models import Notification, utcnow
 
 notifications_bp = Blueprint('notifications', __name__)
@@ -20,6 +20,7 @@ notifications_bp = Blueprint('notifications', __name__)
 
 @notifications_bp.route('/')
 @login_required
+@limiter.limit('60 per minute')
 def notification_center():
     notifications = (
         Notification.query
@@ -36,6 +37,7 @@ def notification_center():
 
 @notifications_bp.route('/<int:notification_id>/read', methods=['POST'])
 @login_required
+@limiter.limit('60 per minute')
 def mark_read(notification_id):
     n = Notification.query.filter_by(
         id=notification_id, user_id=current_user.id).first_or_404()
@@ -46,6 +48,7 @@ def mark_read(notification_id):
 
 @notifications_bp.route('/read-all', methods=['POST'])
 @login_required
+@limiter.limit('20 per minute')
 def mark_all_read():
     (Notification.query
      .filter_by(user_id=current_user.id, is_read=False)
@@ -56,6 +59,7 @@ def mark_all_read():
 
 @notifications_bp.route('/count')
 @login_required
+@limiter.limit('120 per minute')
 def count():
     n = Notification.query.filter_by(user_id=current_user.id, is_read=False).count()
     return jsonify({'count': n})
