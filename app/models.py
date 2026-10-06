@@ -404,6 +404,7 @@ class Patient(db.Model):
     referrals         = db.relationship('Referral',        foreign_keys='Referral.patient_id',
                                         backref='patient',  lazy='dynamic')
     longitudinal_records = db.relationship('LongitudinalRecord', backref='patient', lazy='dynamic')
+    clinical_observations = db.relationship('ClinicalObservation', foreign_keys='ClinicalObservation.patient_id', backref='patient', lazy='dynamic')
 
     @staticmethod
     def next_patient_code() -> str:
@@ -730,6 +731,49 @@ class EducationalContent(db.Model):
     order_index = db.Column(db.Integer,    default=0)
     is_published = db.Column(db.Boolean,   default=False)
     created_at  = db.Column(db.DateTime,   default=utcnow)
+
+
+class ClinicalObservation(db.Model):
+    """Canonical longitudinal measurement with provenance and validation state."""
+
+    __tablename__ = 'clinical_observations'
+    __table_args__ = (
+        db.Index('ix_obs_patient_time', 'patient_id', 'observed_at'),
+        db.Index('ix_obs_user_time', 'user_id', 'observed_at'),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True, index=True)
+    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'), nullable=True, index=True)
+
+    code = db.Column(db.String(80), nullable=False, index=True)
+    value = db.Column(db.Float, nullable=False)
+    unit = db.Column(db.String(30), nullable=True)
+    observed_at = db.Column(db.DateTime, nullable=False, index=True)
+
+    source_type = db.Column(db.String(20), nullable=False, index=True)
+    source_id = db.Column(db.String(100), nullable=True)
+    validation_state = db.Column(db.String(20), nullable=False, default=MeasurementValidationState.PENDING.value)
+    quality_score = db.Column(db.Float, nullable=True)
+    reference_metadata = db.Column(db.Text, nullable=True)
+    correction_of_id = db.Column(db.Integer, db.ForeignKey('clinical_observations.id'), nullable=True)
+    created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+
+    def get_reference_metadata(self) -> dict:
+        try:
+            return json.loads(self.reference_metadata) if self.reference_metadata else {}
+        except (ValueError, TypeError):
+            return {}
+
+    def set_reference_metadata(self, data: dict):
+        self.reference_metadata = json.dumps(data)
+
+    @property
+    def is_usable(self):
+        return (
+            self.validation_state == MeasurementValidationState.VALIDATED.value
+            and (self.quality_score is None or self.quality_score >= 0.7)
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
