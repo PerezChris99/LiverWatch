@@ -448,6 +448,8 @@ class RiskAssessment(db.Model):
     referral_urgency   = db.Column(db.String(20), nullable=True)  # 'routine'|'urgent'|'emergency'
     assessment_type    = db.Column(db.String(20), default='self') # 'self'|'chw_assisted'|'wearable'
     disclaimer_acknowledged = db.Column(db.Boolean, default=False)
+    engine_version = db.Column(db.String(30), nullable=False, default='3.1.0')
+    input_fingerprint = db.Column(db.String(64), nullable=True, index=True)
 
     created_at = db.Column(db.DateTime, default=utcnow, index=True)
 
