@@ -36,9 +36,12 @@ class Config:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_pre_ping':  True,
-        'pool_recycle':   300,
-        'pool_timeout':   20,
+        'pool_pre_ping': True,
+        'pool_recycle': 300,
+        'pool_timeout': 20,
+        'pool_size': int(os.environ.get('DB_POOL_SIZE', '5')),
+        'max_overflow': int(os.environ.get('DB_MAX_OVERFLOW', '10')),
+        'connect_args': {'connect_timeout': int(os.environ.get('DB_CONNECT_TIMEOUT', '10'))},
     }
 
     # ── Redis ──────────────────────────────────────────────────────────────
@@ -54,9 +57,10 @@ class Config:
 
     # ── Caching ────────────────────────────────────────────────────────────
     # Phase 1: simple (in-memory). Phase 9: switch to 'redis'
-    CACHE_TYPE            = 'simple'
-    CACHE_DEFAULT_TIMEOUT = 300
-    CACHE_REDIS_URL       = REDIS_URL  # used when CACHE_TYPE = 'redis'
+    CACHE_TYPE            = os.environ.get('CACHE_TYPE', 'simple')
+    CACHE_DEFAULT_TIMEOUT = int(os.environ.get('CACHE_DEFAULT_TIMEOUT', '300'))
+    CACHE_REDIS_URL       = REDIS_URL
+    SEND_FILE_MAX_AGE_DEFAULT = int(os.environ.get('STATIC_CACHE_SECONDS', '86400'))
 
     # ── Security ───────────────────────────────────────────────────────────
     WTF_CSRF_ENABLED         = True
@@ -66,6 +70,9 @@ class Config:
     PERMANENT_SESSION_LIFETIME = timedelta(days=14)
 
     # Token expiry
+    JWT_ISSUER = os.environ.get('JWT_ISSUER', 'liverwatch')
+    JWT_AUDIENCE = os.environ.get('JWT_AUDIENCE', 'liverwatch-api')
+
     PASSWORD_RESET_EXPIRY_HOURS = 2
     EMAIL_VERIFY_EXPIRY_HOURS   = 24
 
@@ -84,9 +91,13 @@ class Config:
 
     # ── Rate Limiting ──────────────────────────────────────────────────────
     RATELIMIT_ENABLED         = True
-    RATELIMIT_STORAGE_URL     = 'memory://'    # Phase 9: change to REDIS_URL
+    RATELIMIT_STORAGE_URL     = os.environ.get('RATELIMIT_STORAGE_URL', REDIS_URL)
     RATELIMIT_STRATEGY        = 'fixed-window'
     RATELIMIT_DEFAULT         = '200 per day, 50 per hour'
+    MAX_CONTENT_LENGTH        = int(os.environ.get('MAX_CONTENT_LENGTH', str(2 * 1024 * 1024)))
+    JSON_SORT_KEYS             = True
+    JSONIFY_PRETTYPRINT_REGULAR = False
+    TRUSTED_PROXY_HOPS         = int(os.environ.get('TRUSTED_PROXY_HOPS', '0'))
     RATELIMIT_HEADERS_ENABLED = True
     RATELIMIT_LOGIN           = '5 per minute, 20 per hour'
     RATELIMIT_REGISTER        = '3 per hour'

@@ -148,6 +148,7 @@ class User(db.Model, UserMixin):
     last_login_at     = db.Column(db.DateTime, nullable=True)
     last_activity_at  = db.Column(db.DateTime, nullable=True)
     failed_login_count = db.Column(db.Integer, default=0)
+    token_version      = db.Column(db.Integer, default=0, nullable=False)
     locked_until      = db.Column(db.DateTime, nullable=True)
 
     # Soft-delete

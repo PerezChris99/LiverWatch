@@ -19,7 +19,7 @@ from datetime import datetime
 import pytz
 from flask import Blueprint, g, jsonify, request
 
-from app import db
+from app import db, limiter
 from app.blueprints.api.v1.auth import jwt_required
 from app.models import AuditLog, BiomarkerReading, DeviceStatus, WearableDevice
 from app.services.risk_engine import MEDICAL_DISCLAIMER
@@ -52,6 +52,7 @@ def _is_anomaly(biomarker_type: str, value: float) -> bool:
 
 @wearable_api_v1.post('/register')
 @jwt_required
+@limiter.limit('20 per minute')
 def register_device():
     """
     POST /api/v1/wearable/register
@@ -105,6 +106,7 @@ def register_device():
 
 @wearable_api_v1.post('/<string:device_id>/sync')
 @jwt_required
+@limiter.limit('30 per minute')
 def sync_readings(device_id: str):
     """
     POST /api/v1/wearable/<device_id>/sync
@@ -210,6 +212,7 @@ def sync_readings(device_id: str):
 
 @wearable_api_v1.get('/devices')
 @jwt_required
+@limiter.limit('60 per minute')
 def list_devices():
     """GET /api/v1/wearable/devices — list authenticated user's devices."""
     user    = g.current_user
@@ -233,6 +236,7 @@ def list_devices():
 
 @wearable_api_v1.get('/<string:device_id>/readings')
 @jwt_required
+@limiter.limit('120 per minute')
 def get_readings(device_id: str):
     """GET /api/v1/wearable/<device_id>/readings — paginated reading history."""
     user = g.current_user
@@ -241,15 +245,15 @@ def get_readings(device_id: str):
     if not dev:
         return jsonify({'error': 'Device not found or not owned by you'}), 404
 
-    page  = request.args.get('page',  1,  type=int)
-    limit = min(request.args.get('limit', 50, type=int), 200)
+    page = max(request.args.get('page', 1, type=int) or 1, 1)
+    limit = min(max(request.args.get('limit', 50, type=int) or 50, 1), 200)
     btype = request.args.get('biomarker_type')
 
     q = BiomarkerReading.query.filter_by(device_id=dev.id)
     if btype:
         q = q.filter_by(biomarker_type=btype)
 
-    pagination = q.order_by(BiomarkerReading.timestamp.desc()).paginate(
+    pagination = q.order_by(BiomarkerReading.timestamp.desc(), BiomarkerReading.id.desc()).paginate(
         page=page, per_page=limit, error_out=False
     )
 

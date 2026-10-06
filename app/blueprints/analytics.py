@@ -13,7 +13,7 @@ from flask import Blueprint, jsonify, render_template, request
 from flask_login import current_user, login_required
 from sqlalchemy import func
 
-from app import db
+from app import db, cache
 from app.models import RiskAssessment, RiskLevel
 
 analytics_bp = Blueprint('analytics', __name__)
@@ -34,7 +34,7 @@ def dashboard():
     assessments = (
         RiskAssessment.query
         .filter_by(user_id=current_user.id)
-        .order_by(RiskAssessment.created_at.desc())
+        .order_by(RiskAssessment.created_at.desc(), RiskAssessment.id.desc())
         .limit(20)
         .all()
     )
@@ -73,6 +73,7 @@ def dashboard():
 
 @analytics_bp.route('/trend-data')
 @login_required
+@cache.cached(timeout=60, query_string=True)
 def trend_data():
     """Chart-ready JSON for risk score trend (last 90 days)."""
     days = request.args.get('days', 90, type=int)
@@ -85,7 +86,7 @@ def trend_data():
             RiskAssessment.user_id == current_user.id,
             RiskAssessment.created_at >= since,
         )
-        .order_by(RiskAssessment.created_at.asc())
+        .order_by(RiskAssessment.created_at.asc(), RiskAssessment.id.asc())
         .all()
     )
 
@@ -116,6 +117,7 @@ def summary():
         RiskAssessment.query
         .filter_by(user_id=current_user.id)
         .order_by(RiskAssessment.created_at.desc())
+        .limit(500)
         .all()
     )
     if not all_assessments:

@@ -16,10 +16,11 @@ from functools import wraps
 
 import pytz
 import jwt
+import uuid
 from flask import Blueprint, current_app, g, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import db
+from app import db, limiter
 from app.models import AuditLog, User, UserConsent
 from app.services.token_service import generate_token, token_expiry
 from app.models import EmailVerificationToken
@@ -36,9 +37,15 @@ def _create_access_token(user_id: int, role: str, expires_hours: int = 12) -> st
     payload = {
         'sub':  str(user_id),
         'role': role,
+        'ver': current_app.config.get('APP_VERSION', '3.0'),
+        'tv': 0,
+        'jti': str(uuid.uuid4()),
+        'iss': current_app.config.get('JWT_ISSUER', 'liverwatch'),
+        'aud': current_app.config.get('JWT_AUDIENCE', 'liverwatch-api'),
         'iat':  datetime.now(pytz.utc),
         'exp':  datetime.now(pytz.utc) + timedelta(hours=expires_hours),
     }
+    payload['tv'] = user_token_version = db.session.get(User, user_id).token_version
     return jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
 
 
@@ -55,6 +62,8 @@ def jwt_required(f):
                 token_str,
                 current_app.config['SECRET_KEY'],
                 algorithms=['HS256'],
+                issuer=current_app.config.get('JWT_ISSUER', 'liverwatch'),
+                audience=current_app.config.get('JWT_AUDIENCE', 'liverwatch-api'),
             )
         except jwt.ExpiredSignatureError:
             return jsonify({'error': 'Token has expired'}), 401
@@ -62,7 +71,7 @@ def jwt_required(f):
             return jsonify({'error': 'Invalid token'}), 401
 
         user = db.session.get(User, int(payload['sub']))
-        if not user or not user.is_active or user.is_deleted:
+        if not user or not user.is_active or user.is_deleted or payload.get('tv') != user.token_version:
             return jsonify({'error': 'User not found or inactive'}), 401
         g.current_user = user
         return f(*args, **kwargs)
@@ -72,6 +81,7 @@ def jwt_required(f):
 # ── Endpoints ─────────────────────────────────────────────────────────────
 
 @auth_api_v1.post('/login')
+@limiter.limit('5 per minute')
 def api_login():
     """
     POST /api/v1/auth/login
@@ -125,6 +135,7 @@ def api_login():
 
 
 @auth_api_v1.post('/register')
+@limiter.limit('3 per hour')
 def api_register():
     """
     POST /api/v1/auth/register
@@ -217,6 +228,17 @@ def api_register():
         'user': _user_dict(user),
         'email_verification_sent': sent,
     }), 201
+
+
+@auth_api_v1.post('/logout')
+@limiter.limit('30 per minute')
+@jwt_required
+def api_logout():
+    """Invalidate all currently issued access tokens for the authenticated user."""
+    user = g.current_user
+    user.token_version += 1
+    db.session.commit()
+    return jsonify({'message': 'Logged out successfully.'}), 200
 
 
 @auth_api_v1.get('/me')
