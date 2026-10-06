@@ -14,7 +14,7 @@ from flask import (Blueprint, abort, flash, redirect,
                    render_template, request, url_for)
 from flask_login import current_user, login_required
 
-from app import db
+from app import db, limiter
 from app.models import (
     HealthcareFacility, Referral, ReferralStatus,
     RiskAssessment, UserRole, utcnow,
@@ -39,6 +39,7 @@ def index():
 # ── Facility directory ────────────────────────────────────────────────────
 
 @referral_bp.route('/facilities')
+@limiter.limit('60 per minute')
 def facilities():
     district = request.args.get('district', '').strip()
     service  = request.args.get('service', '').strip()
@@ -67,6 +68,7 @@ def facilities():
 
 
 @referral_bp.route('/facilities/<int:facility_id>')
+@limiter.limit('120 per minute')
 def facility_detail(facility_id):
     facility = db.session.get(HealthcareFacility, facility_id)
     if not facility or not facility.is_active:
