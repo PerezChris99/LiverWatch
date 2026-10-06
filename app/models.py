@@ -78,6 +78,22 @@ class DeviceStatus(str, enum.Enum):
     ERROR       = 'error'
 
 
+class MeasurementValidationState(str, enum.Enum):
+    PENDING = 'pending'
+    VALIDATED = 'validated'
+    REJECTED = 'rejected'
+    CORRECTED = 'corrected'
+
+
+class MeasurementSource(str, enum.Enum):
+    PATIENT = 'patient'
+    CHW = 'chw'
+    CLINICIAN = 'clinician'
+    LABORATORY = 'laboratory'
+    DEVICE = 'device'
+    RESEARCH = 'research'
+
+
 class BiomarkerType(str, enum.Enum):
     AMMONIA            = 'ammonia'
     HYDRATION          = 'hydration'
@@ -86,6 +102,13 @@ class BiomarkerType(str, enum.Enum):
     SODIUM             = 'sodium'
     POTASSIUM          = 'potassium'
     STRESS             = 'stress'
+    ALT                = 'ALT'
+    AST                = 'AST'
+    ALP                = 'ALP'
+    GGT                = 'GGT'
+    BILIRUBIN_TOTAL    = 'bilirubin_total'
+    ALBUMIN            = 'albumin'
+    INR                = 'INR'
 
 
 # ═══════════════════════════════════════════════════════════════════════════
