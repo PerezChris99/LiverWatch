@@ -43,7 +43,7 @@ cryptography>=42.0.0   # Fernet encryption for PII fields
 python-dotenv>=1.0.0
 requests>=2.31.0
 beautifulsoup4>=4.12.3
-pytz>=2024.1
+pytz>=2026.4
 
 # ---- Scheduling ----
 APScheduler>=3.10.4
