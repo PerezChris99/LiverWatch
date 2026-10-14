@@ -15,7 +15,7 @@ Flask-Caching>=2.0.0
 
 # ---- Forms & Validation ----
 WTForms>=3.2.1
-email-validator>=2.2.0
+email-validator>=2.3.0
 
 # ---- Web / WSGI ----
 werkzeug>=3.1.0
