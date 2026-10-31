@@ -31,7 +31,7 @@ psycopg2-binary>=2.9.9
 
 # ---- Cache & Task Queue ----
 redis>=5.0.0
-celery>=5.3.6
+celery>=5.6.3
 flower>=2.2.0          # Celery task monitor (optional)
 
 # ---- Security ----
