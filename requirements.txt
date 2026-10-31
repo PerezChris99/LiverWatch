@@ -37,7 +37,7 @@ flower>=2.2.0          # Celery task monitor (optional)
 # ---- Security ----
 PyJWT>=2.8.0
 itsdangerous>=2.1.0
-cryptography>=42.0.0   # Fernet encryption for PII fields
+cryptography>=50.0.2   # Fernet encryption for PII fields
 
 # ---- Utilities ----
 python-dotenv>=1.0.0
