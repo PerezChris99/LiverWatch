@@ -18,7 +18,7 @@ WTForms>=3.3.1
 email-validator>=2.3.0
 
 # ---- Web / WSGI ----
-werkzeug>=3.1.0
+werkzeug>=3.1.9
 Jinja2>=3.0.0
 gunicorn>=26.2.0
 
