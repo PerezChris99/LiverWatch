@@ -46,7 +46,7 @@ beautifulsoup4>=4.15.0
 pytz>=2026.6
 
 # ---- Scheduling ----
-APScheduler>=3.10.4
+APScheduler>=3.11.3
 
 # ---- Geolocation ----
 ipinfo>=5.6.0
