@@ -52,7 +52,7 @@ APScheduler>=3.10.4
 ipinfo>=5.6.0
 
 # ---- Monitoring & Observability (production) ----
-sentry-sdk[flask]>=2.0.0   # Error tracking
+sentry-sdk[flask]>=2.74.0   # Error tracking
 structlog>=26.1.0           # Structured logging
 
 # ==========================================
